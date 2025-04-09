@@ -230,7 +230,7 @@
         rgba(0, 0, 0, 0) 0%,
         rgba(17, 17, 17, 0.6) 100%
     ),
-    url('/images/pic3.webp');
+    url('pic3.webp');
     background-size: cover;
     background-position: center;
     position: relative;
@@ -244,7 +244,7 @@
         rgba(0, 0, 0, 0) 0%,
         rgba(17, 17, 17, 0.6) 100%
     ),
-    url('/images/pic4.jpg');
+    url('pic4.jpg');
 }
 
 .services__card h2 {
