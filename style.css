@@ -238,14 +238,24 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+.services__card:nth-child(2) {
+    background-image: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(17, 17, 17, 0.6) 100%
+    ),
+    url('/images/pic4.jpg');
+}
 
 .services__card h2 {
     margin-bottom: 1rem;
     font-size: 1.5rem;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
 }
 
 .services__card p {
     margin-bottom: 1rem;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
 }
 
 .services__card button {
@@ -308,6 +318,8 @@
     .main__container {
         grid-template-columns: 1fr;
         text-align: center;
+        height: auto; /* NEW */
+        padding: 2rem 1rem; /* adjust for smaller screens */
     }
 
     .main__img--container {
@@ -330,4 +342,194 @@
         flex-direction: column;
         align-items: center;
     }
+}
+
+.footer {
+    background: #131313;
+    color: #fff;
+    padding: 2rem 1rem;
+    text-align: center;
+    margin-top: 4rem;
+  }
+  
+  .footer__container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .footer__links a {
+    color: #aaa;
+    margin: 0 10px;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .footer__links a:hover {
+    color: #4837ff;
+    transition: 0.3s;
+  }
+
+  .dark-toggle {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #fff;
+    margin-left: 1rem;
+  }
+  
+  /* Dark Mode Styles */
+  body.dark-mode {
+    background: #0c0c0c;
+    color: #e0e0e0;
+  }
+  
+  body.dark-mode .navbar,
+  body.dark-mode .footer,
+  body.dark-mode .services {
+    background: #0c0c0c;
+  }
+  
+  body.dark-mode .navbar__links,
+  body.dark-mode .footer__links a {
+    color: #ccc;
+  }
+  
+  body.dark-mode .services__card {
+    background: #1a1a1a;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+  }
+  
+
+/* Portfolio Section Styles */
+/* Tech Page Styles */
+.tech {
+    background-color: #000000;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.tech__container h1 {
+    font-size: 3rem;
+    color: #4837ff;
+}
+
+.tech__container p {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+}
+
+.tech__services {
+    margin-top: 2rem;
+}
+
+.tech__services-container {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.tech__card {
+    background: #161616;
+    border-radius: 10px;
+    padding: 2rem;
+    width: 280px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tech__card h2 {
+    font-size: 1.8rem;
+    color: #4837ff;
+}
+
+.tech__card p {
+    font-size: 1rem;
+    color: #555;
+}
+
+.tech__btn {
+    background-color: #4837ff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-top: 1rem;
+    display: inline-block;
+}
+
+/* Portfolio Page Styles */
+.portfolio {
+    background-color: #000000;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.portfolio h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #4837ff;
+}
+
+.portfolio p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.portfolio__container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.portfolio__card {
+    background: #1f1f1f;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 280px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.portfolio__card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.portfolio__card-info {
+    padding: 1rem;
+}
+
+.portfolio__card-info h2 {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+}
+
+.portfolio__card-info p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    color: #555;
+}
+
+.portfolio__btn {
+    background-color: #4837ff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.portfolio__btn:hover {
+    background-color: #948bf3;
+    transition: 0.3s;
+}
+
+.portfolio__card:hover {
+    transform: scale(1.05);
 }
