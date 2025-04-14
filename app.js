@@ -45,3 +45,31 @@ signInForm.addEventListener("submit", async (e) => {
     alert("Sign in failed: " + error.message);
   }
 });
+
+// ScrollReveal Animations
+ScrollReveal().reveal('.portfolio h1', {
+    duration: 1000,
+    origin: 'top',
+    distance: '50px',
+    easing: 'ease-in-out',
+    reset: false
+  });
+  
+  ScrollReveal().reveal('.portfolio p', {
+    duration: 1000,
+    origin: 'bottom',
+    distance: '30px',
+    delay: 200,
+    easing: 'ease-in-out',
+    reset: false
+  });
+  
+  ScrollReveal().reveal('.project-card', {
+    duration: 1200,
+    interval: 200,
+    origin: 'bottom',
+    distance: '40px',
+    easing: 'ease-in-out',
+    reset: false
+  });
+  
