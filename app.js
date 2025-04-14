@@ -13,3 +13,19 @@ toggle.addEventListener('click', () => {
     document.body.classList.toggle('dark-mode');
     toggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
 });
+
+const signUpForm = document.querySelector("#sign-up-form");
+
+signUpForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = document.querySelector("#email").value;
+  const password = document.querySelector("#password").value;
+
+  try {
+    await createUserWithEmailAndPassword(auth, email, password);
+    alert("Sign up successful!");
+    window.location.href = "/thank-you.html"; // or redirect elsewhere
+  } catch (error) {
+    alert("Error: " + error.message);
+  }
+});
