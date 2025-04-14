@@ -29,3 +29,19 @@ signUpForm.addEventListener("submit", async (e) => {
     alert("Error: " + error.message);
   }
 });
+
+const signInForm = document.querySelector("#sign-in-form");
+
+signInForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const email = document.querySelector("#email").value;
+  const password = document.querySelector("#password").value;
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    alert("Signed in!");
+    window.location.href = "/dashboard.html"; // or wherever you want
+  } catch (error) {
+    alert("Sign in failed: " + error.message);
+  }
+});
