@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Najaza Enterprises - Pricing</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://kit.fontawesome.com/5b5b5373bb.js" crossorigin="anonymous"></script>
+  <!-- In your <head> tag -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar__container">
+      <a href="/" id="navbar__logo"><i class="fa-solid fa-terminal"></i>NAJAZA</a>
+      <div class="navbar__toggle" id="mobile-menu">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </div>
+      <ul class="navbar__menu">
+        <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
+        <li class="navbar__item"><a href="/portfolio.html" class="navbar__links">Portfolio</a></li>
+        <li class="navbar__item"><a href="/tech.html" class="navbar__links">Tech</a></li>
+        <li class="navbar__btn"><a href="/signup.html" class="button">Sign Up</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Pricing Section -->
+  <section class="pricing-section">
+    <h1>Plans that scale with your goals</h1>
+    <div class="toggle-container">
+      <span>Monthly</span>
+      <label class="switch">
+        <input type="checkbox" id="billingToggle" />
+        <span class="slider round"></span>
+      </label>
+      <span>Yearly</span>
+    </div>
+
+    <div class="pricing-cards">
+      <div class="card" data-aos="fade-up">
+        <h2>Basic</h2>
+        <p class="price" data-month="29" data-year="290">₦29/mo</p>
+        <ul>
+          <li>1 Page Website</li>
+          <li>Basic Animations</li>
+          <li>Email Contact Form</li>
+        </ul>
+        <a href="#" class="card-btn">Choose Plan</a>
+      </div>
+      <div class="card popular" data-aos="fade-up">
+        <h2>Pro</h2>
+        <p class="price" data-month="49" data-year="490">₦49/mo</p>
+        <ul>
+          <li>Multi-Page Website</li>
+          <li>Scroll Animations</li>
+          <li>Mobile Responsiveness</li>
+        </ul>
+        <a href="#" class="card-btn">Choose Plan</a>
+      </div>
+      <div class="card" data-aos="fade-up">
+        <h2>Premium</h2>
+        <p class="price" data-month="79" data-year="790">₦79/mo</p>
+        <ul>
+          <li>Custom Design</li>
+          <li>SEO + Hosting Setup</li>
+          <li>Priority Support</li>
+        </ul>
+        <a href="#" class="card-btn">Choose Plan</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Add JavaScript -->
+  <script src="app.js"></script>
+  <script>
+    // Monthly/Yearly Toggle functionality
+    const toggle = document.getElementById("billingToggle");
+    const prices = document.querySelectorAll(".price");
+
+    toggle.addEventListener("change", () => {
+      prices.forEach(price => {
+        const isYearly = toggle.checked;
+        const amount = isYearly ? price.dataset.year : price.dataset.month;
+        price.textContent = `₦${amount}/${isYearly ? "yr" : "mo"}`;
+      });
+    });
+
+    // AOS (Animate On Scroll) Initialization
+    AOS.init();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+</body>
+</html>
