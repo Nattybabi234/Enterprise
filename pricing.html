@@ -88,7 +88,7 @@
       prices.forEach(price => {
         const isYearly = toggle.checked;
         const amount = isYearly ? price.dataset.year : price.dataset.month;
-        price.textContent = `£{amount}/£{isYearly ? "yr" : "mo"}`;
+        price.textContent = `£${amount}/${isYearly ? "yr" : "mo"}`;
       });
     });
 
