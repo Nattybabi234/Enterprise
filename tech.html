@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Tech - Najaza Web</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://kit.fontawesome.com/5b5b5373bb.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/scrollreveal"></script>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar__container">
+            <a href="/" id="navbar__logo"><i class="fa-solid fa-terminal"></i>NAJAZA</a>
+            <div class="navbar__toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="navbar__menu">
+                <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
+                <li class="navbar__item"><a href="/tech.html" class="navbar__links">Tech</a></li>
+                <li class="navbar__item"><a href="/portfolio.html" class="navbar__links">Portfolio</a></li>
+                <li class="navbar__item"><a href="/pricing.html" class="navbar__links">Pricing</a></li>
+                <li class="navbar__btn"><a href="/signup.html" class="button">Sign Up</a></li>
+            </ul>
+        </div>
+        <button id="darkModeToggle" class="dark-toggle">🌙</button>
+    </nav>
+
+    <!-- Tech Overview Section -->
+    <div class="tech">
+        <div class="tech__container">
+            <h1>Technology Services</h1>
+            <p>Explore our innovative tech services and solutions that push the boundaries of modern technology.</p>
+        </div>
+    </div>
+
+    <!-- Tech Services Section -->
+    <div class="tech__services">
+        <div class="tech__services-container">
+            <div class="tech__card">
+                <h2>AI Solutions</h2>
+                <p>Harness the power of AI to automate processes and improve decision-making.</p>
+                <button class="tech__btn">Learn More</button>
+            </div>
+            <div class="tech__card">
+                <h2>Web Development</h2>
+                <p>Building responsive and dynamic websites with cutting-edge technologies.</p>
+                <button class="tech__btn">Learn More</button>
+            </div>
+            <div class="tech__card">
+                <h2>Mobile App Development</h2>
+                <p>Design and develop feature-rich mobile applications for Android and iOS.</p>
+                <button class="tech__btn">Learn More</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="app.js"></script>
+    <script>
+        const menu = document.querySelector('#mobile-menu');
+        const menuLinks = document.querySelector('.navbar__menu');
+
+        menu.addEventListener('click', () => {
+            menu.classList.toggle('is-active');
+            menuLinks.classList.toggle('active');
+        });
+    </script>
+
+    <!-- ScrollReveal Animations -->
+    <script>
+        ScrollReveal().reveal('.tech__container', {
+          delay: 200,
+          duration: 1000,
+          origin: 'left',
+          distance: '50px',
+          reset: false
+        });
+
+        ScrollReveal().reveal('.tech__card', {
+          interval: 200,
+          delay: 200,
+          duration: 800,
+          origin: 'bottom',
+          distance: '40px',
+          reset: false
+        });
+
+        ScrollReveal().reveal('.footer', {
+          delay: 300,
+          duration: 1000,
+          origin: 'bottom',
+          distance: '50px',
+          reset: false
+        });
+    </script>
+
+    <!-- Dark Mode Toggle Script -->
+    <script>
+        const toggle = document.getElementById('darkModeToggle');
+        toggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            toggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+        });
+    </script>
+
+</body>
+
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="footer__container">
+        <p>&copy; 2025 Nathania Layeni. All rights reserved.</p>
+        <div class="footer__links">
+            <a href="#services">Services</a>
+            <a href="#about">About</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </div>
+</footer>
+
+</html>

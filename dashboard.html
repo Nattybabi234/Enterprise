@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - Najaza Web</title>
+  <link rel="stylesheet" href="stylesheet.css" />
+  <script src="https://kit.fontawesome.com/5b5b5373bb.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar__container">
+      <a href="/" id="navbar__logo"><i class="fa-solid fa-terminal"></i>NAJAZA</a>
+      <ul class="navbar__menu">
+        <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
+        <li class="navbar__item"><a href="/tech.html" class="navbar__links">Tech</a></li>
+        <li class="navbar__item"><a href="/portfolio.html" class="navbar__links">Portfolio</a></li>
+        <li class="navbar__item"><a href="/pricing.html" class="navbar__links">Pricing</a></li>
+        <li class="navbar__item"><a href="javascript:void(0);" id="logout-btn" class="navbar__links">Sign Out</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Dashboard Section -->
+  <div class="dashboard">
+    <div class="dashboard__container">
+      <h1>Welcome, <span id="user-email"></span></h1>
+
+      <section>
+        <h2>Your Ongoing Services</h2>
+        <ul id="portfolio-list">
+          <!-- Portfolio Items will be injected here dynamically -->
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <!-- Firebase + Dashboard Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCFWGQEhZDfXP9kuVefDtpOF2zRmxsdPbY",
+      authDomain: "najazaauth.firebaseapp.com",
+      projectId: "najazaauth",
+      storageBucket: "najazaauth.firebasestorage.app",
+      messagingSenderId: "797577104417",
+      appId: "1:797577104417:web:6f96bc4adbfc9f4cc26760",
+      measurementId: "G-D2S3729SQH"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    async function loadPortfolio() {
+      const querySnapshot = await getDocs(collection(db, "portfolio"));
+      const portfolioContainer = document.getElementById("portfolio-list");
+
+      querySnapshot.forEach((doc) => {
+        const project = doc.data();
+        const item = document.createElement("li");
+        item.innerHTML = `
+          <h3>${project.projectName}</h3>
+          <p>${project.description}</p>
+          <a href="${project.link}" target="_blank">View Project</a>
+        `;
+        portfolioContainer.appendChild(item);
+      });
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById("user-email").textContent = user.email;
+        loadPortfolio();
+      } else {
+        window.location.href = "signin.html";
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const logoutBtn = document.getElementById("logout-btn");
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+          signOut(auth).then(() => {
+            window.location.href = "signin.html";
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>

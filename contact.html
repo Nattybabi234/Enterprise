@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Najaza Web-Contact</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://kit.fontawesome.com/5b5b5373bb.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <link rel="icon" type="image/png" href="mainlogo.jpg" />
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar__container">
+            <a href="/" id="navbar__logo"><i class="fa-solid fa-terminal"></i>NAJAZA</a>
+            <div class="navbar__toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <ul class="navbar__menu">
+                <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
+                <li class="navbar__item"><a href="/tech.html" class="navbar__links">Tech</a></li>
+                <li class="navbar__item"><a href="/Portfolio.html" class="navbar__links">Portfolio</a></li>
+                <li class="navbar__item"><a href="/pricing.html" class="navbar__links">Pricing</a></li>
+                <li class="navbar__btn"><a href="/signup.html" class="button">Sign Up</a></li>
+            </ul>
+        </div>
+        <button id="darkModeToggle" class="dark-toggle">🌙</button>
+    </nav>
+
+    <!-- Contact Hero Section -->
+    <section class="contact-hero">
+        <h1>Get in Touch</h1>
+        <p>We’re here to help with any questions or project inquiries.</p>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="contact-form">
+        <h2>Contact Form</h2>
+        <!-- Corrected form action URL -->
+        <form action="https://formsubmit.co/najaza-enterprises@outlook.com" method="POST">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <input type="text" name="subject" placeholder="Subject" required>
+            <textarea name="message" placeholder="Message" rows="6" required></textarea>
+          
+            <!-- Hidden inputs for configuration -->
+            <input type="hidden" name="_next" value="https://najaza-enterprises.netlify.app/thank-you.html">
+            <input type="hidden" name="_subject" value="New Contact Form Submission">
+            <input type="hidden" name="_captcha" value="false"> <!-- optional: disables the default FormSubmit CAPTCHA -->
+          
+            <button type="submit">Send Message</button>
+          </form>
+          
+    </section>
+
+    <!-- Additional Contact Information Section -->
+    <section class="additional-info">
+        <h3>Other Ways to Reach Us</h3>
+        <p><strong>Phone:</strong> 123-456-7890</p>
+        <p><strong>Email:</strong> <a href="mailto:najaza-enterprises@outlook.com">contact@najaza.com</a></p>
+        <div class="social-links">
+            <a href="#" class="social-icon">Facebook</a>
+            <a href="#" class="social-icon">Twitter</a>
+            <a href="#" class="social-icon">LinkedIn</a>
+        </div>
+    </section>
+
+    <script src="app.js"></script>
+    <script>
+        const menu = document.querySelector('#mobile-menu');
+        const menuLinks = document.querySelector('.navbar__menu');
+
+        menu.addEventListener('click', () => {
+            menu.classList.toggle('is-active');
+            menuLinks.classList.toggle('active');
+        });
+    </script>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Najaza Enterprises. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
