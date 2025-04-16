@@ -9,19 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
   <link rel="icon" type="image/png" href="mainlogo.jpg" />
   <style>
-    h2 {
-        text-align: center;
-        padding: 0;
-    }
-
-    h3 {
-        text-align: center;
-    }
-
-    p {
-        text-align: center;
-    }
-
+    /* Base Styles */
     body {
       background-color: #070707;
       color: white;
@@ -70,17 +58,14 @@
       font-weight: bold;
       cursor: pointer;
       transition: background 0.3s;
+      margin-top: 10px;
     }
 
     .btn:hover {
       background-color: gold;
     }
 
-    .button-link {
-      text-decoration: none;
-      color: inherit;
-    }
-
+    /* Pricing Toggle */
     .price-toggle {
       display: flex;
       align-items: center;
@@ -99,7 +84,7 @@
       position: relative;
       width: 50px;
       height: 26px;
-      background-color: #1e3a8a;
+      background-color: #1e3a8a; /* Royal Blue */
       border-radius: 50px;
       cursor: pointer;
       transition: background 0.3s;
@@ -119,7 +104,7 @@
     }
 
     #pricingToggle:checked + .toggle-label {
-      background-color: #ffd700;
+      background-color: #ffd700; /* Gold */
     }
 
     #pricingToggle:checked + .toggle-label::after {
@@ -130,45 +115,43 @@
       display: none;
     }
 
-    /* Mobile Responsiveness */
     @media (max-width: 768px) {
-      table, thead, tbody, th, td, tr {
+      /* Make the table responsive */
+      table {
+        display: none;
+      }
+
+      .table-mobile {
         display: block;
       }
 
-      th {
-        text-align: left;
+      /* Mobile pricing cards */
+      .price-card {
+        background-color: var(--dark-bg);
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border-radius: 8px;
+        border: 1px solid #444;
       }
 
-      td {
-        border: none;
-        border-bottom: 1px solid #333;
+      .price-card h4 {
+        font-size: 1.2rem;
+        color: #ffd700;
       }
 
-      th, td {
-        font-size: 0.85rem;
+      .price-card .price {
+        font-size: 1.5rem;
+        color: #fff;
+        font-weight: bold;
       }
 
-      .price-toggle {
-        flex-direction: column;
-        gap: 0.5rem;
+      .price-card .features {
+        margin-top: 1rem;
+        font-size: 1rem;
       }
 
-      .btn {
-        padding: 0.5rem 0.8rem;
-      }
-
-      /* Ensure table content is scrollable on small screens */
-      .overflow-x-auto {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-      }
-    }
-
-    /* Large devices (e.g., tablet and above) */
-    @media (min-width: 769px) {
-      .price-toggle {
-        gap: 1rem;
+      .price-card .btn {
+        margin-top: 1rem;
       }
     }
   </style>
@@ -198,7 +181,7 @@
     <h2 class="text-4xl font-bold text-gold mb-4">Our Pricing Plans</h2>
     <p class="text-gray-400 mb-10">Your Brand. Your Vision. Our Code.</p>
 
-    <!-- Pricing Toggle -->
+    <!-- Toggle -->
     <div class="price-toggle">
       <span>Monthly</span>
       <input type="checkbox" id="pricingToggle" />
@@ -206,7 +189,53 @@
       <span>Yearly</span>
     </div>
 
-    <!-- Pricing Table -->
+    <!-- Mobile Pricing Cards -->
+    <div class="table-mobile">
+      <div class="price-card">
+        <h4>Starter 💼</h4>
+        <p class="price"><span class="monthly">£90</span><span class="yearly hidden">£1,200</span></p>
+        <div class="features">
+          <p>Portfolio Website: ✅</p>
+          <p>E-commerce Website: ❌</p>
+          <p>Responsive Design: ✅</p>
+          <p>Domain + Hosting Setup: ✅</p>
+          <p>Contact + Email Form: ✅</p>
+        </div>
+        <button class="btn"><a href="contact.html" class="button-link">Choose Starter</a></button>
+      </div>
+
+      <div class="price-card">
+        <h4>Pro 🚀</h4>
+        <p class="price"><span class="monthly">£180</span><span class="yearly hidden">£2,100</span></p>
+        <div class="features">
+          <p>Portfolio Website: ✅</p>
+          <p>E-commerce Website: ✅</p>
+          <p>Responsive Design: ✅</p>
+          <p>Domain + Hosting Setup: ✅</p>
+          <p>Contact + Email Form: ✅</p>
+          <p>Animations & Effects: ✅</p>
+        </div>
+        <button class="btn">Choose Pro</button>
+      </div>
+
+      <div class="price-card">
+        <h4>Elite 👑</h4>
+        <p class="price"><span class="monthly">£360</span><span class="yearly hidden">£4,400</span></p>
+        <div class="features">
+          <p>Portfolio Website: ✅</p>
+          <p>E-commerce Website: ✅</p>
+          <p>Responsive Design: ✅</p>
+          <p>Domain + Hosting Setup: ✅</p>
+          <p>Contact + Email Form: ✅</p>
+          <p>Animations & Effects: ✅</p>
+          <p>Business Email: ✅</p>
+          <p>Monthly Maintenance: ✅</p>
+        </div>
+        <button class="btn">Choose Elite</button>
+      </div>
+    </div>
+
+    <!-- Regular Table (visible on desktop) -->
     <div class="overflow-x-auto">
       <table>
         <thead>
@@ -232,49 +261,9 @@
           <tr><td>Support</td><td>Email</td><td>Priority Email</td><td>Priority + Chat</td></tr>
           <tr>
             <td></td>
-            <td><button class="btn"><a href="contact.html">Choose Starter</a></button></td>
+            <td><button class="btn"><a href="contact.html" class="button-link">Choose Starter</a></button></td>
             <td><button class="btn">Choose Pro</button></td>
             <td><button class="btn">Choose Elite</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<section class="bg-[#121212] text-white py-16 px-4">
-  <div class="max-w-4xl mx-auto text-center">
-    <h3 class="text-3xl font-bold text-gold mb-6">Optional Add-Ons</h3>
-    <p class="text-gray-400 mb-8">Enhance your plan with these extras:</p>
-    <div class="overflow-x-auto">
-      <table class="w-full table-auto border-collapse border border-gold text-left">
-        <thead class="bg-[#1e3a8a] text-white">
-          <tr>
-            <th class="p-3 border border-gold">Service</th>
-            <th class="p-3 border border-gold">Description</th>
-            <th class="p-3 border border-gold">Price</th>
-          </tr>
-        </thead>
-        <tbody class="text-gray-300">
-          <tr>
-            <td class="p-3 border border-gold">Extra Page Design</td>
-            <td class="p-3 border border-gold">Add pages like Blog, FAQ, etc.</td>
-            <td class="p-3 border border-gold">£25 / page</td>
-          </tr>
-          <tr>
-            <td class="p-3 border border-gold">Custom Logo Design</td>
-            <td class="p-3 border border-gold">Professional logo for your brand</td>
-            <td class="p-3 border border-gold">£50</td>
-          </tr>
-          <tr>
-            <td class="p-3 border border-gold">Business Email Setup</td>
-            <td class="p-3 border border-gold">YourName@YourBusiness.com</td>
-            <td class="p-3 border border-gold">£5 / month</td>
-          </tr>
-          <tr>
-            <td class="p-3 border border-gold">SEO Optimization</td>
-            <td class="p-3 border border-gold">Make your site rank on Google</td>
-            <td class="p-3 border border-gold">£40</td>
           </tr>
         </tbody>
       </table>
