@@ -76,55 +76,61 @@
       background-color: gold;
     }
 
+    .button-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
     .price-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin: 20px 0;
-  font-weight: 600;
-  color: #f1f1f1;
-}
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 20px 0;
+      font-weight: 600;
+      color: #f1f1f1;
+    }
 
-.price-toggle input[type="checkbox"] {
-  display: none;
-}
+    .price-toggle input[type="checkbox"] {
+      display: none;
+    }
 
-.toggle-label {
-  position: relative;
-  width: 50px;
-  height: 26px;
-  background-color: #1e3a8a; /* Royal Blue */
-  border-radius: 50px;
-  cursor: pointer;
-  transition: background 0.3s;
-  display: inline-block;
-}
+    .toggle-label {
+      position: relative;
+      width: 50px;
+      height: 26px;
+      background-color: #1e3a8a;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: background 0.3s;
+      display: inline-block;
+    }
 
-.toggle-label::after {
-  content: "";
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  top: 3px;
-  left: 3px;
-  background-color: white;
-  border-radius: 50%;
-  transition: 0.3s;
-}
+    .toggle-label::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 3px;
+      left: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
 
-#pricingToggle:checked + .toggle-label {
-  background-color: #ffd700; /* Gold */
-}
+    #pricingToggle:checked + .toggle-label {
+      background-color: #ffd700;
+    }
 
-#pricingToggle:checked + .toggle-label::after {
-  transform: translateX(24px);
-}
+    #pricingToggle:checked + .toggle-label::after {
+      transform: translateX(24px);
+    }
 
     .hidden {
       display: none;
     }
 
+    /* Mobile Responsiveness */
     @media (max-width: 768px) {
       table, thead, tbody, th, td, tr {
         display: block;
@@ -137,6 +143,32 @@
       td {
         border: none;
         border-bottom: 1px solid #333;
+      }
+
+      th, td {
+        font-size: 0.85rem;
+      }
+
+      .price-toggle {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .btn {
+        padding: 0.5rem 0.8rem;
+      }
+
+      /* Ensure table content is scrollable on small screens */
+      .overflow-x-auto {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+
+    /* Large devices (e.g., tablet and above) */
+    @media (min-width: 769px) {
+      .price-toggle {
+        gap: 1rem;
       }
     }
   </style>
@@ -166,17 +198,13 @@
     <h2 class="text-4xl font-bold text-gold mb-4">Our Pricing Plans</h2>
     <p class="text-gray-400 mb-10">Your Brand. Your Vision. Our Code.</p>
 
-    <!-- Toggle -->
-    <!-- Replace only the toggle section with this inside your pricing section -->
-<!-- Pricing Toggle -->
-<div class="price-toggle">
-    <span>Monthly</span>
-    <input type="checkbox" id="pricingToggle" />
-    <label for="pricingToggle" class="toggle-label"></label>
-    <span>Yearly</span>
-  </div>
-  
-  
+    <!-- Pricing Toggle -->
+    <div class="price-toggle">
+      <span>Monthly</span>
+      <input type="checkbox" id="pricingToggle" />
+      <label for="pricingToggle" class="toggle-label"></label>
+      <span>Yearly</span>
+    </div>
 
     <!-- Pricing Table -->
     <div class="overflow-x-auto">
@@ -204,7 +232,7 @@
           <tr><td>Support</td><td>Email</td><td>Priority Email</td><td>Priority + Chat</td></tr>
           <tr>
             <td></td>
-            <td><button class="btn">Choose Starter</button></td>
+            <td><button class="btn"><a href="contact.html">Choose Starter</a></button></td>
             <td><button class="btn">Choose Pro</button></td>
             <td><button class="btn">Choose Elite</button></td>
           </tr>
@@ -215,46 +243,44 @@
 </section>
 
 <section class="bg-[#121212] text-white py-16 px-4">
-    <div class="max-w-4xl mx-auto text-center">
-      <h3 class="text-3xl font-bold text-gold mb-6">Optional Add-Ons</h3>
-      <p class="text-gray-400 mb-8">Enhance your plan with these extras:</p>
-      <div class="overflow-x-auto">
-        <table class="w-full table-auto border-collapse border border-gold text-left">
-          <thead class="bg-[#1e3a8a] text-white">
-            <tr>
-              <th class="p-3 border border-gold">Service</th>
-              <th class="p-3 border border-gold">Description</th>
-              <th class="p-3 border border-gold">Price</th>
-            </tr>
-          </thead>
-          <tbody class="text-gray-300">
-            <tr>
-              <td class="p-3 border border-gold">Extra Page Design</td>
-              <td class="p-3 border border-gold">Add pages like Blog, FAQ, etc.</td>
-              <td class="p-3 border border-gold">£25 / page</td>
-            </tr>
-            <tr>
-              <td class="p-3 border border-gold">Custom Logo Design</td>
-              <td class="p-3 border border-gold">Professional logo for your brand</td>
-              <td class="p-3 border border-gold">£50</td>
-            </tr>
-            <tr>
-              <td class="p-3 border border-gold">Business Email Setup</td>
-              <td class="p-3 border border-gold">YourName@YourBusiness.com</td>
-              <td class="p-3 border border-gold">£5 / month</td>
-            </tr>
-            <tr>
-              <td class="p-3 border border-gold">SEO Optimization</td>
-              <td class="p-3 border border-gold">Make your site rank on Google</td>
-              <td class="p-3 border border-gold">£40</td>
-            </tr>
-            <!-- Add more rows as needed -->
-          </tbody>
-        </table>
-      </div>
+  <div class="max-w-4xl mx-auto text-center">
+    <h3 class="text-3xl font-bold text-gold mb-6">Optional Add-Ons</h3>
+    <p class="text-gray-400 mb-8">Enhance your plan with these extras:</p>
+    <div class="overflow-x-auto">
+      <table class="w-full table-auto border-collapse border border-gold text-left">
+        <thead class="bg-[#1e3a8a] text-white">
+          <tr>
+            <th class="p-3 border border-gold">Service</th>
+            <th class="p-3 border border-gold">Description</th>
+            <th class="p-3 border border-gold">Price</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-300">
+          <tr>
+            <td class="p-3 border border-gold">Extra Page Design</td>
+            <td class="p-3 border border-gold">Add pages like Blog, FAQ, etc.</td>
+            <td class="p-3 border border-gold">£25 / page</td>
+          </tr>
+          <tr>
+            <td class="p-3 border border-gold">Custom Logo Design</td>
+            <td class="p-3 border border-gold">Professional logo for your brand</td>
+            <td class="p-3 border border-gold">£50</td>
+          </tr>
+          <tr>
+            <td class="p-3 border border-gold">Business Email Setup</td>
+            <td class="p-3 border border-gold">YourName@YourBusiness.com</td>
+            <td class="p-3 border border-gold">£5 / month</td>
+          </tr>
+          <tr>
+            <td class="p-3 border border-gold">SEO Optimization</td>
+            <td class="p-3 border border-gold">Make your site rank on Google</td>
+            <td class="p-3 border border-gold">£40</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </section>
-  
+  </div>
+</section>
 
 <script>
   document.getElementById('pricingToggle').addEventListener('change', function () {
