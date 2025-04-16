@@ -8,92 +8,256 @@
   <script src="https://kit.fontawesome.com/5b5b5373bb.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
   <link rel="icon" type="image/png" href="mainlogo.jpg" />
+  <style>
+    h2 {
+        text-align: center;
+        padding: 0;
+    }
 
+    p {
+        text-align: center;
+    }
+
+    body {
+      background-color: #070707;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .text-gold { color: var(--secondary-color); }
+    .bg-gold { background-color: var(--secondary-color); }
+    .border-gold { border-color: var(--secondary-color); }
+
+    .section {
+      padding: 4rem 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+      background-color: var(--dark-bg);
+    }
+
+    th, td {
+      padding: 1rem;
+      border: 1px solid #444;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    th {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    td {
+      color: #e5e5e5;
+    }
+
+    .btn {
+      background-color: var(--secondary-color);
+      color: #000;
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background-color: gold;
+    }
+
+    .price-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 20px 0;
+  font-weight: 600;
+  color: #f1f1f1;
+}
+
+.price-toggle input[type="checkbox"] {
+  display: none;
+}
+
+.toggle-label {
+  position: relative;
+  width: 50px;
+  height: 26px;
+  background-color: #1e3a8a; /* Royal Blue */
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background 0.3s;
+  display: inline-block;
+}
+
+.toggle-label::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 3px;
+  left: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+#pricingToggle:checked + .toggle-label {
+  background-color: #ffd700; /* Gold */
+}
+
+#pricingToggle:checked + .toggle-label::after {
+  transform: translateX(24px);
+}
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      th {
+        text-align: left;
+      }
+
+      td {
+        border: none;
+        border-bottom: 1px solid #333;
+      }
+    }
+  </style>
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="navbar__container">
-      <a href="/" id="navbar__logo"><i class="fa-solid fa-terminal"></i>NAJAZA</a>
-      <div class="navbar__toggle" id="mobile-menu">
-        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
-      </div>
-      <ul class="navbar__menu">
-        <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
-        <li class="navbar__item"><a href="/portfolio.html" class="navbar__links">Portfolio</a></li>
-        <li class="navbar__item"><a href="/tech.html" class="navbar__links">Tech</a></li>
-        <li class="navbar__item"><a href="/signin.html" class="navbar__links">Sign In</a></li>
-        <li class="navbar__btn"><a href="/signup.html" class="button">Sign Up</a></li>
-      </ul>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar__container">
+    <a href="/" id="navbar__logo"><i class="fa-solid fa-terminal"></i>NAJAZA</a>
+    <div class="navbar__toggle" id="mobile-menu">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
     </div>
-  </nav>
+    <ul class="navbar__menu">
+      <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
+      <li class="navbar__item"><a href="/portfolio.html" class="navbar__links">Portfolio</a></li>
+      <li class="navbar__item"><a href="/tech.html" class="navbar__links">Tech</a></li>
+      <li class="navbar__item"><a href="/signin.html" class="navbar__links">Sign In</a></li>
+      <li class="navbar__btn"><a href="/signup.html" class="button">Sign Up</a></li>
+    </ul>
+  </div>
+</nav>
 
-  <!-- Pricing Section -->
-  <section class="pricing-container">
-    <h1 class="pricing-title">Plans that scale with your goals</h1>
-    <p class="pricing-subtitle">Choose a plan that fits your brand's journey.</p>
+<!-- Pricing Section -->
+<section class="section">
+  <div class="max-w-7xl mx-auto text-center">
+    <h2 class="text-4xl font-bold text-gold mb-4">Our Pricing Plans</h2>
+    <p class="text-gray-400 mb-10">Your Brand. Your Vision. Our Code.</p>
 
-    <div class="price-toggle">
-        <span>Monthly</span>
-        <input type="checkbox" id="billingToggle" />
-        <label class="toggle-label" for="billingToggle"></label>
-        <span>Yearly</span>
-      </div>
-      
+    <!-- Toggle -->
+    <!-- Replace only the toggle section with this inside your pricing section -->
+<!-- Pricing Toggle -->
+<div class="price-toggle">
+    <span>Monthly</span>
+    <input type="checkbox" id="pricingToggle" />
+    <label for="pricingToggle" class="toggle-label"></label>
+    <span>Yearly</span>
+  </div>
+  
+  
 
-    <div class="pricing-cards">
-      <div class="card" data-aos="fade-up">
-        <h3>Basic</h3>
-        <p class="price" data-month="90" data-year="1,200">£90/mo</p>
-        <ul>
-          <li>1 Page Website</li>
-          <li>Basic Animations</li>
-          <li>Email Contact Form</li>
-        </ul>
-        <button>Choose Plan</button>
-      </div>
+    <!-- Pricing Table -->
+    <div class="overflow-x-auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Features</th>
+            <th>Starter 💼<br><span class="monthly">£90</span><span class="yearly hidden">£1,200</span></th>
+            <th>Pro 🚀<br><span class="monthly">£180</span><span class="yearly hidden">£2,100</span></th>
+            <th>Elite 👑<br><span class="monthly">£360</span><span class="yearly hidden">£4,400</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Portfolio Website</td><td>✅</td><td>✅</td><td>✅</td></tr>
+          <tr><td>E-commerce Website</td><td>❌</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Responsive Design</td><td>✅</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Domain + Hosting Setup</td><td>✅</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Contact + Email Form</td><td>✅</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Animations & Effects</td><td>❌</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Business Email</td><td>❌</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Monthly Maintenance</td><td>❌</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Logo Design</td><td>❌</td><td>🔄 Add-on</td><td>✅</td></tr>
+          <tr><td>Social Media Branding</td><td>❌</td><td>❌</td><td>✅</td></tr>
+          <tr><td>Business Card Design</td><td>❌</td><td>❌</td><td>✅</td></tr>
+          <tr><td>Support</td><td>Email</td><td>Priority Email</td><td>Priority + Chat</td></tr>
+          <tr>
+            <td></td>
+            <td><button class="btn">Choose Starter</button></td>
+            <td><button class="btn">Choose Pro</button></td>
+            <td><button class="btn">Choose Elite</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
-      <div class="card" data-aos="fade-up">
-        <h3>Pro</h3>
-        <p class="price" data-month="180" data-year="2,100">£180/mo</p>
-        <ul>
-          <li>Multi-Page Website</li>
-          <li>Scroll Animations</li>
-          <li>Mobile Responsiveness</li>
-        </ul>
-        <button>Choose Plan</button>
-      </div>
-
-      <div class="card" data-aos="fade-up">
-        <h3>Premium</h3>
-        <p class="price" data-month="360" data-year="4,400">£360/mo</p>
-        <ul>
-          <li>Custom Design</li>
-          <li>SEO + Hosting Setup</li>
-          <li>Priority Support</li>
-        </ul>
-        <button>Choose Plan</button>
+<section class="bg-[#121212] text-white py-16 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <h3 class="text-3xl font-bold text-gold mb-6">Optional Add-Ons</h3>
+      <p class="text-gray-400 mb-8">Enhance your plan with these extras:</p>
+      <div class="overflow-x-auto">
+        <table class="w-full table-auto border-collapse border border-gold text-left">
+          <thead class="bg-[#1e3a8a] text-white">
+            <tr>
+              <th class="p-3 border border-gold">Service</th>
+              <th class="p-3 border border-gold">Description</th>
+              <th class="p-3 border border-gold">Price</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-300">
+            <tr>
+              <td class="p-3 border border-gold">Extra Page Design</td>
+              <td class="p-3 border border-gold">Add pages like Blog, FAQ, etc.</td>
+              <td class="p-3 border border-gold">£25 / page</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gold">Custom Logo Design</td>
+              <td class="p-3 border border-gold">Professional logo for your brand</td>
+              <td class="p-3 border border-gold">£50</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gold">Business Email Setup</td>
+              <td class="p-3 border border-gold">YourName@YourBusiness.com</td>
+              <td class="p-3 border border-gold">£5 / month</td>
+            </tr>
+            <tr>
+              <td class="p-3 border border-gold">SEO Optimization</td>
+              <td class="p-3 border border-gold">Make your site rank on Google</td>
+              <td class="p-3 border border-gold">£40</td>
+            </tr>
+            <!-- Add more rows as needed -->
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
+  
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-  <script>
-    // Monthly/Yearly Toggle
-    const toggle = document.getElementById("billingToggle");
-    const prices = document.querySelectorAll(".price");
+<script>
+  document.getElementById('pricingToggle').addEventListener('change', function () {
+    document.querySelectorAll('.monthly').forEach(el => el.classList.toggle('hidden'));
+    document.querySelectorAll('.yearly').forEach(el => el.classList.toggle('hidden'));
+  });
+</script>
 
-    toggle.addEventListener("change", () => {
-      prices.forEach(price => {
-        const isYearly = toggle.checked;
-        const amount = isYearly ? price.dataset.year : price.dataset.month;
-        price.textContent = `£${amount}/${isYearly ? "yr" : "mo"}`;
-      });
-    });
-
-    // Initialize AOS
-    AOS.init();
-  </script>
 </body>
 </html>
