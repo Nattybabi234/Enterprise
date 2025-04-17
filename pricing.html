@@ -289,7 +289,7 @@
       <div class="price-tier-container">
         <div class="price-card">
           <h4>Starter 💼</h4>
-          <p class="price"><span class="monthly">£90</span><span class="yearly hidden">£1,200</span></p>
+          <p class="price" data-monthly="90" data-yearly="1200">£90</p>
           <div class="features">
             <p>Portfolio Website: ✅</p>
             <p>E-commerce Website: ❌</p>
@@ -311,7 +311,7 @@
       <div class="price-tier-container">
         <div class="price-card">
           <h4>Pro 🚀</h4>
-          <p class="price"><span class="monthly">£180</span><span class="yearly hidden">£2,100</span></p>
+          <p class="price" data-monthly="180" data-yearly="2100">£180</p>
           <div class="features">
             <p>Portfolio Website: ✅</p>
             <p>E-commerce Website: ✅</p>
@@ -333,7 +333,7 @@
       <div class="price-tier-container">
         <div class="price-card">
           <h4>Elite 👑</h4>
-          <p class="price"><span class="monthly">£360</span><span class="yearly hidden">£4,400</span></p>
+          <p class="price" data-monthly="360" data-yearly="4400">£360</p>
           <div class="features">
             <p>Portfolio Website: ✅</p>
             <p>E-commerce Website: ✅</p>
@@ -417,5 +417,40 @@
     </div>
   </div>
 </section>
+
+<script>
+  const toggle = document.getElementById('pricingToggle');
+
+  toggle.addEventListener('change', () => {
+    // Handle mobile cards
+    document.querySelectorAll('.price').forEach(price => {
+      const monthly = price.getAttribute('data-monthly');
+      const yearly = price.getAttribute('data-yearly');
+
+      if (monthly && yearly) {
+        // This is a mobile card
+        price.textContent = toggle.checked ? `£${yearly}` : `£${monthly}`;
+      }
+    });
+
+    // Handle desktop cards
+    document.querySelectorAll('.desktop-tier-container .price').forEach(priceWrapper => {
+      const monthlySpan = priceWrapper.querySelector('.monthly');
+      const yearlySpan = priceWrapper.querySelector('.yearly');
+
+      if (monthlySpan && yearlySpan) {
+        if (toggle.checked) {
+          monthlySpan.classList.add('hidden');
+          yearlySpan.classList.remove('hidden');
+        } else {
+          yearlySpan.classList.add('hidden');
+          monthlySpan.classList.remove('hidden');
+        }
+      }
+    });
+  });
+</script>
+
+
 </body>
 </html>
