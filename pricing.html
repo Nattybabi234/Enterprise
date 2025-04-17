@@ -18,6 +18,14 @@
       padding: 0;
     }
 
+    h2 {
+      text-align: center;
+    }
+
+    p {
+      text-align: center;
+    }
+
     .text-gold { color: var(--secondary-color); }
     .bg-gold { background-color: var(--secondary-color); }
     .border-gold { border-color: var(--secondary-color); }
@@ -116,44 +124,131 @@
     }
 
     @media (max-width: 768px) {
-      /* Make the table responsive */
-      table {
+      /* Hide the desktop version */
+      .desktop-tier-container {
         display: none;
       }
 
-      .table-mobile {
+      /* Show mobile version */
+      .mobile-tier-container {
         display: block;
       }
+    }
 
-      /* Mobile pricing cards */
-      .price-card {
-        background-color: var(--dark-bg);
-        padding: 1.5rem;
-        margin: 1rem 0;
-        border-radius: 8px;
-        border: 1px solid #444;
+    @media (min-width: 769px) {
+      /* Hide the mobile version */
+      .mobile-tier-container {
+        display: none;
       }
 
-      .price-card h4 {
-        font-size: 1.2rem;
-        color: #ffd700;
-      }
-
-      .price-card .price {
-        font-size: 1.5rem;
-        color: #fff;
-        font-weight: bold;
-      }
-
-      .price-card .features {
-        margin-top: 1rem;
-        font-size: 1rem;
-      }
-
-      .price-card .btn {
-        margin-top: 1rem;
+      /* Show desktop version */
+      .desktop-tier-container {
+        display: block;
       }
     }
+
+    .pricing-container {
+  margin: 2rem auto;
+  max-width: 1200px;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Gradient container */
+.price-tier-container {
+  background: #0d0d0d;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  border: 3px solid;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  border-image: linear-gradient(45deg, #ffd700, #1e3a8a) 1;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.price-tier-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+}
+
+/* Table container for each tier (desktop) */
+.tier-column {
+  background: #101010;
+  border-radius: 10px;
+  padding: 1rem;
+  border: 3px solid;
+  border-image: linear-gradient(135deg, #1e3a8a, #ffd700) 1;
+  box-shadow: 0 0 20px rgba(30, 58, 138, 0.3);
+}
+
+/* Desktop tier container layout */
+.desktop-tier-container {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 3rem;
+  flex-wrap: wrap;
+}
+
+.tier-column {
+  flex: 1 1 300px;
+  max-width: 320px;
+}
+
+@media (max-width: 768px) {
+  .desktop-tier-container {
+    display: none;
+  }
+}
+
+/* Gradient Border and Glow Shadow */
+.price-tier-container {
+  padding: 1.5rem;
+  background: #0a0a0a;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  background-image: linear-gradient(#0a0a0a, #0a0a0a),
+    linear-gradient(135deg, royalblue, gold);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.price-tier-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 35px rgba(255, 215, 0, 0.4);
+}
+
+.price-tier-container h4 {
+  font-size: 1.4rem;
+  color: gold;
+  margin-bottom: 10px;
+}
+
+.price-tier-container .price {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.price-tier-container .features p {
+  margin: 0.4rem 0;
+  font-size: 1rem;
+  color: #ddd;
+}
+
+@media (max-width: 768px) {
+  .desktop-tier-container {
+    display: none;
+  }
+}
+
+
+
   </style>
 </head>
 <body>
@@ -189,9 +284,78 @@
       <span>Yearly</span>
     </div>
 
-    <!-- Mobile Pricing Cards -->
-    <div class="table-mobile">
-      <div class="price-card">
+    <!-- Mobile Pricing Cards (Visible on small screens) -->
+    <div class="mobile-tier-container hidden">
+      <div class="price-tier-container">
+        <div class="price-card">
+          <h4>Starter 💼</h4>
+          <p class="price"><span class="monthly">£90</span><span class="yearly hidden">£1,200</span></p>
+          <div class="features">
+            <p>Portfolio Website: ✅</p>
+            <p>E-commerce Website: ❌</p>
+            <p>Responsive Design: ✅</p>
+            <p>Domain + Hosting Setup: ✅</p>
+            <p>Contact + Email Form: ✅</p>
+            <p>Animations & Effects: ❌</p>
+            <p>Business Email: ❌</p>
+            <p>Monthly Maintenance: ❌</p>
+            <p>Logo Design: ❌</p>
+            <p>Social Media Branding: ❌</p>
+            <p>Business Card Design: ❌</p>
+            <p>Support: Email</p>
+          </div>
+          <button class="btn"><a href="contact.html" class="button-link">Choose Starter</a></button>
+        </div>
+      </div>
+
+      <div class="price-tier-container">
+        <div class="price-card">
+          <h4>Pro 🚀</h4>
+          <p class="price"><span class="monthly">£180</span><span class="yearly hidden">£2,100</span></p>
+          <div class="features">
+            <p>Portfolio Website: ✅</p>
+            <p>E-commerce Website: ✅</p>
+            <p>Responsive Design: ✅</p>
+            <p>Domain + Hosting Setup: ✅</p>
+            <p>Contact + Email Form: ✅</p>
+            <p>Animations & Effects: ✅</p>
+            <p>Business Email: ✅</p>
+            <p>Monthly Maintenance: ✅</p>
+            <p>Logo Design: 🔄 Add-on</p>
+            <p>Social Media Branding: ❌</p>
+            <p>Business Card Design: ❌</p>
+            <p>Support: Priority Email</p>
+          </div>
+          <button class="btn">Choose Pro</button>
+        </div>
+      </div>
+
+      <div class="price-tier-container">
+        <div class="price-card">
+          <h4>Elite 👑</h4>
+          <p class="price"><span class="monthly">£360</span><span class="yearly hidden">£4,400</span></p>
+          <div class="features">
+            <p>Portfolio Website: ✅</p>
+            <p>E-commerce Website: ✅</p>
+            <p>Responsive Design: ✅</p>
+            <p>Domain + Hosting Setup: ✅</p>
+            <p>Contact + Email Form: ✅</p>
+            <p>Animations & Effects: ✅</p>
+            <p>Business Email: ✅</p>
+            <p>Monthly Maintenance: ✅</p>
+            <p>Logo Design: ✅</p>
+            <p>Social Media Branding: ✅</p>
+            <p>Business Card Design: ✅</p>
+            <p>Support: Priority + Chat</p>
+          </div>
+          <button class="btn">Choose Elite</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop Pricing Table (Visible on large screens) -->
+    <div class="desktop-tier-container hidden">
+      <div class="tier-column">
         <h4>Starter 💼</h4>
         <p class="price"><span class="monthly">£90</span><span class="yearly hidden">£1,200</span></p>
         <div class="features">
@@ -200,11 +364,18 @@
           <p>Responsive Design: ✅</p>
           <p>Domain + Hosting Setup: ✅</p>
           <p>Contact + Email Form: ✅</p>
+          <p>Animations & Effects: ❌</p>
+          <p>Business Email: ❌</p>
+          <p>Monthly Maintenance: ❌</p>
+          <p>Logo Design: ❌</p>
+          <p>Social Media Branding: ❌</p>
+          <p>Business Card Design: ❌</p>
+          <p>Support: Email</p>
         </div>
         <button class="btn"><a href="contact.html" class="button-link">Choose Starter</a></button>
       </div>
 
-      <div class="price-card">
+      <div class="tier-column">
         <h4>Pro 🚀</h4>
         <p class="price"><span class="monthly">£180</span><span class="yearly hidden">£2,100</span></p>
         <div class="features">
@@ -214,11 +385,17 @@
           <p>Domain + Hosting Setup: ✅</p>
           <p>Contact + Email Form: ✅</p>
           <p>Animations & Effects: ✅</p>
+          <p>Business Email: ✅</p>
+          <p>Monthly Maintenance: ✅</p>
+          <p>Logo Design: 🔄 Add-on</p>
+          <p>Social Media Branding: ❌</p>
+          <p>Business Card Design: ❌</p>
+          <p>Support: Priority Email</p>
         </div>
         <button class="btn">Choose Pro</button>
       </div>
 
-      <div class="price-card">
+      <div class="tier-column">
         <h4>Elite 👑</h4>
         <p class="price"><span class="monthly">£360</span><span class="yearly hidden">£4,400</span></p>
         <div class="features">
@@ -230,53 +407,15 @@
           <p>Animations & Effects: ✅</p>
           <p>Business Email: ✅</p>
           <p>Monthly Maintenance: ✅</p>
+          <p>Logo Design: ✅</p>
+          <p>Social Media Branding: ✅</p>
+          <p>Business Card Design: ✅</p>
+          <p>Support: Priority + Chat</p>
         </div>
         <button class="btn">Choose Elite</button>
       </div>
     </div>
-
-    <!-- Regular Table (visible on desktop) -->
-    <div class="overflow-x-auto">
-      <table>
-        <thead>
-          <tr>
-            <th>Features</th>
-            <th>Starter 💼<br><span class="monthly">£90</span><span class="yearly hidden">£1,200</span></th>
-            <th>Pro 🚀<br><span class="monthly">£180</span><span class="yearly hidden">£2,100</span></th>
-            <th>Elite 👑<br><span class="monthly">£360</span><span class="yearly hidden">£4,400</span></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Portfolio Website</td><td>✅</td><td>✅</td><td>✅</td></tr>
-          <tr><td>E-commerce Website</td><td>❌</td><td>✅</td><td>✅</td></tr>
-          <tr><td>Responsive Design</td><td>✅</td><td>✅</td><td>✅</td></tr>
-          <tr><td>Domain + Hosting Setup</td><td>✅</td><td>✅</td><td>✅</td></tr>
-          <tr><td>Contact + Email Form</td><td>✅</td><td>✅</td><td>✅</td></tr>
-          <tr><td>Animations & Effects</td><td>❌</td><td>✅</td><td>✅</td></tr>
-          <tr><td>Business Email</td><td>❌</td><td>✅</td><td>✅</td></tr>
-          <tr><td>Monthly Maintenance</td><td>❌</td><td>✅</td><td>✅</td></tr>
-          <tr><td>Logo Design</td><td>❌</td><td>🔄 Add-on</td><td>✅</td></tr>
-          <tr><td>Social Media Branding</td><td>❌</td><td>❌</td><td>✅</td></tr>
-          <tr><td>Business Card Design</td><td>❌</td><td>❌</td><td>✅</td></tr>
-          <tr><td>Support</td><td>Email</td><td>Priority Email</td><td>Priority + Chat</td></tr>
-          <tr>
-            <td></td>
-            <td><button class="btn"><a href="contact.html" class="button-link">Choose Starter</a></button></td>
-            <td><button class="btn">Choose Pro</button></td>
-            <td><button class="btn">Choose Elite</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 </section>
-
-<script>
-  document.getElementById('pricingToggle').addEventListener('change', function () {
-    document.querySelectorAll('.monthly').forEach(el => el.classList.toggle('hidden'));
-    document.querySelectorAll('.yearly').forEach(el => el.classList.toggle('hidden'));
-  });
-</script>
-
 </body>
 </html>
