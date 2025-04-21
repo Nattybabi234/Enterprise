@@ -6,158 +6,60 @@
   <title>Najaza Admin Dashboard</title>
   <link rel="stylesheet" href="stylesheet.css">
   <link rel="icon" type="image/png" href="mainlogo.jpg" />
-  
   <style>
-    /* Sidebar */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #1d1d1d;
-      padding: 10px;
-    }
-
-    .brand {
+    button {
+      background-color: royalblue;
       color: white;
-      font-size: 20px;
-      font-weight: bold;
-    }
-
-    .navbar ul {
-      list-style: none;
-      display: flex;
-      margin: 0;
-      padding: 0;
-    }
-
-    .navbar ul li {
-      margin: 0 10px;
-    }
-
-    .navbar ul li a {
-      color: white;
-      text-decoration: none;
-      padding: 10px 20px;
-      transition: background-color 0.3s;
-    }
-
-    .navbar ul li a:hover {
-      background-color: #333;
-    }
-
-    /* Hamburger Menu */
-    .hamburger {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      width: 30px;
-      height: 20px;
-      cursor: pointer;
-      display: none;
-    }
-
-    .hamburger div {
-      width: 30px;
-      height: 3px;
-      background-color: white;
-      transition: all 0.3s;
-    }
-
-    .hamburger.active div:nth-child(1) {
-      transform: rotate(45deg);
-      position: relative;
-      top: 8px;
-    }
-
-    .hamburger.active div:nth-child(2) {
-      opacity: 0;
-    }
-
-    .hamburger.active div:nth-child(3) {
-      transform: rotate(-45deg);
-      position: relative;
-      bottom: 8px;
-    }
-
-    /* Sidebar toggle */
-    @media (max-width: 768px) {
-      .navbar ul {
-        display: none;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .navbar ul.show {
-        display: block;
-      }
-
-      .hamburger {
-        display: flex;
-      }
-    }
-
-    /* Content */
-    .content {
-      padding: 20px;
-    }
-
-    .card {
-      background-color: #f4f4f4;
-      margin-bottom: 20px;
-      padding: 20px;
+      border: none;
+      padding: 10px 16px;
       border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: background 0.3s;
     }
 
-    /* Transitions */
-    .fade-in {
-      animation: fadeIn 0.5s ease-in-out;
+    button:hover {
+      background-color: #4169e1;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
+    .chat-box {
+      height: 250px;
+      overflow-y: auto;
+      background: #f1f1f1;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 10px;
     }
 
-    /* Progress Bar */
-    .progress-bar {
-      width: 100%;
-      background-color: #e0e0e0;
-      height: 10px;
-      border-radius: 5px;
+    .message {
+      margin: 10px 0;
     }
 
-    .progress-bar div {
-      height: 100%;
-      border-radius: 5px;
+    .message.najaza {
+      text-align: right;
+      color: royalblue;
     }
 
-    /* Admin Dashboard */
-    #admin-dashboard {
-      display: none;
+    .message.client {
+      text-align: left;
+      color: darkgreen;
     }
 
-    /* Login Section */
-    #login-section {
+    .message-time {
+      font-size: 0.8em;
       display: block;
+      color: #666;
     }
   </style>
 </head>
 <body>
-  <!-- Sidebar -->
+  <!-- Navbar -->
   <nav class="navbar">
     <div class="brand">Najaza Admin</div>
-
     <div class="hamburger" id="hamburger">
       <div></div>
       <div></div>
       <div></div>
     </div>
-
     <ul id="nav-links">
       <li><a href="#">Dashboard</a></li>
       <li><a href="#">Chats</a></li>
@@ -177,13 +79,13 @@
       </form>
     </div>
 
-    <div id="admin-dashboard" class="fade-in">
+    <div id="admin-dashboard" class="fade-in" style="display: none;">
       <h2>Welcome, Admin</h2>
       <button id="logout-btn">Logout</button>
 
       <div class="card">
         <h3>💬 Client Chat</h3>
-        <div id="chat-box-admin">Loading...</div>
+        <div id="chat-box-admin" class="chat-box">Loading...</div>
         <form id="admin-chat-form">
           <input type="text" id="admin-message" placeholder="Type a reply..." required />
           <button type="submit">Send</button>
@@ -208,15 +110,12 @@
         <div id="user-details"></div>
       </div>
     </div>
-    
-    
   </div>
 
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js"></script>
-
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
@@ -264,34 +163,31 @@
     });
 
     document.getElementById("logout-btn").addEventListener("click", () => {
-  const confirmLogout = confirm("Are you sure you want to log out?");
-  if (confirmLogout) {
-    signOut(auth).then(() => {
-      loginSection.style.display = "block";
-      dashboard.style.display = "none";
+      const confirmLogout = confirm("Are you sure you want to log out?");
+      if (confirmLogout) {
+        signOut(auth).then(() => {
+          loginSection.style.display = "block";
+          dashboard.style.display = "none";
+        });
+      }
     });
-  }
-});
-
 
     // Real-time Chat Listener
     onSnapshot(query(collection(db, "chat"), orderBy("timestamp", "asc")), (snapshot) => {
-  chatBox.innerHTML = "";
-  snapshot.forEach((doc) => {
-    const msg = doc.data();
-    const type = msg.user === "Najaza Admin" ? "najaza" : "client";
-    const timestamp = new Date(msg.timestamp.seconds * 1000);  // Convert Firestore timestamp to Date object
-    const formattedTime = timestamp.toLocaleTimeString(); // You can customize the time format if needed
-    chatBox.innerHTML += `<div class="message ${type}">
-      <span class="message-time">${formattedTime}</span>
-      ${msg.message}
-    </div>`;
-  });
-  chatBox.scrollTop = chatBox.scrollHeight;
-});
+      chatBox.innerHTML = "";
+      snapshot.forEach((doc) => {
+        const msg = doc.data();
+        const type = msg.user === "Najaza Admin" ? "najaza" : "client";
+        const timestamp = new Date(msg.timestamp?.seconds * 1000);
+        const formattedTime = timestamp.toLocaleTimeString();
+        chatBox.innerHTML += `<div class="message ${type}">
+          <span class="message-time">${formattedTime}</span>
+          ${msg.message}
+        </div>`;
+      });
+      chatBox.scrollTop = chatBox.scrollHeight;
+    });
 
-
-    // Send Message
     chatForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const message = messageInput.value;
@@ -305,23 +201,18 @@
       });
     });
 
-    // Add this inside your message listener
-const notificationCount = document.getElementById("notification-count");
+    const notificationCount = document.getElementById("notification-count");
+    onSnapshot(query(collection(db, "chat"), orderBy("timestamp", "asc")), (snapshot) => {
+      const unreadMessages = snapshot.docs.filter(doc => !doc.data().read);
+      notificationCount.textContent = unreadMessages.length;
+      if (unreadMessages.length > 0) {
+        document.getElementById("notifications").classList.add("show");
+      } else {
+        document.getElementById("notifications").classList.remove("show");
+      }
+    });
 
-onSnapshot(query(collection(db, "chat"), orderBy("timestamp", "asc")), (snapshot) => {
-  const unreadMessages = snapshot.docs.filter(doc => !doc.data().read);
-  notificationCount.textContent = unreadMessages.length;
-  if (unreadMessages.length > 0) {
-    document.getElementById("notifications").classList.add("show");
-  } else {
-    document.getElementById("notifications").classList.remove("show");
-  }
-});
-
-
-    // Real-time User Progress + Search
     let allUsers = [];
-
     onSnapshot(collection(db, "users"), (snapshot) => {
       allUsers = [];
       snapshot.forEach((doc) => {
@@ -331,76 +222,42 @@ onSnapshot(query(collection(db, "chat"), orderBy("timestamp", "asc")), (snapshot
     });
 
     function renderUserProgress() {
-  const search = searchInput.value.toLowerCase();
-  userProgressList.innerHTML = "";
+      const search = searchInput.value.toLowerCase();
+      userProgressList.innerHTML = "";
 
-  allUsers
-    .filter(u => (u.name || "").toLowerCase().includes(search))
-    .forEach((user) => {
-      const div = document.createElement("div");
-      div.classList.add("user-progress-item"); // Add a class for styling
-
-      div.innerHTML = `
-        <h4>${user.name || "Unnamed User"}</h4>
-        <p><strong>Project:</strong> ${user.project || "No project assigned"}</p>
-        <p><strong>Due Date:</strong> ${user.dueDate || "Not set"}</p>
-        <div class="progress-bar">
-          <div style="width:${user.progress || 0}%; background:${user.progress == 100 ? 'green' : '#ffd700'};"></div>
-        </div>
-        <p>${user.progress || 0}% completed</p>
-      `;
-
-      userProgressList.appendChild(div);
-    });
-}
-
-const filterByProject = "Design"; // Example project
-const filterByProgress = 50; // Example filter for users with more than 50% progress
-
-const filteredUsers = allUsers.filter(u => {
-  return (u.project && u.project.includes(filterByProject)) && (u.progress >= filterByProgress);
-});
-
-filteredUsers.forEach((user) => {
-  const div = document.createElement("div");
-  div.innerHTML = `
-    <h4>${user.name}</h4>
-    <p><strong>Project:</strong> ${user.project}</p>
-    <p><strong>Progress:</strong> ${user.progress}%</p>
-  `;
-  userProgressList.appendChild(div);
-});
+      allUsers
+        .filter(u => (u.name || "").toLowerCase().includes(search))
+        .forEach((user) => {
+          const div = document.createElement("div");
+          div.classList.add("user-progress-item");
+          div.innerHTML = `
+            <h4>${user.name || "Unnamed User"}</h4>
+            <p><strong>Project:</strong> ${user.project || "No project assigned"}</p>
+            <p><strong>Due Date:</strong> ${user.dueDate || "Not set"}</p>
+            <div class="progress-bar">
+              <div style="width:${user.progress || 0}%; background:${user.progress == 100 ? 'green' : '#ffd700'};"></div>
+            </div>
+            <p>${user.progress || 0}% completed</p>
+          `;
+          userProgressList.appendChild(div);
+        });
+    }
 
     searchInput.addEventListener("input", renderUserProgress);
   </script>
 
+  <!-- Mobile nav toggle -->
   <script>
     const hamburger = document.getElementById("hamburger");
     const navList = document.querySelector(".navbar ul");
-
     hamburger.addEventListener("click", () => {
       hamburger.classList.toggle("active");
       navList.classList.toggle("show");
     });
 
-    function openModal(user) {
-  const modal = document.getElementById("user-progress-modal");
-  const userDetails = document.getElementById("user-details");
-  
-  userDetails.innerHTML = `
-    <h4>${user.name}</h4>
-    <p><strong>Project:</strong> ${user.project}</p>
-    <p><strong>Due Date:</strong> ${user.dueDate}</p>
-    <p><strong>Progress:</strong> ${user.progress}%</p>
-  `;
-  
-  modal.style.display = "flex";
-}
-
-function closeModal() {
-  document.getElementById("user-progress-modal").style.display = "none";
-}
-
+    function closeModal() {
+      document.getElementById("user-progress-modal").style.display = "none";
+    }
   </script>
 </body>
 </html>
