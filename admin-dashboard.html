@@ -106,6 +106,18 @@
         <input type="text" id="searchInput" placeholder="Search user by name..." />
         <div id="user-progress-list">Loading...</div>
       </div>
+
+      <div class="card">
+        <h3>➕ Add New User</h3>
+        <form id="add-user-form">
+          <input type="email" id="new-user-email" placeholder="User Email" required />
+          <input type="text" id="new-user-name" placeholder="User Name" required />
+          <input type="text" id="new-user-project" placeholder="Project Name" required />
+          <input type="date" id="new-user-due" placeholder="Due Date" />
+          <input type="number" id="new-user-progress" placeholder="Progress (%)" min="0" max="100" />
+          <button type="submit">Add User</button>
+        </form>
+      </div>
     </div>
 
     <div id="notifications" class="notification-icon">
@@ -125,7 +137,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBf56KIkY6197EpikJWA4J2KbPVpGGM3xY",
@@ -229,10 +241,59 @@
             <div style="width:${user.progress || 0}%; background:${user.progress == 100 ? 'green' : '#ffd700'};"></div>
           </div>
           <p>${user.progress || 0}% completed</p>
+          <input type="number" min="0" max="100" value="${user.progress || 0}" id="progress-${user.email}" />
+          <button onclick="updateProgress('${user.email}')">Update Progress</button>
         `;
         userProgressList.appendChild(div);
       });
     }
+
+    window.updateProgress = async function(email) {
+      const input = document.getElementById(`progress-${email}`);
+      const newProgress = parseInt(input.value);
+
+      if (isNaN(newProgress) || newProgress < 0 || newProgress > 100) {
+        alert("Please enter a valid progress between 0 and 100.");
+        return;
+      }
+
+      try {
+        const userRef = doc(db, "users", email);
+        await updateDoc(userRef, { progress: newProgress });
+        alert(`Progress for ${email} updated to ${newProgress}%`);
+      } catch (error) {
+        console.error("Error updating progress:", error);
+        alert("Failed to update progress.");
+      }
+    }
+
+    const addUserForm = document.getElementById("add-user-form");
+    addUserForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("new-user-email").value.trim();
+      const name = document.getElementById("new-user-name").value.trim();
+      const project = document.getElementById("new-user-project").value.trim();
+      const dueDate = document.getElementById("new-user-due").value;
+      const progress = parseInt(document.getElementById("new-user-progress").value) || 0;
+
+      if (!email || !name) {
+        alert("Email and name are required!");
+        return;
+      }
+
+      try {
+        await setDoc(doc(db, "users", email), {
+          name,
+          project,
+          dueDate,
+          progress
+        });
+        alert("User added successfully!");
+        addUserForm.reset();
+      } catch (err) {
+        alert("Error adding user: " + err.message);
+      }
+    });
 
     searchInput.addEventListener("input", renderUserProgress);
   </script>
