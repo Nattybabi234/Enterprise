@@ -121,10 +121,7 @@
     </div>
   </div>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js"></script>
+  <!-- Firebase SDK - MODULE ONLY -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
@@ -170,7 +167,6 @@
           }
         })
         .catch((err) => alert("Login failed: " + err.message));
-
     });
 
     document.getElementById("logout-btn").addEventListener("click", () => {
@@ -183,7 +179,6 @@
       }
     });
 
-    // Real-time Chat Listener (shared with user dashboard)
     const q = query(collection(db, "messages"), orderBy("createdAt", "asc"));
     onSnapshot(q, (snapshot) => {
       chatBox.innerHTML = "";
@@ -211,7 +206,6 @@
       }
     });
 
-    // User progress rendering logic stays the same
     let allUsers = [];
     onSnapshot(collection(db, "users"), (snapshot) => {
       allUsers = [];
