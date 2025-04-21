@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Najaza Admin Dashboard</title>
+  <link rel="stylesheet" href="stylesheet.css">
+  <link rel="icon" type="image/png" href="mainlogo.jpg" />
+  
+  <style>
+    /* Sidebar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #1d1d1d;
+      padding: 10px;
+    }
+
+    .brand {
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar ul li {
+      margin: 0 10px;
+    }
+
+    .navbar ul li a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      transition: background-color 0.3s;
+    }
+
+    .navbar ul li a:hover {
+      background-color: #333;
+    }
+
+    /* Hamburger Menu */
+    .hamburger {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 30px;
+      height: 20px;
+      cursor: pointer;
+      display: none;
+    }
+
+    .hamburger div {
+      width: 30px;
+      height: 3px;
+      background-color: white;
+      transition: all 0.3s;
+    }
+
+    .hamburger.active div:nth-child(1) {
+      transform: rotate(45deg);
+      position: relative;
+      top: 8px;
+    }
+
+    .hamburger.active div:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active div:nth-child(3) {
+      transform: rotate(-45deg);
+      position: relative;
+      bottom: 8px;
+    }
+
+    /* Sidebar toggle */
+    @media (max-width: 768px) {
+      .navbar ul {
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .navbar ul.show {
+        display: block;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+
+    /* Content */
+    .content {
+      padding: 20px;
+    }
+
+    .card {
+      background-color: #f4f4f4;
+      margin-bottom: 20px;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Transitions */
+    .fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Progress Bar */
+    .progress-bar {
+      width: 100%;
+      background-color: #e0e0e0;
+      height: 10px;
+      border-radius: 5px;
+    }
+
+    .progress-bar div {
+      height: 100%;
+      border-radius: 5px;
+    }
+
+    /* Admin Dashboard */
+    #admin-dashboard {
+      display: none;
+    }
+
+    /* Login Section */
+    #login-section {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <nav class="navbar">
+    <div class="brand">Najaza Admin</div>
+
+    <div class="hamburger" id="hamburger">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+
+    <ul id="nav-links">
+      <li><a href="#">Dashboard</a></li>
+      <li><a href="#">Chats</a></li>
+      <li><a href="#">Progress</a></li>
+      <li><a href="#" id="logout-btn-nav">Logout</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="content">
+    <div id="login-section">
+      <h2>Admin Login</h2>
+      <form id="login-form">
+        <input type="email" id="email" placeholder="Enter email" required /><br />
+        <input type="password" id="password" placeholder="Enter password" required /><br />
+        <button type="submit">Login</button>
+      </form>
+    </div>
+
+    <div id="admin-dashboard" class="fade-in">
+      <h2>Welcome, Admin</h2>
+      <button id="logout-btn">Logout</button>
+
+      <div class="card">
+        <h3>💬 Client Chat</h3>
+        <div id="chat-box-admin">Loading...</div>
+        <form id="admin-chat-form">
+          <input type="text" id="admin-message" placeholder="Type a reply..." required />
+          <button type="submit">Send</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3>📈 Client Progress</h3>
+        <input type="text" id="searchInput" placeholder="Search user by name..." />
+        <div id="user-progress-list">Loading...</div>
+      </div>
+    </div>
+
+    <div id="notifications" class="notification-icon">
+      <span id="notification-count">0</span>
+    </div>
+
+    <div id="user-progress-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">×</span>
+        <h2>User Progress Details</h2>
+        <div id="user-details"></div>
+      </div>
+    </div>
+    
+    
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js"></script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBmbYhrimPvTFsY5R_2rdERjJ_-2fZlcnU",
+      authDomain: "admindashboard-60b5c.firebaseapp.com",
+      projectId: "admindashboard-60b5c",
+      storageBucket: "admindashboard-60b5c.appspot.com",
+      messagingSenderId: "378431820190",
+      appId: "1:378431820190:web:64fefe44f4036ad29b068f"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const allowedAdmins = ["layeninathania@gmail.com"];
+    const loginForm = document.getElementById("login-form");
+    const loginSection = document.getElementById("login-section");
+    const dashboard = document.getElementById("admin-dashboard");
+    const chatBox = document.getElementById("chat-box-admin");
+    const chatForm = document.getElementById("admin-chat-form");
+    const messageInput = document.getElementById("admin-message");
+    const userProgressList = document.getElementById("user-progress-list");
+    const searchInput = document.getElementById("searchInput");
+
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          if (!allowedAdmins.includes(userCredential.user.email)) {
+            signOut(auth);
+            alert("Access denied.");
+          } else {
+            loginSection.style.display = "none";
+            dashboard.style.display = "block";
+          }
+        })
+        .catch(() => alert("Login failed."));
+    });
+
+    document.getElementById("logout-btn").addEventListener("click", () => {
+  const confirmLogout = confirm("Are you sure you want to log out?");
+  if (confirmLogout) {
+    signOut(auth).then(() => {
+      loginSection.style.display = "block";
+      dashboard.style.display = "none";
+    });
+  }
+});
+
+
+    // Real-time Chat Listener
+    onSnapshot(query(collection(db, "chat"), orderBy("timestamp", "asc")), (snapshot) => {
+  chatBox.innerHTML = "";
+  snapshot.forEach((doc) => {
+    const msg = doc.data();
+    const type = msg.user === "Najaza Admin" ? "najaza" : "client";
+    const timestamp = new Date(msg.timestamp.seconds * 1000);  // Convert Firestore timestamp to Date object
+    const formattedTime = timestamp.toLocaleTimeString(); // You can customize the time format if needed
+    chatBox.innerHTML += `<div class="message ${type}">
+      <span class="message-time">${formattedTime}</span>
+      ${msg.message}
+    </div>`;
+  });
+  chatBox.scrollTop = chatBox.scrollHeight;
+});
+
+
+    // Send Message
+    chatForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const message = messageInput.value;
+      if (!message.trim()) return;
+      addDoc(collection(db, "chat"), {
+        user: "Najaza Admin",
+        message,
+        timestamp: serverTimestamp()
+      }).then(() => {
+        messageInput.value = "";
+      });
+    });
+
+    // Add this inside your message listener
+const notificationCount = document.getElementById("notification-count");
+
+onSnapshot(query(collection(db, "chat"), orderBy("timestamp", "asc")), (snapshot) => {
+  const unreadMessages = snapshot.docs.filter(doc => !doc.data().read);
+  notificationCount.textContent = unreadMessages.length;
+  if (unreadMessages.length > 0) {
+    document.getElementById("notifications").classList.add("show");
+  } else {
+    document.getElementById("notifications").classList.remove("show");
+  }
+});
+
+
+    // Real-time User Progress + Search
+    let allUsers = [];
+
+    onSnapshot(collection(db, "users"), (snapshot) => {
+      allUsers = [];
+      snapshot.forEach((doc) => {
+        allUsers.push(doc.data());
+      });
+      renderUserProgress();
+    });
+
+    function renderUserProgress() {
+  const search = searchInput.value.toLowerCase();
+  userProgressList.innerHTML = "";
+
+  allUsers
+    .filter(u => (u.name || "").toLowerCase().includes(search))
+    .forEach((user) => {
+      const div = document.createElement("div");
+      div.classList.add("user-progress-item"); // Add a class for styling
+
+      div.innerHTML = `
+        <h4>${user.name || "Unnamed User"}</h4>
+        <p><strong>Project:</strong> ${user.project || "No project assigned"}</p>
+        <p><strong>Due Date:</strong> ${user.dueDate || "Not set"}</p>
+        <div class="progress-bar">
+          <div style="width:${user.progress || 0}%; background:${user.progress == 100 ? 'green' : '#ffd700'};"></div>
+        </div>
+        <p>${user.progress || 0}% completed</p>
+      `;
+
+      userProgressList.appendChild(div);
+    });
+}
+
+const filterByProject = "Design"; // Example project
+const filterByProgress = 50; // Example filter for users with more than 50% progress
+
+const filteredUsers = allUsers.filter(u => {
+  return (u.project && u.project.includes(filterByProject)) && (u.progress >= filterByProgress);
+});
+
+filteredUsers.forEach((user) => {
+  const div = document.createElement("div");
+  div.innerHTML = `
+    <h4>${user.name}</h4>
+    <p><strong>Project:</strong> ${user.project}</p>
+    <p><strong>Progress:</strong> ${user.progress}%</p>
+  `;
+  userProgressList.appendChild(div);
+});
+
+    searchInput.addEventListener("input", renderUserProgress);
+  </script>
+
+  <script>
+    const hamburger = document.getElementById("hamburger");
+    const navList = document.querySelector(".navbar ul");
+
+    hamburger.addEventListener("click", () => {
+      hamburger.classList.toggle("active");
+      navList.classList.toggle("show");
+    });
+
+    function openModal(user) {
+  const modal = document.getElementById("user-progress-modal");
+  const userDetails = document.getElementById("user-details");
+  
+  userDetails.innerHTML = `
+    <h4>${user.name}</h4>
+    <p><strong>Project:</strong> ${user.project}</p>
+    <p><strong>Due Date:</strong> ${user.dueDate}</p>
+    <p><strong>Progress:</strong> ${user.progress}%</p>
+  `;
+  
+  modal.style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("user-progress-modal").style.display = "none";
+}
+
+  </script>
+</body>
+</html>
