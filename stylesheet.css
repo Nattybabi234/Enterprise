@@ -138,3 +138,565 @@
     border-radius: 5px;
   }
   
+  /* Reset & base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #1a1a40;
+  color: white;
+  min-height: 100vh;
+  overflow-x: hidden;
+  animation: fadeInBody 0.8s ease-in-out;
+}
+
+/* Animations */
+@keyframes fadeInBody {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #002366;
+  padding: 15px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.navbar .brand {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffd700;
+  animation: slideUp 0.6s ease-out;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.navbar li {
+  position: relative;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.navbar a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  width: 0;
+  height: 2px;
+  background-color: #ffd700;
+  transition: width 0.3s ease;
+}
+
+.navbar a:hover {
+  background: #ffd700;
+  color: #1a1a40;
+}
+
+.navbar a:hover::after {
+  width: 80%;
+}
+
+.hamburger {
+  display: none;
+  font-size: 28px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .navbar ul {
+    flex-direction: column;
+    background-color: #002366;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 200px;
+    padding: 10px 0;
+    display: none;
+  }
+
+  .navbar ul.show {
+    display: flex;
+  }
+
+  .hamburger {
+    display: block;
+  }
+}
+
+/* Layout */
+.content {
+  padding: 20px;
+  max-width: 1100px;
+  margin: auto;
+  animation: slideUp 0.8s ease-in-out;
+}
+
+/* Cards */
+.card {
+  background: #222;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  animation: slideUp 0.8s ease forwards;
+}
+
+/* Chat Box */
+#chat-box-admin {
+  background: #111;
+  border: 1px solid #444;
+  height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  animation: fadeInBody 0.6s ease-in-out;
+}
+
+.message {
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 80%;
+  margin-bottom: 10px;
+  word-wrap: break-word;
+  transition: all 0.3s;
+}
+
+.client {
+  background: #002366;
+  color: white;
+}
+
+.najaza {
+  background: #ffd700;
+  color: #1a1a40;
+  margin-left: auto;
+}
+
+/* Chat input */
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+form input, form button {
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+form input {
+  flex: 1;
+  border: none;
+  background: #fff;
+  color: #000;
+}
+
+form button {
+  background: #ffd700;
+  color: #1a1a40;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+form button:hover {
+  background-color: #e6c200;
+}
+
+/* Progress */
+.progress {
+  margin: 15px 0;
+}
+
+.progress-bar {
+  width: 100%;
+  background-color: #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-bar div {
+  height: 20px;
+  border-radius: 5px;
+  transition: width 0.5s ease;
+}
+
+/* Responsive Fixes */
+@media (max-width: 768px) {
+  .card, .content {
+    padding: 15px;
+  }
+
+  form input {
+    width: 100%;
+  }
+
+  form {
+    flex-direction: column;
+  }
+}
+
+/* Page transition */
+.page-transition {
+  animation: fadeSlideIn 0.6s ease-in-out;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hide hamburger on desktop, show on small screens */
+/* Hamburger Menu */
+.hamburger {
+  display: block;
+  cursor: pointer;
+  width: 30px;
+  height: 25px;
+  position: relative;
+  z-index: 99;
+}
+
+/* Hamburger bars */
+.hamburger div {
+  width: 30px;
+  height: 5px;
+  background-color: #ffd700;
+  margin: 5px auto;
+  transition: 0.3s ease;
+  border-radius: 5px;
+}
+
+/* On click (active) hamburger animation */
+.hamburger.active .bar1 {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active .bar2 {
+  opacity: 0;
+}
+
+.hamburger.active .bar3 {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Hide hamburger icon on desktop */
+@media (min-width: 768px) {
+  .hamburger {
+    display: none;
+  }
+}
+
+/* Navbar Styles */
+.navbar ul {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  justify-content: center;
+}
+
+.navbar ul li {
+  margin: 0 20px;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+}
+
+.navbar ul li a {
+  text-decoration: none;
+  color: #ffd700;
+}
+
+/* On hover effect */
+.navbar ul li:hover {
+  transform: scale(1.1);
+  color: white;
+}
+
+/* Mobile Navbar */
+.navbar ul.show {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #002366;
+  padding: 20px 0;
+  height: 100vh;
+  transition: all 0.3s ease-in-out;
+}
+
+.navbar ul li {
+  margin: 15px 0;
+  text-align: center;
+}
+
+.navbar ul.show li a {
+  color: white;
+}
+
+.navbar ul.show li:hover {
+  transform: none;
+}
+
+/* Sidebar / Navbar */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #002366;
+  height: 100vh;
+  width: 250px;
+  padding: 20px;
+  box-shadow: 4px 0px 12px rgba(0,0,0,0.5);
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 999;
+}
+
+.sidebar a {
+  color: #ffd700;
+  display: block;
+  font-size: 20px;
+  margin: 15px 0;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Hover Effect */
+.sidebar a:hover {
+  background: #ffd700;
+  color: #1a1a40;
+  border-radius: 4px;
+}
+
+/* Content Section */
+.content {
+  margin-left: 250px;
+  padding: 20px;
+  transition: margin-left 0.3s;
+}
+
+/* Media Query for Mobile (Hamburger Menu for small screens) */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+
+  .content {
+    margin-left: 0;
+  }
+
+  .navbar ul {
+    display: none;
+    flex-direction: column;
+  }
+
+  .navbar ul.show {
+    display: flex;
+  }
+
+  /* Hide sidebar on mobile */
+  .sidebar a {
+    color: #ffd700;
+  }
+
+  .navbar ul li {
+    margin: 10px 0;
+  }
+}
+
+.navbar ul li a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.navbar ul li a:hover {
+  background-color: #333;
+  transform: scale(1.05);
+}
+
+.navbar ul li a.active {
+  background-color: #0077ff; /* Add an active state to highlight the current page */
+  transform: scale(1.05);
+}
+
+
+.user-progress-item {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.user-progress-item h4 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.user-progress-item p {
+  margin: 5px 0;
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
+
+.progress-bar div {
+  height: 100%;
+  border-radius: 5px;
+}
+
+.read-status {
+  color: green;
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.progress-bar {
+  width: 100%;
+  background-color: #e0e0e0;
+  height: 12px;
+  border-radius: 5px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
+}
+
+.progress-bar div {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.3s, background-color 0.3s;
+}
+
+.progress-bar div.green {
+  background-color: green;
+}
+
+.progress-bar div.yellow {
+  background-color: #ffcc00;
+}
+
+.progress-bar div.red {
+  background-color: red;
+}
+
+.card {
+  background-color: #f4f4f4;
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Sidebar background */
+.navbar {
+  background-color: #1d1d1d;
+}
+
+.navbar ul.show {
+  background-color: #333;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Hamburger menu effect */
+.hamburger.active div {
+  background-color: #0077ff;
+}
+
+.notification-icon {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: red;
+  color: white;
+  padding: 10px;
+  border-radius: 50%;
+  font-size: 16px;
+  display: none;
+  cursor: pointer;
+}
+
+.notification-icon.show {
+  display: block;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
