@@ -169,7 +169,8 @@
             dashboard.style.display = "block";
           }
         })
-        .catch(() => alert("Login failed."));
+        .catch((err) => alert("Login failed: " + err.message));
+
     });
 
     document.getElementById("logout-btn").addEventListener("click", () => {
