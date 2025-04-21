@@ -2,100 +2,221 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard - Najaza Web</title>
-  <link rel="stylesheet" href="stylesheet.css" />
-  <script src="https://kit.fontawesome.com/5b5b5373bb.js" crossorigin="anonymous"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Dashboard - Najaza</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="icon" type="image/png" href="mainlogo.jpg" />
+  <style>
+    :root {
+      --blue: #002366;
+      --gold: #ffd700;
+      --dark: #0c0c24;
+      --light: #1a1a40;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--dark);
+      color: white;
+    }
+    .header {
+      background-color: var(--gold);
+      color: var(--blue);
+      padding: 1rem 2rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    .dashboard {
+      display: flex;
+    }
+    .sidebar {
+      width: 220px;
+      background-color: var(--blue);
+      height: 100vh;
+      padding: 2rem 1rem;
+    }
+    .sidebar a {
+      color: white;
+      display: block;
+      margin-bottom: 1rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .sidebar a:hover {
+      color: var(--gold);
+    }
+    .main {
+      flex-grow: 1;
+      padding: 2rem;
+    }
+    .card {
+      background-color: var(--light);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border-radius: 10px;
+    }
+    .card h3 {
+      color: var(--gold);
+    }
+    .progress-bar {
+      background-color: grey;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+    .progress {
+      height: 12px;
+      background-color: var(--gold);
+      width: 60%;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    input, textarea {
+      padding: 0.5rem;
+      border: none;
+      border-radius: 5px;
+    }
+    button {
+      background: var(--gold);
+      color: var(--blue);
+      border: none;
+      padding: 0.7rem;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+
+<style>
+  #chat-box {
+    height: 250px;
+    overflow-y: auto;
+    background: #1a1a40;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    color: white;
+  }
+
+  #chat-form input {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+  }
+
+  #chat-form button {
+    padding: 0.5rem 1rem;
+    background: #ffd700;
+    color: #002366;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+</style>
+
 </head>
 <body>
-
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="navbar__container">
-      <a href="/" id="navbar__logo"><i class="fa-solid fa-terminal"></i>NAJAZA</a>
-      <ul class="navbar__menu">
-        <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
-        <li class="navbar__item"><a href="/tech.html" class="navbar__links">Tech</a></li>
-        <li class="navbar__item"><a href="/portfolio.html" class="navbar__links">Portfolio</a></li>
-        <li class="navbar__item"><a href="/pricing.html" class="navbar__links">Pricing</a></li>
-        <li class="navbar__item"><a href="javascript:void(0);" id="logout-btn" class="navbar__links">Sign Out</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- Dashboard Section -->
+  <div class="header">Najaza User Dashboard</div>
   <div class="dashboard">
-    <div class="dashboard__container">
-      <h1>Welcome, <span id="user-email"></span></h1>
-
-      <section>
-        <h2>Your Ongoing Services</h2>
-        <ul id="portfolio-list">
-          <!-- Portfolio Items will be injected here dynamically -->
-        </ul>
-      </section>
+    <div class="sidebar">
+      <a href="#"><i class="fas fa-house"></i> Home</a>
+      <a href="#"><i class="fas fa-folder"></i> My Projects</a>
+      <a href="#"><i class="fas fa-envelope"></i> Contact Najaza</a>
+      <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
+    <div class="main">
+      <div class="card">
+        <h3>Welcome, Client 👋</h3>
+        <p>Here’s the progress on your current website:</p>
+        <strong>Project: Fashion Portfolio Site</strong>
+        <p>Status: In Development</p>
+        <div class="progress-bar"><div class="progress" style="width: 70%;"></div></div>
+        <p>Estimated Completion: April 22, 2025</p>
+      </div>
+
+      <div class="card">
+        <h3>Live Chat with Najaza 🟢</h3>
+        <div id="chat-box">Loading messages...</div>
+        <form id="chat-form">
+          <input type="text" id="message" placeholder="Type your message..." required />
+          <button type="submit">Send</button>
+        </form>
+      </div>
+      
   </div>
 
-  <!-- Firebase + Dashboard Logic -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCFWGQEhZDfXP9kuVefDtpOF2zRmxsdPbY",
-      authDomain: "najazaauth.firebaseapp.com",
-      projectId: "najazaauth",
-      storageBucket: "najazaauth.firebasestorage.app",
-      messagingSenderId: "797577104417",
-      appId: "1:797577104417:web:6f96bc4adbfc9f4cc26760",
-      measurementId: "G-D2S3729SQH"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    async function loadPortfolio() {
-      const querySnapshot = await getDocs(collection(db, "portfolio"));
-      const portfolioContainer = document.getElementById("portfolio-list");
-
-      querySnapshot.forEach((doc) => {
-        const project = doc.data();
-        const item = document.createElement("li");
-        item.innerHTML = `
-          <h3>${project.projectName}</h3>
-          <p>${project.description}</p>
-          <a href="${project.link}" target="_blank">View Project</a>
-        `;
-        portfolioContainer.appendChild(item);
-      });
+  <script>
+    function sendMessage() {
+      alert("Message sent! Najaza will get back to you shortly.");
+      // You can connect this to your email API later (e.g., EmailJS, Formspree)
     }
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        document.getElementById("user-email").textContent = user.email;
-        loadPortfolio();
-      } else {
-        window.location.href = "signin.html";
-      }
-    });
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const logoutBtn = document.getElementById("logout-btn");
-      if (logoutBtn) {
-        logoutBtn.addEventListener("click", () => {
-          signOut(auth).then(() => {
-            window.location.href = "signin.html";
-          });
-        });
-      }
-    });
   </script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    addDoc,
+    onSnapshot,
+    serverTimestamp,
+    query,
+    orderBy
+  } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBf56KIkY6197EpikJWA4J2KbPVpGGM3xY",
+    authDomain: "najazachat.firebaseapp.com",
+    projectId: "najazachat",
+    storageBucket: "najazachat.firebasestorage.app",
+    messagingSenderId: "93782128218",
+    appId: "1:93782128218:web:169cf9051f2532a9664a63",
+    measurementId: "G-28QPTZ86DV"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const chatForm = document.getElementById("chat-form");
+  const chatBox = document.getElementById("chat-box");
+
+  chatForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const messageInput = document.getElementById("message");
+    const msg = messageInput.value.trim();
+
+    if (msg) {
+      await addDoc(collection(db, "messages"), {
+        sender: "client",
+        text: msg,
+        createdAt: serverTimestamp()
+      });
+      messageInput.value = "";
+    }
+  });
+
+  const q = query(collection(db, "messages"), orderBy("createdAt", "asc"));
+
+  onSnapshot(q, (snapshot) => {
+    chatBox.innerHTML = "";
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      const msgDiv = document.createElement("div");
+      msgDiv.textContent = `${data.sender === "client" ? "You" : "Najaza"}: ${data.text}`;
+      msgDiv.style.marginBottom = "8px";
+      msgDiv.style.background = data.sender === "client" ? "#333" : "#ffd700";
+      msgDiv.style.color = data.sender === "client" ? "#fff" : "#002366";
+      msgDiv.style.padding = "8px";
+      msgDiv.style.borderRadius = "8px";
+      chatBox.appendChild(msgDiv);
+    });
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+</script>
+
 </body>
 </html>
