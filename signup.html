@@ -38,7 +38,7 @@ const firebaseConfig = {
                 const user = userCredential.user;
                 console.log('User signed up:', user);
                 // Redirect to Dashboard after successful sign-up
-                window.location.href = '/dashboard.html'; 
+                window.location.href = 'dashboard.html'; 
             } catch (error) {
                 const errorCode = error.code;
                 const errorMessage = error.message;
