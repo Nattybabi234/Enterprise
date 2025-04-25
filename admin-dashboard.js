@@ -1,8 +1,11 @@
+// admin-dashboard.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import {
   getAuth,
   signInWithEmailAndPassword,
-  signOut
+  signOut,
+  onAuthStateChanged,
+  browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import {
   getFirestore,
@@ -46,7 +49,14 @@ const addUserForm = document.getElementById("add-user-form");
 
 const allowedAdmins = ["layeninathania@gmail.com"];
 
-let CURRENT_SELECTED_USER_EMAIL = ""; // Track selected user email for chat
+// Ensure Firebase session persistence
+auth.setPersistence(browserLocalPersistence)
+  .then(() => {
+    // Your login logic here will go inside
+  })
+  .catch((error) => {
+    console.error("Error setting persistence", error);
+  });
 
 // Handle login
 loginForm.addEventListener("submit", (e) => {
@@ -68,6 +78,23 @@ loginForm.addEventListener("submit", (e) => {
     .catch((err) => alert("Login failed: " + err.message));
 });
 
+// Handle session state when page loads
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const email = user.email;
+    if (!allowedAdmins.includes(email)) {
+      signOut(auth);  // Sign out if the user is not an allowed admin
+      alert("Access denied.");
+    } else {
+      loginSection.style.display = "none";
+      dashboard.style.display = "block";
+    }
+  } else {
+    loginSection.style.display = "block";
+    dashboard.style.display = "none";
+  }
+});
+
 // Logout
 document.getElementById("logout-btn").addEventListener("click", () => {
   if (confirm("Are you sure you want to log out?")) {
@@ -78,59 +105,38 @@ document.getElementById("logout-btn").addEventListener("click", () => {
   }
 });
 
-// View Chat for selected user
-function viewUserChat(email) {
-  CURRENT_SELECTED_USER_EMAIL = email;
-  chatBox.innerHTML = "Loading chat..."; // Display loading message
-
-  const chatQuery = query(collection(db, "users", email, "messages"), orderBy("createdAt", "asc"));
-
-  onSnapshot(chatQuery, (snapshot) => {
-    chatBox.innerHTML = ""; // Clear existing messages
-    snapshot.forEach((doc) => {
-      const data = doc.data();
-      const type = data.sender === "client" ? "client" : "najaza";
-      const msgDiv = document.createElement("div");
-      msgDiv.className = `message ${type}`;
-      msgDiv.innerHTML = `${data.text}<span class="message-time">${new Date(data.createdAt?.seconds * 1000 || Date.now()).toLocaleTimeString()}</span>`;
-      chatBox.appendChild(msgDiv);
-      
-      // Mark message as read if it's unread
-      if (data.read === false) {
-        updateDoc(doc.ref, { read: true });
-      }
-    });
-    chatBox.scrollTop = chatBox.scrollHeight; // Scroll to latest message
+// Chat listener
+const chatQuery = query(collection(db, "messages"), orderBy("createdAt", "asc"));
+onSnapshot(chatQuery, (snapshot) => {
+  chatBox.innerHTML = "";
+  snapshot.forEach((doc) => {
+    const data = doc.data();
+    const type = data.sender === "client" ? "client" : "najaza";
+    const msgDiv = document.createElement("div");
+    msgDiv.className = `message ${type}`;
+    msgDiv.innerHTML = `${data.text}<span class="message-time">${new Date(data.createdAt?.seconds * 1000 || Date.now()).toLocaleTimeString()}</span>`;
+    chatBox.appendChild(msgDiv);
   });
-}
+  chatBox.scrollTop = chatBox.scrollHeight;
+});
 
 // Send chat message
 chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const msg = messageInput.value.trim();
-  if (msg && CURRENT_SELECTED_USER_EMAIL) {
-    const msgRef = collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages");
+  if (msg) {
+    const selectedUserEmail = CURRENT_SELECTED_USER_EMAIL; // ← You'll dynamically set this!
+    const msgRef = collection(db, "users", selectedUserEmail, "messages");
+
     await addDoc(msgRef, {
       sender: "najaza",
       text: msg,
       createdAt: serverTimestamp(),
-      read: false  // New message is unread
+      read: false
     });
-    messageInput.value = ""; // Clear the input field after sending
-  }
-});
 
-// Listen for unread messages
-const notificationsRef = collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages");
-onSnapshot(notificationsRef, (snapshot) => {
-  let unreadCount = 0;
-  snapshot.forEach((doc) => {
-    if (doc.data().read === false) {
-      unreadCount++;
-    }
-  });
-  document.getElementById("notification-count").textContent = unreadCount;
-  document.getElementById("notification-count").style.display = unreadCount > 0 ? "block" : "none";
+    messageInput.value = "";
+  }
 });
 
 // User progress display
@@ -143,7 +149,7 @@ onSnapshot(collection(db, "users"), (snapshot) => {
   renderUserProgress();
 });
 
-// Render progress cards with a button to view chat
+// Render progress cards
 function renderUserProgress() {
   const search = searchInput.value.toLowerCase();
   userProgressList.innerHTML = "";
@@ -152,11 +158,12 @@ function renderUserProgress() {
     .forEach((user) => {
       const div = document.createElement("div");
       div.classList.add("user-progress-item");
-
       div.innerHTML = `
-        <p>${user.name} (${user.project})</p>
-        <progress value="${user.progress}" max="100"></progress>
-        <button onclick="viewUserChat('${user.id}')">View Chat</button>
+        <h3>${user.name}</h3>
+        <p>Project: ${user.project}</p>
+        <p>Due Date: ${user.dueDate}</p>
+        <input type="number" id="progress-${user.id}" value="${user.progress}" min="0" max="100" />
+        <button onclick="updateProgress('${user.id}')">Update Progress</button>
       `;
       userProgressList.appendChild(div);
     });
