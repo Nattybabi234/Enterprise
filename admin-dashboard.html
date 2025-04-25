@@ -163,51 +163,24 @@
     const userProgressList = document.getElementById("user-progress-list");
     const searchInput = document.getElementById("searchInput");
 
-    let currentUser = null; // Store the current user info
-
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
       signInWithEmailAndPassword(auth, email, password)
-        .then(async (userCredential) => {
+        .then((userCredential) => {
           if (!allowedAdmins.includes(userCredential.user.email)) {
             signOut(auth);
             alert("Access denied.");
           } else {
-            currentUser = userCredential.user; // Store the current logged-in user
             loginSection.style.display = "none";
             dashboard.style.display = "block";
-            await getUserProgress(currentUser.email); // Get user progress for display
+            getUserProgress(userCredential.user.email);  // Get user progress after login
           }
         })
         .catch((err) => alert("Login failed: " + err.message));
     });
-
-    async function getUserProgress(userEmail) {
-      const userRef = doc(db, "users", userEmail);
-      const userDoc = await getDoc(userRef);
-      if (userDoc.exists()) {
-        const userData = userDoc.data();
-        displayUserProgress(userData);
-      } else {
-        alert("User not found.");
-      }
-    }
-
-    function displayUserProgress(userData) {
-      const progressDiv = document.getElementById("user-progress-list");
-      progressDiv.innerHTML = `
-        <h4>${userData.name}</h4>
-        <p><strong>Project:</strong> ${userData.project || "No project assigned"}</p>
-        <p><strong>Due Date:</strong> ${userData.dueDate || "Not set"}</p>
-        <div class="progress-bar">
-          <div style="width:${userData.progress || 0}%; background:${userData.progress === 100 ? 'green' : '#ffd700'};"></div>
-        </div>
-        <p>${userData.progress || 0}% completed</p>
-      `;
-    }
 
     document.getElementById("logout-btn").addEventListener("click", () => {
       const confirmLogout = confirm("Are you sure you want to log out?");
@@ -216,13 +189,6 @@
           loginSection.style.display = "block";
           dashboard.style.display = "none";
         });
-      }
-    });
-
-    // Real-time updates for the user progress
-    onSnapshot(doc(db, "users", currentUser?.email || ""), (docSnap) => {
-      if (docSnap.exists()) {
-        displayUserProgress(docSnap.data());
       }
     });
 
@@ -276,15 +242,15 @@
             <div style="width:${user.progress || 0}%; background:${user.progress == 100 ? 'green' : '#ffd700'};"></div>
           </div>
           <p>${user.progress || 0}% completed</p>
-          <input type="number" min="0" max="100" value="${user.progress || 0}" id="progress-${user.id}" />
-          <button onclick="updateProgress('${user.id}')">Update Progress</button>
+          <input type="number" min="0" max="100" value="${user.progress || 0}" id="progress-${user.email}" />
+          <button onclick="updateProgress('${user.email}')">Update Progress</button>
         `;
         userProgressList.appendChild(div);
       });
     }
 
-    window.updateProgress = async function(userId) {
-      const input = document.getElementById(`progress-${userId}`);
+    window.updateProgress = async function(email) {
+      const input = document.getElementById(`progress-${email}`);
       const newProgress = parseInt(input.value);
 
       if (isNaN(newProgress) || newProgress < 0 || newProgress > 100) {
@@ -293,9 +259,9 @@
       }
 
       try {
-        const userRef = doc(db, "users", userId);
+        const userRef = doc(db, "users", email);
         await updateDoc(userRef, { progress: newProgress });
-        alert(`Progress for user ${userId} updated to ${newProgress}%`);
+        alert(`Progress for ${email} updated to ${newProgress}%`);
       } catch (error) {
         console.error("Error updating progress:", error);
         alert("Failed to update progress.");
@@ -331,15 +297,20 @@
     });
 
     searchInput.addEventListener("input", renderUserProgress);
-  </script>
 
-  <script>
-    const hamburger = document.getElementById("hamburger");
-    const navList = document.querySelector(".navbar ul");
-    hamburger.addEventListener("click", () => {
-      hamburger.classList.toggle("active");
-      navList.classList.toggle("show");
-    });
+    function getUserProgress(userEmail) {
+      const userRef = doc(db, "users", userEmail);
+      getDoc(userRef).then(docSnap => {
+        if (docSnap.exists()) {
+          const userData = docSnap.data();
+          renderUserProgress(userData); // Display progress
+        } else {
+          alert("User not found");
+          signOut(auth);  // Force logout if the user is not found
+        }
+      });
+    }
+
     function closeModal() {
       document.getElementById("user-progress-modal").style.display = "none";
     }
