@@ -82,8 +82,9 @@ document.getElementById("logout-btn").addEventListener("click", () => {
 function viewUserChat(email) {
   CURRENT_SELECTED_USER_EMAIL = email;
   chatBox.innerHTML = "Loading chat..."; // Display loading message
+
   const chatQuery = query(collection(db, "users", email, "messages"), orderBy("createdAt", "asc"));
-  
+
   onSnapshot(chatQuery, (snapshot) => {
     chatBox.innerHTML = ""; // Clear existing messages
     snapshot.forEach((doc) => {
@@ -93,6 +94,11 @@ function viewUserChat(email) {
       msgDiv.className = `message ${type}`;
       msgDiv.innerHTML = `${data.text}<span class="message-time">${new Date(data.createdAt?.seconds * 1000 || Date.now()).toLocaleTimeString()}</span>`;
       chatBox.appendChild(msgDiv);
+      
+      // Mark message as read if it's unread
+      if (data.read === false) {
+        updateDoc(doc.ref, { read: true });
+      }
     });
     chatBox.scrollTop = chatBox.scrollHeight; // Scroll to latest message
   });
@@ -108,10 +114,23 @@ chatForm.addEventListener("submit", async (e) => {
       sender: "najaza",
       text: msg,
       createdAt: serverTimestamp(),
-      read: false
+      read: false  // New message is unread
     });
     messageInput.value = ""; // Clear the input field after sending
   }
+});
+
+// Listen for unread messages
+const notificationsRef = collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages");
+onSnapshot(notificationsRef, (snapshot) => {
+  let unreadCount = 0;
+  snapshot.forEach((doc) => {
+    if (doc.data().read === false) {
+      unreadCount++;
+    }
+  });
+  document.getElementById("notification-count").textContent = unreadCount;
+  document.getElementById("notification-count").style.display = unreadCount > 0 ? "block" : "none";
 });
 
 // User progress display
