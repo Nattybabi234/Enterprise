@@ -16,9 +16,11 @@
       cursor: pointer;
       transition: background 0.3s;
     }
+
     button:hover {
       background-color: #4169e1;
     }
+
     .chat-box {
       height: 250px;
       overflow-y: auto;
@@ -28,29 +30,60 @@
       border-radius: 10px;
       color: white;
     }
+
     .message {
       margin: 10px 0;
       padding: 8px;
       border-radius: 8px;
       max-width: 80%;
     }
+
     .message.najaza {
       text-align: right;
       background: #ffd700;
       color: #002366;
       margin-left: auto;
     }
+
     .message.client {
       text-align: left;
       background: #333;
       color: white;
       margin-right: auto;
     }
+
     .message-time {
       font-size: 0.75em;
       display: block;
       color: #aaa;
       margin-top: 4px;
+    }
+
+    .card {
+      background: #f9f9f9;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 10px;
+    }
+
+    .progress-bar {
+      height: 10px;
+      background: #ccc;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-bottom: 5px;
+    }
+
+    .progress-bar > div {
+      height: 100%;
+    }
+
+    .user-progress-item {
+      background: #fff;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
   </style>
 </head>
@@ -113,175 +146,31 @@
         </form>
       </div>
     </div>
+
+    <div id="notifications" class="notification-icon">
+      <span id="notification-count">0</span>
+    </div>
+
+    <div id="user-progress-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">×</span>
+        <h2>User Progress Details</h2>
+        <div id="user-details"></div>
+      </div>
+    </div>
   </div>
 
-  <!-- Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, doc, updateDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBf56KIkY6197EpikJWA4J2KbPVpGGM3xY",
-      authDomain: "najazachat.firebaseapp.com",
-      projectId: "najazachat",
-      storageBucket: "najazachat.firebasestorage.app",
-      messagingSenderId: "93782128218",
-      appId: "1:93782128218:web:169cf9051f2532a9664a63",
-      measurementId: "G-28QPTZ86DV"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    const allowedAdmins = ["layeninathania@gmail.com"];
-    const loginForm = document.getElementById("login-form");
-    const loginSection = document.getElementById("login-section");
-    const dashboard = document.getElementById("admin-dashboard");
-    const chatBox = document.getElementById("chat-box-admin");
-    const chatForm = document.getElementById("admin-chat-form");
-    const messageInput = document.getElementById("admin-message");
-    const userProgressList = document.getElementById("user-progress-list");
-    const searchInput = document.getElementById("searchInput");
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        if (!allowedAdmins.includes(user.email)) {
-          signOut(auth);
-          alert("Access denied.");
-          loginSection.style.display = "block";
-          dashboard.style.display = "none";
-        } else {
-          loginSection.style.display = "none";
-          dashboard.style.display = "block";
-        }
-      } else {
-        loginSection.style.display = "block";
-        dashboard.style.display = "none";
-      }
+  <script type="module" src="admin-dashboard.js"></script>
+  <script>
+    const hamburger = document.getElementById("hamburger");
+    const navList = document.querySelector(".navbar ul");
+    hamburger.addEventListener("click", () => {
+      hamburger.classList.toggle("active");
+      navList.classList.toggle("show");
     });
-
-    loginForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      signInWithEmailAndPassword(auth, email, password)
-        .catch((err) => alert("Login failed: " + err.message));
-    });
-
-    document.getElementById("logout-btn").addEventListener("click", () => {
-      if (confirm("Are you sure you want to log out?")) {
-        signOut(auth);
-      }
-    });
-
-    const q = query(collection(db, "messages"), orderBy("createdAt", "asc"));
-    onSnapshot(q, (snapshot) => {
-      chatBox.innerHTML = "";
-      snapshot.forEach((doc) => {
-        const data = doc.data();
-        const type = data.sender === "client" ? "client" : "najaza";
-        const msgDiv = document.createElement("div");
-        msgDiv.className = `message ${type}`;
-        msgDiv.innerHTML = `${data.text}<span class="message-time">${new Date(data.createdAt?.seconds * 1000 || Date.now()).toLocaleTimeString()}</span>`;
-        chatBox.appendChild(msgDiv);
-      });
-      chatBox.scrollTop = chatBox.scrollHeight;
-    });
-
-    chatForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const msg = messageInput.value.trim();
-      if (msg) {
-        await addDoc(collection(db, "messages"), {
-          sender: "najaza",
-          text: msg,
-          createdAt: serverTimestamp()
-        });
-        messageInput.value = "";
-      }
-    });
-
-    let allUsers = [];
-    onSnapshot(collection(db, "users"), (snapshot) => {
-      allUsers = [];
-      snapshot.forEach((docSnap) => {
-        allUsers.push({ id: docSnap.id, ...docSnap.data() });
-      });
-      renderUserProgress();
-    });
-
-    function renderUserProgress() {
-      const search = searchInput.value.toLowerCase();
-      userProgressList.innerHTML = "";
-      allUsers.filter(u => (u.name || "").toLowerCase().includes(search)).forEach((user) => {
-        const div = document.createElement("div");
-        div.classList.add("user-progress-item");
-        div.innerHTML = `
-          <h4>${user.name || "Unnamed User"}</h4>
-          <p><strong>Project:</strong> ${user.project || "No project assigned"}</p>
-          <p><strong>Due Date:</strong> ${user.dueDate || "Not set"}</p>
-          <div class="progress-bar">
-            <div style="width:${user.progress || 0}%; background:${user.progress == 100 ? 'green' : '#ffd700'};"></div>
-          </div>
-          <p>${user.progress || 0}% completed</p>
-          <input type="number" min="0" max="100" value="${user.progress || 0}" id="progress-${user.email}" />
-          <button onclick="updateProgress('${user.email}')">Update Progress</button>
-        `;
-        userProgressList.appendChild(div);
-      });
+    function closeModal() {
+      document.getElementById("user-progress-modal").style.display = "none";
     }
-
-    window.updateProgress = async function(email) {
-      const input = document.getElementById(`progress-${email}`);
-      const newProgress = parseInt(input.value);
-      if (isNaN(newProgress) || newProgress < 0 || newProgress > 100) {
-        alert("Please enter a valid progress between 0 and 100.");
-        return;
-      }
-      try {
-        const userRef = doc(db, "users", email);
-        const docSnap = await getDoc(userRef);
-        if (!docSnap.exists()) {
-          alert(`User with email ${email} does not exist.`);
-          return;
-        }
-        await updateDoc(userRef, { progress: newProgress });
-        alert(`Progress for ${email} updated to ${newProgress}%`);
-      } catch (error) {
-        console.error("Error updating progress:", error);
-        alert("Failed to update progress.");
-      }
-    }
-
-    const addUserForm = document.getElementById("add-user-form");
-    addUserForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("new-user-email").value.trim();
-      const name = document.getElementById("new-user-name").value.trim();
-      const project = document.getElementById("new-user-project").value.trim();
-      const dueDate = document.getElementById("new-user-due").value;
-      const progress = parseInt(document.getElementById("new-user-progress").value) || 0;
-      if (!email || !name) {
-        alert("Email and name are required!");
-        return;
-      }
-      try {
-        await setDoc(doc(db, "users", email), {
-          name,
-          project,
-          dueDate,
-          progress
-        });
-        alert("User added successfully!");
-        addUserForm.reset();
-      } catch (err) {
-        alert("Error adding user: " + err.message);
-      }
-    });
-
-    searchInput.addEventListener("input", renderUserProgress);
   </script>
 </body>
 </html>
