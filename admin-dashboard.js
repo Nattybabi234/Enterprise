@@ -143,31 +143,100 @@ chatForm.addEventListener("submit", async (e) => {
 let allUsers = [];
 onSnapshot(collection(db, "users"), (snapshot) => {
   allUsers = [];
+  userUnreadCounts = {}; // reset
+  
   snapshot.forEach((docSnap) => {
-    allUsers.push({ id: docSnap.id, ...docSnap.data() });
+    const user = { id: docSnap.id, ...docSnap.data() };
+    allUsers.push(user);
+
+    // Now check for unread messages
+    const msgRef = collection(db, "users", user.id, "messages");
+    const unreadQuery = query(msgRef, 
+      orderBy("createdAt", "desc")
+    );
+
+    onSnapshot(unreadQuery, (msgsSnap) => {
+      let count = 0;
+      msgsSnap.forEach((msgDoc) => {
+        const msg = msgDoc.data();
+        if (msg.sender === "client" && msg.read === false) {
+          count++;
+        }
+      });
+      userUnreadCounts[user.id] = count;
+      renderUserProgress(); // update UI
+    });
   });
+
   renderUserProgress();
 });
+
 
 // Render progress cards
 function renderUserProgress() {
   const search = searchInput.value.toLowerCase();
   userProgressList.innerHTML = "";
+
   allUsers
     .filter((u) => (u.name || "").toLowerCase().includes(search))
     .forEach((user) => {
+      const unreadCount = userUnreadCounts[user.id] || 0;
+      
       const div = document.createElement("div");
       div.classList.add("user-progress-item");
+
       div.innerHTML = `
-        <h3>${user.name}</h3>
+        <h4>${user.name} ${unreadCount > 0 ? `<span style="color: red;">(${unreadCount})</span>` : ""}</h4>
         <p>Project: ${user.project}</p>
-        <p>Due Date: ${user.dueDate}</p>
-        <input type="number" id="progress-${user.id}" value="${user.progress}" min="0" max="100" />
-        <button onclick="updateProgress('${user.id}')">Update Progress</button>
+        <p>Progress: ${user.progress || 0}%</p>
+        <button onclick="selectUser('${user.id}')">Chat</button>
       `;
+
       userProgressList.appendChild(div);
     });
 }
+
+
+let CURRENT_SELECTED_USER_EMAIL = null;
+let unsubscribeMessages = null;
+
+window.selectUser = async function(userEmail) {
+  CURRENT_SELECTED_USER_EMAIL = userEmail;
+
+  if (unsubscribeMessages) unsubscribeMessages();
+
+  const msgRef = collection(db, "users", userEmail, "messages");
+  const msgQuery = query(msgRef, orderBy("createdAt", "asc"));
+
+  unsubscribeMessages = onSnapshot(msgQuery, (snapshot) => {
+    chatBox.innerHTML = "";
+
+    const batchUpdates = [];
+
+    snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      const type = data.sender === "client" ? "client" : "najaza";
+
+      const msgDiv = document.createElement("div");
+      msgDiv.className = `message ${type}`;
+      msgDiv.innerHTML = `${data.text}<span class="message-time">${new Date(data.createdAt?.seconds * 1000 || Date.now()).toLocaleTimeString()}</span>`;
+      chatBox.appendChild(msgDiv);
+
+      // If unread client message, mark it as read
+      if (data.sender === "client" && data.read === false) {
+        batchUpdates.push(updateDoc(docSnap.ref, { read: true }));
+      }
+    });
+
+    Promise.all(batchUpdates).then(() => {
+      console.log("All messages marked as read");
+    });
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+}
+
+
 
 // Update user progress
 window.updateProgress = async function (userId) {
@@ -190,8 +259,10 @@ window.updateProgress = async function (userId) {
 };
 
 // Add user
+// Add user
 addUserForm.addEventListener("submit", async (e) => {
   e.preventDefault();
+  
   const email = document.getElementById("new-user-email").value.trim();
   const name = document.getElementById("new-user-name").value.trim();
   const project = document.getElementById("new-user-project").value.trim();
@@ -204,18 +275,30 @@ addUserForm.addEventListener("submit", async (e) => {
   }
 
   try {
+    // 1. Create the user profile document
     await setDoc(doc(db, "users", email), {
       name,
       project,
       dueDate,
       progress
     });
-    alert("User added successfully!");
+
+    // 2. Create an empty message document (optional starter message)
+    const msgRef = collection(db, "users", email, "messages");
+    await addDoc(msgRef, {
+      sender: "najaza",
+      text: "Welcome to the project!",
+      createdAt: serverTimestamp(),
+      read: false
+    });
+
+    alert("User added successfully and private chat initialized!");
     addUserForm.reset();
   } catch (err) {
     alert("Error adding user: " + err.message);
   }
 });
+
 
 // Search input
 searchInput.addEventListener("input", renderUserProgress);
