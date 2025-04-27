@@ -1,4 +1,3 @@
-// admin-dashboard.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import {
   getAuth,
@@ -105,12 +104,10 @@ window.selectUser = async function (userEmail) {
   if (unsubscribeMessages) unsubscribeMessages();
 
   const msgRef = collection(db, "users", userEmail, "messages");
-  const msgQuery = query(msgRef, orderBy("createdAt", "asc"));
-
-  chatBox.innerHTML = "Loading messages...";
+  const msgQuery = query(collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages"), orderBy("createdAt", "asc"));
 
   unsubscribeMessages = onSnapshot(msgQuery, (snapshot) => {
-    chatBox.innerHTML = ""; // Clear loading message
+    chatBox.innerHTML = "";
 
     const batchUpdates = [];
 
@@ -149,19 +146,14 @@ chatForm.addEventListener("submit", async (e) => {
   if (msg) {
     const msgRef = collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages");
 
-    try {
-      await addDoc(msgRef, {
-        sender: "najaza",   // mark this as 'admin'
-        text: msg,
-        createdAt: serverTimestamp(),
-        read: false
-      });
+    await addDoc(msgRef, {
+      sender: "najaza",   // mark this as 'admin'
+      text: msg,
+      createdAt: serverTimestamp(),
+      read: false
+    });
 
-      messageInput.value = "";
-    } catch (error) {
-      console.error("Error sending message:", error);
-      alert("Error sending message. Please try again.");
-    }
+    messageInput.value = "";
   }
 });
 
@@ -209,7 +201,7 @@ function renderUserProgress() {
     .filter((u) => (u.name || "").toLowerCase().includes(search))
     .forEach((user) => {
       const unreadCount = userUnreadCounts[user.id] || 0;
-      
+
       const div = document.createElement("div");
       div.classList.add("user-progress-item");
 
@@ -219,13 +211,40 @@ function renderUserProgress() {
           ${unreadCount > 0 ? `<span style="color: red;"> (${unreadCount} unread)</span>` : ""}
         </h4>
         <p>Project: ${user.project}</p>
-        <p>Progress: ${user.progress || 0}%</p>
+        <p>Progress: <input id="progress-${user.id}" type="number" value="${user.progress || 0}" />%</p>
+        <button onclick="updateProgress('${user.id}')">Update Progress</button>
         <button onclick="selectUser('${user.id}')">Chat</button>
       `;
 
       userProgressList.appendChild(div);
     });
 }
+
+// Update progress when the admin clicks "Update Progress" for a user
+window.updateProgress = async function (userId) {
+  const input = document.getElementById(`progress-${userId}`);
+  const newProgress = parseInt(input.value);
+
+  // Validate the input to ensure it's a number between 0 and 100
+  if (isNaN(newProgress) || newProgress < 0 || newProgress > 100) {
+    alert("Please enter a valid progress between 0 and 100.");
+    return;
+  }
+
+  try {
+    // Reference to the specific user document in Firestore
+    const userRef = doc(db, "users", userId);
+
+    // Update the progress field in Firestore
+    await updateDoc(userRef, { progress: newProgress });
+
+    // Confirm success to the admin
+    alert(`Progress updated to ${newProgress}%`);
+  } catch (error) {
+    console.error("Error updating progress:", error);
+    alert("Failed to update progress.");
+  }
+};
 
 // Add new user
 addUserForm.addEventListener("submit", async (e) => {
@@ -255,35 +274,12 @@ addUserForm.addEventListener("submit", async (e) => {
       sender: "najaza",
       text: "Welcome to the project!",
       createdAt: serverTimestamp(),
-      read: false
+      read: true
     });
 
     alert("User added successfully!");
-    addUserForm.reset();
-  } catch (err) {
-    alert("Error adding user: " + err.message);
+  } catch (error) {
+    console.error("Error adding user:", error);
+    alert("Failed to add user.");
   }
 });
-
-// Update progress
-window.updateProgress = async function (userId) {
-  const input = document.getElementById(`progress-${userId}`);
-  const newProgress = parseInt(input.value);
-
-  if (isNaN(newProgress) || newProgress < 0 || newProgress > 100) {
-    alert("Please enter a valid progress between 0 and 100.");
-    return;
-  }
-
-  try {
-    const userRef = doc(db, "users", userId);
-    await updateDoc(userRef, { progress: newProgress });
-    alert(`Progress updated to ${newProgress}%`);
-  } catch (error) {
-    console.error("Error updating progress:", error);
-    alert("Failed to update progress.");
-  }
-};
-
-// Search filter
-searchInput.addEventListener("input", renderUserProgress);
