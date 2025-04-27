@@ -107,8 +107,10 @@ window.selectUser = async function (userEmail) {
   const msgRef = collection(db, "users", userEmail, "messages");
   const msgQuery = query(msgRef, orderBy("createdAt", "asc"));
 
+  chatBox.innerHTML = "Loading messages...";
+
   unsubscribeMessages = onSnapshot(msgQuery, (snapshot) => {
-    chatBox.innerHTML = "";
+    chatBox.innerHTML = ""; // Clear loading message
 
     const batchUpdates = [];
 
@@ -134,7 +136,6 @@ window.selectUser = async function (userEmail) {
   });
 };
 
-// Send chat message
 // Send chat message from Admin
 chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -148,17 +149,21 @@ chatForm.addEventListener("submit", async (e) => {
   if (msg) {
     const msgRef = collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages");
 
-    await addDoc(msgRef, {
-      sender: "najaza",   // mark this as 'admin'
-      text: msg,
-      createdAt: serverTimestamp(),
-      read: false
-    });
+    try {
+      await addDoc(msgRef, {
+        sender: "najaza",   // mark this as 'admin'
+        text: msg,
+        createdAt: serverTimestamp(),
+        read: false
+      });
 
-    messageInput.value = "";
+      messageInput.value = "";
+    } catch (error) {
+      console.error("Error sending message:", error);
+      alert("Error sending message. Please try again.");
+    }
   }
 });
-
 
 // User Progress and Listeners
 onSnapshot(collection(db, "users"), (snapshot) => {
@@ -204,12 +209,15 @@ function renderUserProgress() {
     .filter((u) => (u.name || "").toLowerCase().includes(search))
     .forEach((user) => {
       const unreadCount = userUnreadCounts[user.id] || 0;
-
+      
       const div = document.createElement("div");
       div.classList.add("user-progress-item");
 
       div.innerHTML = `
-        <h4>${user.name} ${unreadCount > 0 ? `<span style="color: red;">(${unreadCount})</span>` : ""}</h4>
+        <h4>
+          ${user.name}
+          ${unreadCount > 0 ? `<span style="color: red;"> (${unreadCount} unread)</span>` : ""}
+        </h4>
         <p>Project: ${user.project}</p>
         <p>Progress: ${user.progress || 0}%</p>
         <button onclick="selectUser('${user.id}')">Chat</button>
