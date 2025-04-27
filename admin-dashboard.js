@@ -39,17 +39,12 @@ const db = getFirestore(app);
 const loginForm = document.getElementById("login-form");
 const loginSection = document.getElementById("login-section");
 const dashboard = document.getElementById("admin-dashboard");
-const chatBox = document.getElementById("chat-box-admin");
-const chatForm = document.getElementById("admin-chat-form");
-const messageInput = document.getElementById("admin-message");
 const userProgressList = document.getElementById("user-progress-list");
 const searchInput = document.getElementById("searchInput");
 const addUserForm = document.getElementById("add-user-form");
 
 const allowedAdmins = ["layeninathania@gmail.com"];
 
-let CURRENT_SELECTED_USER_EMAIL = null;
-let unsubscribeMessages = null;
 let allUsers = [];
 let userUnreadCounts = {};
 let isFirstLoad = true;
@@ -97,56 +92,6 @@ document.getElementById("logout-btn").addEventListener("click", () => {
   }
 });
 
-// Select User and Listen to Messages
-window.selectUser = async function (userEmail) {
-  CURRENT_SELECTED_USER_EMAIL = userEmail;
-
-  if (unsubscribeMessages) unsubscribeMessages();
-
-  const msgRef = collection(db, "users", userEmail, "messages");
-  const msgQuery = query(msgRef, orderBy("createdAt", "asc"));
-
-  unsubscribeMessages = onSnapshot(msgQuery, (snapshot) => {
-    chatBox.innerHTML = ""; // Clear previous chat messages
-
-    snapshot.forEach((docSnap) => {
-      const data = docSnap.data();
-      const type = data.sender === "client" ? "client" : "najaza"; // sender: 'client' or 'najaza' (admin)
-
-      const msgDiv = document.createElement("div");
-      msgDiv.className = `message ${type}`;
-      msgDiv.innerHTML = `${data.text}<span class="message-time">${new Date(data.createdAt?.seconds * 1000 || Date.now()).toLocaleTimeString()}</span>`;
-      chatBox.appendChild(msgDiv);
-    });
-
-    chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
-  });
-};
-
-// Send chat message from Admin
-chatForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const msg = messageInput.value.trim();
-
-  if (!CURRENT_SELECTED_USER_EMAIL) {
-    alert("Please select a user to chat with first!");
-    return;
-  }
-
-  if (msg) {
-    const msgRef = collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages");
-
-    await addDoc(msgRef, {
-      sender: "najaza", // sender is 'najaza' (admin)
-      text: msg,
-      createdAt: serverTimestamp(),
-      read: false
-    });
-
-    messageInput.value = ""; // Clear the input field after sending
-  }
-});
-
 // User Progress and Listeners
 onSnapshot(collection(db, "users"), (snapshot) => {
   allUsers = [];
@@ -156,7 +101,7 @@ onSnapshot(collection(db, "users"), (snapshot) => {
     const user = { id: docSnap.id, ...docSnap.data() };
     allUsers.push(user);
 
-    // Unread messages tracking
+    // Unread messages tracking (not used now but kept for completeness)
     const msgRef = collection(db, "users", user.id, "messages");
     const unreadQuery = query(msgRef, orderBy("createdAt", "desc"));
 
@@ -177,7 +122,6 @@ onSnapshot(collection(db, "users"), (snapshot) => {
 
   // Auto select first user if none selected yet
   if (isFirstLoad && allUsers.length > 0) {
-    selectUser(allUsers[0].id);
     isFirstLoad = false;
   }
 });
@@ -203,7 +147,6 @@ function renderUserProgress() {
         <p>Project: ${user.project}</p>
         <p>Progress: <input id="progress-${user.id}" type="number" value="${user.progress || 0}" />%</p>
         <button onclick="updateProgress('${user.id}')">Update Progress</button>
-        <button onclick="selectUser('${user.id}')">Chat</button>
       `;
 
       userProgressList.appendChild(div);
@@ -257,14 +200,6 @@ addUserForm.addEventListener("submit", async (e) => {
       project,
       dueDate,
       progress
-    });
-
-    const msgRef = collection(db, "users", email, "messages");
-    await addDoc(msgRef, {
-      sender: "najaza",
-      text: "Welcome to the project!",
-      createdAt: serverTimestamp(),
-      read: false
     });
 
     alert("User added successfully!");
