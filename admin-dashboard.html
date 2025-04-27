@@ -21,44 +21,6 @@
       background-color: #4169e1;
     }
 
-    .chat-box {
-      height: 250px;
-      overflow-y: auto;
-      background: #1a1a40;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-radius: 10px;
-      color: white;
-    }
-
-    .message {
-      margin: 10px 0;
-      padding: 8px;
-      border-radius: 8px;
-      max-width: 80%;
-    }
-
-    .message.najaza {
-      text-align: right;
-      background: #ffd700;
-      color: #002366;
-      margin-left: auto;
-    }
-
-    .message.client {
-      text-align: left;
-      background: #333;
-      color: white;
-      margin-right: auto;
-    }
-
-    .message-time {
-      font-size: 0.75em;
-      display: block;
-      color: #aaa;
-      margin-top: 4px;
-    }
-
     .card {
       background: #f9f9f9;
       padding: 1rem;
@@ -98,7 +60,6 @@
     </div>
     <ul id="nav-links">
       <li><a href="#">Dashboard</a></li>
-      <li><a href="chat.html">Chats</a></li>
       <li><a href="#">Progress</a></li>
       <li><a href="#" id="logout-btn-nav">Logout</a></li>
     </ul>
@@ -118,15 +79,6 @@
     <div id="admin-dashboard" class="fade-in" style="display: none;">
       <h2>Welcome, Admin</h2>
       <button id="logout-btn">Logout</button>
-
-      <div class="card">
-        <h3>💬 Client Chat</h3>
-        <div id="chat-box-admin" class="chat-box">Loading...</div>
-        <form id="admin-chat-form">
-          <input type="text" id="admin-message" placeholder="Type a reply..." required />
-          <button type="submit">Send</button>
-        </form>
-      </div>
 
       <div class="card">
         <h3>📈 Client Progress</h3>
@@ -168,6 +120,7 @@
       hamburger.classList.toggle("active");
       navList.classList.toggle("show");
     });
+
     function closeModal() {
       document.getElementById("user-progress-modal").style.display = "none";
     }
