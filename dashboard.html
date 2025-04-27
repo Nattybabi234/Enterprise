@@ -89,34 +89,6 @@
       cursor: pointer;
     }
   </style>
-
-  <style>
-    #chat-box {
-      height: 250px;
-      overflow-y: auto;
-      background: #1a1a40;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-radius: 10px;
-      color: white;
-    }
-
-    #chat-form input {
-      width: 100%;
-      padding: 0.5rem;
-      border-radius: 5px;
-      margin-bottom: 0.5rem;
-    }
-
-    #chat-form button {
-      padding: 0.5rem 1rem;
-      background: #ffd700;
-      color: #002366;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-  </style>
 </head>
 <body>
   <div class="header">Najaza User Dashboard</div>
@@ -124,7 +96,6 @@
     <div class="sidebar">
       <a href="#"><i class="fas fa-house"></i> Home</a>
       <a href="#"><i class="fas fa-folder"></i> My Projects</a>
-      <a href="client-chat.html"><i class="fas fa-envelope"></i> Contact Najaza</a>
       <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
     <div class="main">
@@ -136,123 +107,7 @@
         <div class="progress-bar"><div class="progress" style="width: 70%;"></div></div>
         <p>Estimated Completion: April 22, 2025</p>
       </div>
-
-      <div class="card">
-        <h3>Live Chat with Najaza 🟢</h3>
-        <div id="chat-box">Loading messages...</div>
-        <form id="chat-form">
-          <input type="text" id="message" placeholder="Type your message..." required />
-          <button type="submit">Send</button>
-        </form>
-      </div>
     </div>
   </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import {
-      getFirestore,
-      collection,
-      addDoc,
-      onSnapshot,
-      serverTimestamp,
-      query,
-      orderBy
-    } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-
-    // Initialize Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyBf56KIkY6197EpikJWA4J2KbPVpGGM3xY",
-      authDomain: "najazachat.firebaseapp.com",
-      projectId: "najazachat",
-      storageBucket: "najazachat.appspot.com",
-      messagingSenderId: "93782128218",
-      appId: "1:93782128218:web:169cf9051f2532a9664a63",
-      measurementId: "G-28QPTZ86DV"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    const chatForm = document.getElementById("chat-form");
-    const chatBox = document.getElementById("chat-box");
-    const messageInput = document.getElementById("message");
-
-    // This needs to be dynamically set based on the logged-in user
-    const CURRENT_SELECTED_USER_EMAIL = "client_email@example.com"; // Replace with actual logic to get the client's email
-
-    const notificationSound = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1152-pristine.mp3');
-
-    // Listen to messages
-    const q = query(collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages"), orderBy("createdAt", "asc"));
-    onSnapshot(q, (snapshot) => {
-      let isNewMessage = false;
-
-      chatBox.innerHTML = "";
-      snapshot.forEach((docSnap) => {
-        const data = docSnap.data();
-        const msgDiv = document.createElement("div");
-
-        msgDiv.textContent = `${data.sender === "client" ? "You" : "Najaza"}: ${parseEmojis(data.text)}`;
-        msgDiv.style.marginBottom = "8px";
-        msgDiv.style.background = data.sender === "client" ? "#333" : "#ffd700";
-        msgDiv.style.color = data.sender === "client" ? "#fff" : "#002366";
-        msgDiv.style.padding = "8px";
-        msgDiv.style.borderRadius = "8px";
-
-        if (data.sender === "admin" && !data.read) {
-          isNewMessage = true;
-        }
-
-        chatBox.appendChild(msgDiv);
-      });
-
-      chatBox.scrollTop = chatBox.scrollHeight;
-
-      if (isNewMessage) {
-        showNotification("📩 New message from Najaza!");
-        notificationSound.play();
-      }
-    });
-
-    // Send a message
-    chatForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const msg = messageInput.value.trim();
-
-      if (msg) {
-        await addDoc(collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages"), {
-          sender: "client",
-          text: msg,
-          createdAt: serverTimestamp(),
-          read: false
-        });
-        messageInput.value = "";
-      }
-    });
-
-    // Helpers
-    function showNotification(message) {
-      if (Notification.permission === "granted") {
-        new Notification(message);
-      } else if (Notification.permission !== "denied") {
-        Notification.requestPermission().then(permission => {
-          if (permission === "granted") {
-            new Notification(message);
-          }
-        });
-      }
-    }
-
-    function parseEmojis(text) {
-      return text
-        .replace(/:heart:/g, "❤️")
-        .replace(/:fire:/g, "🔥")
-        .replace(/:laugh:/g, "😂")
-        .replace(/:thumbsup:/g, "👍")
-        .replace(/:star:/g, "⭐")
-        .replace(/:rocket:/g, "🚀");
-    }
-  </script>
 </body>
 </html>
