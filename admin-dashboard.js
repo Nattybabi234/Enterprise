@@ -121,12 +121,18 @@ onSnapshot(chatQuery, (snapshot) => {
 });
 
 // Send chat message
+// --- Chat form sending ---
 chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const msg = messageInput.value.trim();
+
+  if (!CURRENT_SELECTED_USER_EMAIL) {
+    alert("Please select a user to chat with first!");
+    return;
+  }
+
   if (msg) {
-    const selectedUserEmail = CURRENT_SELECTED_USER_EMAIL; // ← You'll dynamically set this!
-    const msgRef = collection(db, "users", selectedUserEmail, "messages");
+    const msgRef = collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages");
 
     await addDoc(msgRef, {
       sender: "najaza",
@@ -138,6 +144,44 @@ chatForm.addEventListener("submit", async (e) => {
     messageInput.value = "";
   }
 });
+
+// --- Select user ---
+window.selectUser = async function(userEmail) {
+  CURRENT_SELECTED_USER_EMAIL = userEmail;
+
+  if (unsubscribeMessages) unsubscribeMessages();
+
+  const msgRef = collection(db, "users", userEmail, "messages");
+  const msgQuery = query(msgRef, orderBy("createdAt", "asc"));
+
+  unsubscribeMessages = onSnapshot(msgQuery, (snapshot) => {
+    chatBox.innerHTML = "";
+
+    const batchUpdates = [];
+
+    snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      const type = data.sender === "client" ? "client" : "najaza";
+
+      const msgDiv = document.createElement("div");
+      msgDiv.className = `message ${type}`;
+      msgDiv.innerHTML = `${data.text}<span class="message-time">${new Date(data.createdAt?.seconds * 1000 || Date.now()).toLocaleTimeString()}</span>`;
+      chatBox.appendChild(msgDiv);
+
+      if (data.sender === "client" && data.read === false) {
+        const msgDocRef = doc(db, "users", userEmail, "messages", docSnap.id);
+        batchUpdates.push(updateDoc(msgDocRef, { read: true }));
+      }
+    });
+
+    Promise.all(batchUpdates).then(() => {
+      console.log("All messages marked as read");
+    });
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+}
+
 
 // User progress display
 let allUsers = [];
