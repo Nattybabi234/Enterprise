@@ -111,7 +111,7 @@ window.selectUser = async function (userEmail) {
 
     snapshot.forEach((docSnap) => {
       const data = docSnap.data();
-      const type = data.sender === "client" ? "client" : "najaza";
+      const type = data.sender === "client" ? "client" : "najaza"; // sender: 'client' or 'najaza' (admin)
 
       const msgDiv = document.createElement("div");
       msgDiv.className = `message ${type}`;
@@ -119,7 +119,7 @@ window.selectUser = async function (userEmail) {
       chatBox.appendChild(msgDiv);
     });
 
-    chatBox.scrollTop = chatBox.scrollHeight;
+    chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
   });
 };
 
@@ -137,13 +137,13 @@ chatForm.addEventListener("submit", async (e) => {
     const msgRef = collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages");
 
     await addDoc(msgRef, {
-      sender: "najaza",   // Admin sender
+      sender: "najaza", // sender is 'najaza' (admin)
       text: msg,
       createdAt: serverTimestamp(),
       read: false
     });
 
-    messageInput.value = "";
+    messageInput.value = ""; // Clear the input field after sending
   }
 });
 
