@@ -138,3 +138,112 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  browserLocalPersistence
+} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+// Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyBf56KIkY6197EpikJWA4J2KbPVpGGM3xY",
+  authDomain: "najazachat.firebaseapp.com",
+  projectId: "najazachat",
+  storageBucket: "najazachat.firebasestorage.app",
+  messagingSenderId: "93782128218",
+  appId: "1:93782128218:web:169cf9051f2532a9664a63",
+  measurementId: "G-28QPTZ86DV"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// DOM Elements
+const loginForm = document.getElementById("login-form");
+const loginSection = document.getElementById("login-section");
+const userDashboard = document.getElementById("user-dashboard");
+const userNameElement = document.getElementById("user-name");
+const userProjectElement = document.getElementById("user-project");
+const userProgressElement = document.getElementById("user-progress");
+const logoutBtn = document.getElementById("logout-btn");
+
+const allowedAdmins = ["layeninathania@gmail.com"];
+
+// Session persistence
+auth.setPersistence(browserLocalPersistence).catch((error) => {
+  console.error("Error setting persistence", error);
+});
+
+// Login Function
+loginForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      if (!allowedAdmins.includes(user.email)) {
+        signOut(auth);
+        alert("Access denied.");
+      } else {
+        loginSection.style.display = "none";
+        userDashboard.style.display = "block";
+
+        // Fetch user progress after login
+        fetchUserProgress(user.email);
+      }
+    })
+    .catch((err) => alert("Login failed: " + err.message));
+});
+
+// Fetch User Progress from Firestore
+function fetchUserProgress(userEmail) {
+  const userRef = doc(db, "users", userEmail);
+
+  getDoc(userRef).then((docSnap) => {
+    if (docSnap.exists()) {
+      const userData = docSnap.data();
+      userNameElement.textContent = userData.name;
+      userProjectElement.textContent = userData.project;
+      userProgressElement.textContent = userData.progress || 0;
+    } else {
+      console.error("No such user!");
+    }
+  }).catch((error) => {
+    console.error("Error getting user data:", error);
+  });
+}
+
+// Auth State
+onAuthStateChanged(auth, (user) => {
+  if (user && allowedAdmins.includes(user.email)) {
+    loginSection.style.display = "none";
+    userDashboard.style.display = "block";
+
+    // Fetch user progress after login
+    fetchUserProgress(user.email);
+  } else {
+    loginSection.style.display = "block";
+    userDashboard.style.display = "none";
+  }
+});
+
+// Logout
+logoutBtn.addEventListener("click", () => {
+  if (confirm("Are you sure you want to log out?")) {
+    signOut(auth);
+  }
+});
