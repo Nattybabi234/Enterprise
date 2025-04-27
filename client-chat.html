@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Client Chat</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      color: #333;
+      padding: 20px;
+    }
+
+    #chat-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    #chat-box {
+      height: 300px;
+      overflow-y: auto;
+      background-color: #1a1a40;
+      padding: 1rem;
+      color: white;
+      border-radius: 8px;
+    }
+
+    #chat-form {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 10px;
+    }
+
+    #chat-form input {
+      flex-grow: 1;
+      padding: 0.5rem;
+      border-radius: 5px;
+    }
+
+    #chat-form button {
+      padding: 0.5rem;
+      background-color: #ffd700;
+      color: #002366;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .message {
+      margin-bottom: 8px;
+      padding: 8px;
+      border-radius: 8px;
+    }
+
+    .client {
+      background-color: #333;
+      color: white;
+    }
+
+    .admin {
+      background-color: #ffd700;
+      color: #002366;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="chat-container">
+    <h2>Client Chat</h2>
+    <div id="chat-box">Loading messages...</div>
+    <form id="chat-form">
+      <input type="text" id="message" placeholder="Type your message..." required />
+      <button type="submit">Send</button>
+    </form>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBf56KIkY6197EpikJWA4J2KbPVpGGM3xY",
+      authDomain: "najazachat.firebaseapp.com",
+      projectId: "najazachat",
+      storageBucket: "najazachat.appspot.com",
+      messagingSenderId: "93782128218",
+      appId: "1:93782128218:web:169cf9051f2532a9664a63",
+      measurementId: "G-28QPTZ86DV"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const chatBox = document.getElementById("chat-box");
+    const chatForm = document.getElementById("chat-form");
+    const messageInput = document.getElementById("message");
+
+    let CURRENT_SELECTED_USER_EMAIL = null;
+
+    // Listen for changes in authentication status
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        CURRENT_SELECTED_USER_EMAIL = user.email;
+        loadMessages();  // Load the chat messages for the logged-in client
+      } else {
+        alert("Please log in.");
+        window.location.href = "login.html";  // Redirect to login if not authenticated
+      }
+    });
+
+    // Function to load messages from Firestore
+    function loadMessages() {
+      const q = query(collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages"), orderBy("createdAt", "asc"));
+
+      // Real-time listener for message updates
+      onSnapshot(q, (snapshot) => {
+        chatBox.innerHTML = "";  // Clear current chat
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          const msgDiv = document.createElement("div");
+          msgDiv.textContent = `${data.sender === "client" ? "You" : "Admin"}: ${data.text}`;
+          msgDiv.classList.add(data.sender === "client" ? "client" : "admin");
+          chatBox.appendChild(msgDiv);
+        });
+        chatBox.scrollTop = chatBox.scrollHeight;  // Scroll to bottom of chat
+      });
+    }
+
+    // Send a message to Firestore when the user submits the form
+    chatForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const msg = messageInput.value.trim();
+
+      if (msg) {
+        await addDoc(collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages"), {
+          sender: "client",  // Mark as message from client
+          text: msg,
+          createdAt: serverTimestamp(),
+          read: false  // Message not yet read by admin
+        });
+
+        messageInput.value = "";  // Clear input
+      }
+    });
+  </script>
+
+</body>
+</html>
