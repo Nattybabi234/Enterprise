@@ -104,12 +104,10 @@ window.selectUser = async function (userEmail) {
   if (unsubscribeMessages) unsubscribeMessages();
 
   const msgRef = collection(db, "users", userEmail, "messages");
-  const msgQuery = query(collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages"), orderBy("createdAt", "asc"));
+  const msgQuery = query(msgRef, orderBy("createdAt", "asc"));
 
   unsubscribeMessages = onSnapshot(msgQuery, (snapshot) => {
-    chatBox.innerHTML = "";
-
-    const batchUpdates = [];
+    chatBox.innerHTML = ""; // Clear previous chat messages
 
     snapshot.forEach((docSnap) => {
       const data = docSnap.data();
@@ -119,14 +117,6 @@ window.selectUser = async function (userEmail) {
       msgDiv.className = `message ${type}`;
       msgDiv.innerHTML = `${data.text}<span class="message-time">${new Date(data.createdAt?.seconds * 1000 || Date.now()).toLocaleTimeString()}</span>`;
       chatBox.appendChild(msgDiv);
-
-      if (data.sender === "client" && data.read === false) {
-        batchUpdates.push(updateDoc(doc(db, "users", userEmail, "messages", docSnap.id), { read: true }));
-      }
-    });
-
-    Promise.all(batchUpdates).then(() => {
-      console.log("All client messages marked as read");
     });
 
     chatBox.scrollTop = chatBox.scrollHeight;
@@ -147,7 +137,7 @@ chatForm.addEventListener("submit", async (e) => {
     const msgRef = collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages");
 
     await addDoc(msgRef, {
-      sender: "najaza",   // mark this as 'admin'
+      sender: "najaza",   // Admin sender
       text: msg,
       createdAt: serverTimestamp(),
       read: false
@@ -274,10 +264,11 @@ addUserForm.addEventListener("submit", async (e) => {
       sender: "najaza",
       text: "Welcome to the project!",
       createdAt: serverTimestamp(),
-      read: true
+      read: false
     });
 
     alert("User added successfully!");
+    addUserForm.reset();
   } catch (error) {
     console.error("Error adding user:", error);
     alert("Failed to add user.");
