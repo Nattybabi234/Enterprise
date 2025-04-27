@@ -135,6 +135,7 @@ window.selectUser = async function (userEmail) {
 };
 
 // Send chat message
+// Send chat message from Admin
 chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const msg = messageInput.value.trim();
@@ -148,7 +149,7 @@ chatForm.addEventListener("submit", async (e) => {
     const msgRef = collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages");
 
     await addDoc(msgRef, {
-      sender: "najaza",
+      sender: "najaza",   // mark this as 'admin'
       text: msg,
       createdAt: serverTimestamp(),
       read: false
@@ -157,6 +158,7 @@ chatForm.addEventListener("submit", async (e) => {
     messageInput.value = "";
   }
 });
+
 
 // User Progress and Listeners
 onSnapshot(collection(db, "users"), (snapshot) => {
