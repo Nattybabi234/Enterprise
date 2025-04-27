@@ -158,88 +158,113 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  onSnapshot,
-  serverTimestamp,
-  query,
-  orderBy
-} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-import {
-  getAuth,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+  import {
+    getFirestore,
+    collection,
+    addDoc,
+    onSnapshot,
+    serverTimestamp,
+    query,
+    orderBy,
+    updateDoc,
+    doc
+  } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBf56KIkY6197EpikJWA4J2KbPVpGGM3xY",
-  authDomain: "najazachat.firebaseapp.com",
-  projectId: "najazachat",
-  storageBucket: "najazachat.firebasestorage.app",
-  messagingSenderId: "93782128218",
-  appId: "1:93782128218:web:169cf9051f2532a9664a63",
-  measurementId: "G-28QPTZ86DV"
-};
+  // Initialize Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyBf56KIkY6197EpikJWA4J2KbPVpGGM3xY",
+    authDomain: "najazachat.firebaseapp.com",
+    projectId: "najazachat",
+    storageBucket: "najazachat.appspot.com",
+    messagingSenderId: "93782128218",
+    appId: "1:93782128218:web:169cf9051f2532a9664a63",
+    measurementId: "G-28QPTZ86DV"
+  };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-const chatForm = document.getElementById("chat-form");
-const chatBox = document.getElementById("chat-box");
+  const chatForm = document.getElementById("chat-form");
+  const chatBox = document.getElementById("chat-box");
+  const messageInput = document.getElementById("message");
 
-let currentUserEmail = null;
+  // Optional: load a sound
+  const notificationSound = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1152-pristine.mp3');
 
-// Wait for client to be signed in
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    currentUserEmail = user.email;
-    listenToMessages();
-  } else {
-    window.location.href = "/login"; // redirect to login if not signed in
-  }
-});
-
-function listenToMessages() {
-  const userMessagesRef = collection(db, "users", currentUserEmail, "messages");
-  const q = query(userMessagesRef, orderBy("createdAt", "asc"));
+  // Listen to messages
+  const q = query(collection(db, "messages"), orderBy("createdAt", "asc"));
 
   onSnapshot(q, (snapshot) => {
+    let isNewMessage = false;
+
     chatBox.innerHTML = "";
-    snapshot.forEach((doc) => {
-      const data = doc.data();
+    snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
       const msgDiv = document.createElement("div");
-      msgDiv.textContent = `${data.sender === "client" ? "You" : "Najaza"}: ${data.text}`;
+
+      msgDiv.textContent = `${data.sender === "client" ? "You" : "Najaza"}: ${parseEmojis(data.text)}`;
       msgDiv.style.marginBottom = "8px";
       msgDiv.style.background = data.sender === "client" ? "#333" : "#ffd700";
       msgDiv.style.color = data.sender === "client" ? "#fff" : "#002366";
       msgDiv.style.padding = "8px";
       msgDiv.style.borderRadius = "8px";
+
+      if (data.sender === "admin" && !data.read) {
+        isNewMessage = true;
+      }
+
       chatBox.appendChild(msgDiv);
     });
+
     chatBox.scrollTop = chatBox.scrollHeight;
+
+    if (isNewMessage) {
+      showNotification("📩 New message from Najaza!");
+      notificationSound.play();
+    }
   });
-}
 
-// Send message
-chatForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const messageInput = document.getElementById("message");
-  const msg = messageInput.value.trim();
+  // Send a message
+  chatForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const msg = messageInput.value.trim();
 
-  if (msg && currentUserEmail) {
-    const userMessagesRef = collection(db, "users", currentUserEmail, "messages");
-    await addDoc(userMessagesRef, {
-      sender: "client",
-      text: msg,
-      createdAt: serverTimestamp()
-    });
-    messageInput.value = "";
+    if (msg) {
+      await addDoc(collection(db, "messages"), {
+        sender: "client",
+        text: msg,
+        createdAt: serverTimestamp(),
+        read: false
+      });
+      messageInput.value = "";
+    }
+  });
+
+  // Helpers
+  function showNotification(message) {
+    if (Notification.permission === "granted") {
+      new Notification(message);
+    } else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+          new Notification(message);
+        }
+      });
+    }
   }
-});
+
+  function parseEmojis(text) {
+    return text
+      .replace(/:heart:/g, "❤️")
+      .replace(/:fire:/g, "🔥")
+      .replace(/:laugh:/g, "😂")
+      .replace(/:thumbsup:/g, "👍")
+      .replace(/:star:/g, "⭐")
+      .replace(/:rocket:/g, "🚀");
+  }
 
 </script>
+
 
 </body>
 </html>
