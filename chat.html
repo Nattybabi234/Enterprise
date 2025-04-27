@@ -67,6 +67,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
     import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
     // Firebase configuration
@@ -82,42 +83,57 @@
 
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const CURRENT_SELECTED_USER_EMAIL = "client_email@example.com";  // Replace with dynamic user email
     const chatBox = document.getElementById("chat-box");
     const chatForm = document.getElementById("chat-form");
     const messageInput = document.getElementById("message");
 
-    // Listen to messages in real-time
-    const q = query(collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages"), orderBy("createdAt", "asc"));
+    let CURRENT_SELECTED_USER_EMAIL = null;  // Will be set when the user logs in
 
-    onSnapshot(q, (snapshot) => {
-      chatBox.innerHTML = "";  // Clear previous messages
-      snapshot.forEach((docSnap) => {
-        const data = docSnap.data();
-        const msgDiv = document.createElement("div");
-        msgDiv.textContent = `${data.sender === "client" ? "You" : "Admin"}: ${data.text}`;
-        msgDiv.classList.add(data.sender === "client" ? "client" : "admin");
-        chatBox.appendChild(msgDiv);
-      });
-      chatBox.scrollTop = chatBox.scrollHeight;
+    // Listen for authentication state changes
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        CURRENT_SELECTED_USER_EMAIL = user.email;  // Get logged-in user's email
+        loadMessages();  // Load messages once the user is authenticated
+      } else {
+        // Redirect to login page or show an alert if not authenticated
+        alert("Please log in.");
+        window.location.href = "login.html"; // Redirect to login page
+      }
     });
 
-    // Send message
+    // Function to load chat messages
+    function loadMessages() {
+      const q = query(collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages"), orderBy("createdAt", "asc"));
+
+      onSnapshot(q, (snapshot) => {
+        chatBox.innerHTML = "";  // Clear previous messages
+        snapshot.forEach((docSnap) => {
+          const data = docSnap.data();
+          const msgDiv = document.createElement("div");
+          msgDiv.textContent = `${data.sender === "client" ? "You" : "Admin"}: ${data.text}`;
+          msgDiv.classList.add(data.sender === "client" ? "client" : "admin");
+          chatBox.appendChild(msgDiv);
+        });
+        chatBox.scrollTop = chatBox.scrollHeight;  // Scroll to the bottom
+      });
+    }
+
+    // Send message when the user submits the form
     chatForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      
       const msg = messageInput.value.trim();
+
       if (msg) {
         await addDoc(collection(db, "users", CURRENT_SELECTED_USER_EMAIL, "messages"), {
-          sender: "client",
+          sender: "client",  // Mark the sender as "client"
           text: msg,
           createdAt: serverTimestamp(),
           read: false
         });
-        
-        messageInput.value = "";  // Clear input
+        messageInput.value = "";  // Clear input field
       }
     });
   </script>
