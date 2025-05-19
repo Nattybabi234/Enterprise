@@ -1,176 +1,582 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Najaza Pricing</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Najaza Enterprises - Pricing</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://kit.fontawesome.com/5b5b5373bb.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
+  <link rel="icon" type="image/png" href="mainlogo.jpg" />
   <style>
+    /* Base Styles */
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #070707;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
       padding: 0;
-      background: #fefefe;
-      color: #333;
     }
 
-    header {
-      background: #000;
-      color: gold;
-      padding: 1rem 2rem;
+    h2 {
       text-align: center;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-    }
-
-    .toggle-container {
+    p {
       text-align: center;
-      margin: 2rem 0;
     }
 
-    .toggle {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
+    .text-gold { color: var(--secondary-color); }
+    .bg-gold { background-color: var(--secondary-color); }
+    .border-gold { border-color: var(--secondary-color); }
+
+    .section {
+      padding: 4rem 1rem;
     }
 
-    .pricing {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 2rem;
-      padding: 2rem;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+      background-color: var(--dark-bg);
     }
 
-    .tier {
-      background: #fff;
-      border: 2px solid #ccc;
-      border-radius: 10px;
-      padding: 2rem;
-      width: 300px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    th, td {
+      padding: 1rem;
+      border: 1px solid #444;
+      text-align: center;
+      font-size: 0.95rem;
     }
 
-    .tier h2 {
-      color: #000;
-      margin-top: 0;
+    th {
+      background-color: var(--primary-color);
+      color: white;
     }
 
-    .price {
-      font-size: 2rem;
-      color: gold;
-      margin: 1rem 0;
-    }
-
-    .features {
-      list-style: none;
-      padding: 0;
-      margin: 1rem 0;
-    }
-
-    .features li {
-      margin-bottom: 0.5rem;
+    td {
+      color: #e5e5e5;
     }
 
     .btn {
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      border-radius: 5px;
-      text-decoration: none;
-      background: gold;
+      background-color: var(--secondary-color);
       color: #000;
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 8px;
       font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 10px;
     }
 
-    footer {
-      text-align: center;
-      padding: 1rem;
-      background: #000;
-      color: gold;
+    .btn:hover {
+      background-color: gold;
     }
+
+    /* Pricing Toggle */
+    .price-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 20px 0;
+      font-weight: 600;
+      color: #f1f1f1;
+    }
+
+    .price-toggle input[type="checkbox"] {
+      display: none;
+    }
+
+    .toggle-label {
+      position: relative;
+      width: 50px;
+      height: 26px;
+      background-color: #1e3a8a;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: background 0.3s;
+      display: inline-block;
+    }
+
+    .toggle-label::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 3px;
+      left: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    #pricingToggle:checked + .toggle-label {
+      background-color: #ffd700;
+    }
+
+    #pricingToggle:checked + .toggle-label::after {
+      transform: translateX(24px);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .desktop-tier-container {
+        display: none;
+      }
+
+      .mobile-tier-container {
+        display: block;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .mobile-tier-container {
+        display: none;
+      }
+
+      .desktop-tier-container {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 3rem;
+        flex-wrap: wrap;
+      }
+    }
+
+    .pricing-container {
+      margin: 2rem auto;
+      max-width: 1200px;
+      padding: 1rem;
+      background-color: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .price-tier-container {
+      background: #0d0d0d;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      border: 3px solid;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+      border-image: linear-gradient(45deg, #ffd700, #1e3a8a) 1;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .price-tier-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+    }
+
+    .price-tier-container h4 {
+      font-size: 1.4rem;
+      color: gold;
+      margin-bottom: 10px;
+    }
+
+    .price-tier-container .price {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .price-tier-container .features p {
+      margin: 0.4rem 0;
+      font-size: 1rem;
+      color: #ddd;
+    }
+
+    /* ✨ Desktop tier cards with glow + hover ✨ */
+    @media (min-width: 769px) {
+      .tier-column {
+        background: #101010;
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 3px solid transparent;
+        background-image: linear-gradient(#101010, #101010),
+                          linear-gradient(135deg, royalblue, gold);
+        background-origin: border-box;
+        background-clip: padding-box, border-box;
+        box-shadow: 0 0 20px rgba(30, 58, 138, 0.3);
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+      }
+
+      .tier-column:hover {
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.6), 0 0 40px rgba(65, 105, 225, 0.5);
+        transform: translateY(-6px);
+      }
+    }
+
+    /* ✨ Mobile hover effect on .price-tier-container */
+@media (max-width: 768px) {
+  .price-tier-container {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .price-tier-container:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 0 25px rgba(65, 105, 225, 0.4);
+  }
+}
+
+/* ✨ Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-content {
+  background: #111;
+  border: 2px solid gold;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 90%;
+  text-align: center;
+  color: white;
+  position: relative;
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+}
+
+.modal-content h3 {
+  color: gold;
+  margin-bottom: 1rem;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  color: white;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
   </style>
 </head>
-
 <body>
-  <header>
-    <h1>Najaza Website Plans</h1>
-  </header>
 
-  <div class="toggle-container">
-    <label class="toggle">
-      <span>Monthly</span>
-      <input type="checkbox" id="billing-toggle">
-      <span>Yearly (Save 20%)</span>
-    </label>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar__container">
+    <a href="/" id="navbar__logo"><i class="fa-solid fa-terminal"></i>NAJAZA</a>
+    <div class="navbar__toggle" id="mobile-menu">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </div>
+    <ul class="navbar__menu">
+      <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
+      <li class="navbar__item"><a href="/portfolio.html" class="navbar__links">Portfolio</a></li>
+      <li class="navbar__item"><a href="/tech.html" class="navbar__links">Tech</a></li>
+      <li class="navbar__item"><a href="/signin.html" class="navbar__links">Sign In</a></li>
+      <li class="navbar__btn"><a href="/signup.html" class="button">Sign Up</a></li>
+    </ul>
   </div>
+</nav>
 
-  <section class="pricing">
-    <!-- Starter Tier -->
-    <div class="tier">
-      <h2>🌱 Starter</h2>
-      <p class="price" data-monthly="40" data-yearly="384">£40</p>
-      <ul class="features">
-        <li>📄 1 Page Website</li>
-        <li>📱 Mobile Friendly</li>
-        <li>✉️ Contact Form</li>
-        <li>💬 WhatsApp Integration</li>
-        <li>🔗 Social Media Links</li>
-      </ul>
-      <a href="#" class="btn">Get Started</a>
+<!-- Pricing Section -->
+<section class="section">
+  <div class="max-w-7xl mx-auto text-center">
+    <h2 class="text-4xl font-bold text-gold mb-4">Our Pricing Plans</h2>
+    <p class="text-gray-400 mb-10">Your Brand. Your Vision. Our Code.</p>
+
+    <div class="price-toggle">
+      <span>Starting Prices</span>
     </div>
 
-    <!-- Pro Tier -->
-    <div class="tier">
-      <h2>🚀 Pro</h2>
-      <p class="price" data-monthly="100" data-yearly="960">£100</p>
-      <ul class="features">
-        <li>📄 Up to 5 Pages</li>
-        <li>🎨 Premium UI Design</li>
-        <li>📬 Advanced Contact Form</li>
-        <li>💬 WhatsApp Chat Integration</li>
-        <li>📝 Blog Setup (Optional)</li>
-        <li>🛠️ Admin Panel</li>
-      </ul>
-      <a href="#" class="btn">Choose Pro</a>
+    <!-- Mobile Pricing Cards -->
+    <div class="mobile-tier-container" style="display: flex; flex-direction: column; gap: 1.5rem;">
+
+      <!-- Existing Web Services -->
+      <div class="price-tier-container">
+        <h4>1-page Website (Landing Page)</h4>
+        <p class="price">£250 – £400</p>
+        <div class="features">
+          <p>Simple, clean design</p>
+          <p>Responsive layout</p>
+          <p>Basic SEO setup</p>
+          <p>Contact form integration</p>
+        </div>
+        <button class="btn"><a href="contact.html" class="button-link">Get Started</a></button>
+      </div>
+
+      <div class="price-tier-container">
+        <h4>3–5 Page Brochure Website</h4>
+        <p class="price">£500 – £900</p>
+        <div class="features">
+          <p>Multiple pages</p>
+          <p>Custom design</p>
+          <p>Responsive and mobile-friendly</p>
+          <p>Basic SEO & analytics</p>
+        </div>
+        <button class="btn"><a href="contact.html" class="button-link">Get Started</a></button>
+      </div>
+
+      <div class="price-tier-container">
+        <h4>E-commerce Website (Basic)</h4>
+        <p class="price">£1,000 – £1,800</p>
+        <div class="features">
+          <p>Product listings</p>
+          <p>Shopping cart & checkout</p>
+          <p>Payment gateway integration</p>
+          <p>Responsive design</p>
+        </div>
+        <button class="btn"><a href="contact.html" class="button-link">Get Started</a></button>
+      </div>
+
+      <div class="price-tier-container">
+        <h4>E-commerce + Custom Features</h4>
+        <p class="price">£2,000+</p>
+        <div class="features">
+          <p>Advanced e-commerce solutions</p>
+          <p>Custom plugins & integrations</p>
+          <p>Scalable & secure</p>
+          <p>Ongoing support available</p>
+        </div>
+        <button class="btn"><a href="contact.html" class="button-link">Contact Us</a></button>
+      </div>
+
+      <div class="price-tier-container">
+        <h4>Website Redesign</h4>
+        <p class="price">60–80% of original cost</p>
+        <div class="features">
+          <p>Complete website overhaul</p>
+          <p>Modern design updates</p>
+          <p>Improve user experience</p>
+          <p>SEO improvements</p>
+        </div>
+        <button class="btn"><a href="contact.html" class="button-link">Request Quote</a></button>
+      </div>
+
+      <div class="price-tier-container">
+        <h4>Monthly Maintenance (optional)</h4>
+        <p class="price">£50 – £150/month</p>
+        <div class="features">
+          <p>Regular updates</p>
+          <p>Security monitoring</p>
+          <p>Backup & recovery</p>
+          <p>Technical support</p>
+        </div>
+        <button class="btn"><a href="contact.html" class="button-link">Subscribe</a></button>
+      </div>
+
+      <!-- New Graphic Design Services -->
+      <div class="price-tier-container">
+        <h4>Logo Design</h4>
+        <p class="price">£150 – £350</p>
+        <div class="features">
+          <p>Custom logo creation</p>
+          <p>Multiple concepts</p>
+          <p>High-resolution files</p>
+        </div>
+        <button class="btn"><a href="contact.html" class="button-link">Get Started</a></button>
+      </div>
+
+      <div class="price-tier-container">
+        <h4>Brand Identity Kit (logo, fonts, colors)</h4>
+        <p class="price">£400 – £750</p>
+        <div class="features">
+          <p>Logo design</p>
+          <p>Font selection</p>
+          <p>Color palette</p>
+          <p>Brand guidelines</p>
+        </div>
+        <button class="btn"><a href="contact.html" class="button-link">Get Started</a></button>
+      </div>
+
+      <div class="price-tier-container">
+        <h4>Instagram Post Templates (set of 3–5)</h4>
+        <p class="price">£75 – £150</p>
+        <div class="features">
+          <p>Custom-designed templates</p>
+          <p>Editable files</p>
+          <p>Consistent branding</p>
+        </div>
+        <button class="btn"><a href="contact.html" class="button-link">Order Now</a></button>
+      </div>
+
+      <div class="price-tier-container">
+        <h4>Business Card Design</h4>
+        <p class="price">£40 – £80</p>
+        <div class="features">
+          <p>Double-sided design</p>
+          <p>Print-ready files</p>
+        </div>
+        <button class="btn"><a href="contact.html" class="button-link">Get Started</a></button>
+      </div>
+
+      <div class="price-tier-container">
+        <h4>Flyer/Poster Design</h4>
+        <p class="price">£50 – £100</p>
+        <div class="features">
+          <p>Custom flyer/poster</p>
+          <p>Print-ready design</p>
+          <p>Multiple size options</p>
+        </div>
+        <button class="btn"><a href="contact.html" class="button-link">Get Started</a></button>
+      </div>
+
+      <div class="price-tier-container">
+        <h4>Reels Cover Graphics</h4>
+        <p class="price">£20 – £50 each</p>
+        <div class="features">
+          <p>Custom designed covers</p>
+          <p>Branded styles</p>
+          <p>Optimized for Instagram Reels</p>
+        </div>
+        <button class="btn"><a href="contact.html" class="button-link">Order Now</a></button>
+      </div>
+
     </div>
 
-    <!-- Elite Tier -->
-    <div class="tier">
-      <h2>👑 Elite</h2>
-      <p class="price" data-monthly="180" data-yearly="1728">£180</p>
-      <ul class="features">
-        <li>📄 Unlimited Pages</li>
-        <li>🛒 Ecommerce Integration</li>
-        <li>💳 Online Payment Gateway</li>
-        <li>📊 Admin Dashboard</li>
-        <li>📧 Newsletter/Email Automation</li>
-        <li>🛠️ Monthly Maintenance</li>
-        <li>⚡ Priority Support</li>
-      </ul>
-      <a href="#" class="btn">Go Elite</a>
-    </div>
-  </section>
+    <!-- Desktop Pricing Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>Service</th>
+          <th>Starting Price (GBP)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Web Services -->
+        <tr>
+          <td>1-page Website (Landing Page)</td>
+          <td>£250 – £400</td>
+        </tr>
+        <tr>
+          <td>3–5 Page Brochure Website</td>
+          <td>£500 – £900</td>
+        </tr>
+        <tr>
+          <td>E-commerce Website (Basic)</td>
+          <td>£1,000 – £1,800</td>
+        </tr>
+        <tr>
+          <td>E-commerce + Custom Features</td>
+          <td>£2,000+</td>
+        </tr>
+        <tr>
+          <td>Website Redesign</td>
+          <td>60–80% of original cost</td>
+        </tr>
+        <tr>
+          <td>Monthly Maintenance (optional)</td>
+          <td>£50 – £150/month</td>
+        </tr>
 
-  <footer>
-    <p>© 2025 Najaza Enterprises. All rights reserved.</p>
-  </footer>
+        <!-- Graphic Design Services -->
+        <tr>
+          <td>Logo Design</td>
+          <td>£150 – £350</td>
+        </tr>
+        <tr>
+          <td>Brand Identity Kit (logo, fonts, colors)</td>
+          <td>£400 – £750</td>
+        </tr>
+        <tr>
+          <td>Instagram Post Templates (set of 3–5)</td>
+          <td>£75 – £150</td>
+        </tr>
+        <tr>
+          <td>Business Card Design</td>
+          <td>£40 – £80</td>
+        </tr>
+        <tr>
+          <td>Flyer/Poster Design</td>
+          <td>£50 – £100</td>
+        </tr>
+        <tr>
+          <td>Reels Cover Graphics</td>
+          <td>£20 – £50 each</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
 
-  <script>
-    const toggle = document.getElementById('billing-toggle');
-    const prices = document.querySelectorAll('.price');
+<script>
+  const toggle = document.getElementById('pricingToggle');
 
-    toggle.addEventListener('change', function () {
-      prices.forEach(price => {
-        const monthly = price.getAttribute('data-monthly');
-        const yearly = price.getAttribute('data-yearly');
+  toggle.addEventListener('change', () => {
+    document.querySelectorAll('.price').forEach(price => {
+      const monthly = price.getAttribute('data-monthly');
+      const yearly = price.getAttribute('data-yearly');
+
+      if (monthly && yearly) {
         price.textContent = toggle.checked ? `£${yearly}` : `£${monthly}`;
-      });
+      }
     });
-  </script>
-</body>
 
+    document.querySelectorAll('.desktop-tier-container .price').forEach(priceWrapper => {
+      const monthlySpan = priceWrapper.querySelector('.monthly');
+      const yearlySpan = priceWrapper.querySelector('.yearly');
+
+      if (monthlySpan && yearlySpan) {
+        if (toggle.checked) {
+          monthlySpan.classList.add('hidden');
+          yearlySpan.classList.remove('hidden');
+        } else {
+          yearlySpan.classList.add('hidden');
+          monthlySpan.classList.remove('hidden');
+        }
+      }
+    });
+  });
+
+  const modal = document.getElementById('modal');
+const modalClose = document.querySelector('.modal-close');
+const chooseButtons = document.querySelectorAll('.btn');
+
+chooseButtons.forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    modal.style.display = 'flex';
+  });
+});
+
+modalClose.addEventListener('click', () => {
+  modal.style.display = 'none';
+});
+
+window.addEventListener('click', (e) => {
+  if (e.target === modal) {
+    modal.style.display = 'none';
+  }
+});
+
+</script>
+
+<!-- 💬 Modal for Choose Plan -->
+<div id="modal" class="modal-overlay">
+  <div class="modal-content">
+    <span class="modal-close">&times;</span>
+    <h3>Plan Selected</h3>
+    <p>Thanks for choosing a plan! We’ll contact you shortly with next steps.</p>
+  </div>
+</div>
+
+<script>
+  const mobileMenu = document.getElementById('mobile-menu');
+  const navMenu = document.querySelector('.navbar__menu');
+
+  mobileMenu.addEventListener('click', () => {
+    mobileMenu.classList.toggle('is-active');
+    navMenu.classList.toggle('active');
+  });
+</script>
+
+
+</body>
 </html>
