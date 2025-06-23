@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Najaza Enterprises - Pricing</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://kit.fontawesome.com/5b5b5373bb.js" crossorigin="anonymous"></script>
@@ -26,9 +26,9 @@
       text-align: center;
     }
 
-    .text-gold { color: var(--secondary-color); }
-    .bg-gold { background-color: var(--secondary-color); }
-    .border-gold { border-color: var(--secondary-color); }
+    .text-gold { color: var(--secondary-color, gold); }
+    .bg-gold { background-color: var(--secondary-color, gold); }
+    .border-gold { border-color: var(--secondary-color, gold); }
 
     .section {
       padding: 4rem 1rem;
@@ -38,7 +38,7 @@
       width: 100%;
       border-collapse: collapse;
       margin-top: 2rem;
-      background-color: var(--dark-bg);
+      background-color: var(--dark-bg, #111);
     }
 
     th, td {
@@ -49,7 +49,7 @@
     }
 
     th {
-      background-color: var(--primary-color);
+      background-color: var(--primary-color, #1e3a8a);
       color: white;
     }
 
@@ -57,8 +57,8 @@
       color: #e5e5e5;
     }
 
-    .btn {
-      background-color: var(--secondary-color);
+    .btn, .main__btn {
+      background-color: var(--secondary-color, gold);
       color: #000;
       padding: 0.6rem 1rem;
       border: none;
@@ -67,10 +67,13 @@
       cursor: pointer;
       transition: background 0.3s;
       margin-top: 10px;
+      display: inline-block;
+      text-decoration: none;
     }
 
-    .btn:hover {
-      background-color: gold;
+    .btn:hover, .main__btn:hover {
+      background-color: #ffd700;
+      color: #000;
     }
 
     /* Pricing Toggle */
@@ -129,7 +132,9 @@
       }
 
       .mobile-tier-container {
-        display: block;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
       }
     }
 
@@ -191,7 +196,7 @@
       color: #ddd;
     }
 
-    /* ✨ Desktop tier cards with glow + hover ✨ */
+    /* Desktop tier cards with glow + hover */
     @media (min-width: 769px) {
       .tier-column {
         background: #101010;
@@ -212,67 +217,65 @@
       }
     }
 
-    /* ✨ Mobile hover effect on .price-tier-container */
-@media (max-width: 768px) {
-  .price-tier-container {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
+    /* Mobile hover effect */
+    @media (max-width: 768px) {
+      .price-tier-container {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
 
-  .price-tier-container:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 0 25px rgba(65, 105, 225, 0.4);
-  }
-}
+      .price-tier-container:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 0 25px rgba(65, 105, 225, 0.4);
+      }
+    }
 
-/* ✨ Modal styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.8);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
 
-.modal-content {
-  background: #111;
-  border: 2px solid gold;
-  border-radius: 12px;
-  padding: 2rem;
-  max-width: 90%;
-  text-align: center;
-  color: white;
-  position: relative;
-  box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
-}
+    .modal-content {
+      background: #111;
+      border: 2px solid gold;
+      border-radius: 12px;
+      padding: 2rem;
+      max-width: 90%;
+      text-align: center;
+      color: white;
+      position: relative;
+      box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
+    }
 
-.modal-content h3 {
-  color: gold;
-  margin-bottom: 1rem;
-}
+    .modal-content h3 {
+      color: gold;
+      margin-bottom: 1rem;
+    }
 
-.modal-close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  color: white;
-  font-size: 1.4rem;
-  cursor: pointer;
-}
-
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      color: white;
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
 
-
 <!-- Navbar -->
 <nav class="navbar">
   <div class="navbar__container">
-    <a href="/" id="navbar__logo"><i class="fa-solid fa-terminal"></i>NAJAZA</a>
+    <a href="/" id="navbar__logo"><i class="fa-solid fa-terminal"></i> NAJAZA</a>
     <div class="navbar__toggle" id="mobile-menu">
       <span class="bar"></span><span class="bar"></span><span class="bar"></span>
     </div>
@@ -280,303 +283,166 @@
       <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
       <li class="navbar__item"><a href="/portfolio.html" class="navbar__links">Portfolio</a></li>
       <li class="navbar__item"><a href="/tech.html" class="navbar__links">Tech</a></li>
+      <li class="navbar__item"><a href="/pricing.html" class="navbar__links active">Pricing</a></li>
+      <li class="navbar__item"><a href="/signup.html" class="navbar__links">Sign Up</a></li>
       <li class="navbar__item"><a href="/signin.html" class="navbar__links">Sign In</a></li>
-      <li class="navbar__btn"><a href="/signup.html" class="button">Sign Up</a></li>
     </ul>
   </div>
 </nav>
 
 <!-- Pricing Section -->
-<section class="section">
-  <div class="max-w-7xl mx-auto text-center">
-    <h2 class="text-4xl font-bold text-gold mb-4">Our Pricing Plans</h2>
-    <p class="text-gray-400 mb-10">Your Brand. Your Vision. Our Code.</p>
+<section class="pricing-section section" id="pricing">
+  <h2 class="text-gold">Pricing</h2>
+  <p>Choose the right plan that fits your needs</p>
 
-    <div class="price-toggle">
-      <span>Starting Prices</span>
+  <div class="price-toggle">
+    <span>Monthly</span>
+    <input type="checkbox" id="pricingToggle" />
+    <label for="pricingToggle" class="toggle-label"></label>
+    <span>Yearly <small>(Save 20%)</small></span>
+  </div>
+
+  <!-- Desktop Tier Cards -->
+  <div class="desktop-tier-container" data-aos="fade-up" data-aos-duration="1500">
+    <div class="tier-column">
+      <h4>Basic Plan</h4>
+      <div class="price" data-monthly="20" data-yearly="192">$20</div>
+      <div class="features">
+        <p>5 pages</p>
+        <p>2 design revisions</p>
+        <p>Email support</p>
+        <p>Basic SEO</p>
+      </div>
+      <button class="main__btn add-to-cart" data-plan="Basic Plan" data-price-monthly="20" data-price-yearly="192">Select Plan</button>
     </div>
-
-    <!-- Mobile Pricing Cards -->
-    <div class="mobile-tier-container" style="display: flex; flex-direction: column; gap: 1.5rem;">
-
-      <!-- Existing Web Services -->
-      <div class="price-tier-container">
-        <h4>1-page Website (Landing Page)</h4>
-        <p class="price">£250 – £400</p>
-        <div class="features">
-          <p>Simple, clean design</p>
-          <p>Responsive layout</p>
-          <p>Basic SEO setup</p>
-          <p>Contact form integration</p>
-        </div>
-        <button class="main__btn"><a href="contact.html">Get Started!</a></button>
+    <div class="tier-column">
+      <h4>Pro Plan</h4>
+      <div class="price" data-monthly="40" data-yearly="384">$40</div>
+      <div class="features">
+        <p>10 pages</p>
+        <p>5 design revisions</p>
+        <p>Priority email support</p>
+        <p>Advanced SEO</p>
       </div>
-
-      <div class="price-tier-container">
-        <h4>3–5 Page Brochure Website</h4>
-        <p class="price">£500 – £900</p>
-        <div class="features">
-          <p>Multiple pages</p>
-          <p>Custom design</p>
-          <p>Responsive and mobile-friendly</p>
-          <p>Basic SEO & analytics</p>
-        </div>
-        <button class="main__btn"><a href="contact.html">Get Started!</a></button>
-      </div>
-
-      <div class="price-tier-container">
-        <h4>E-commerce Website (Basic)</h4>
-        <p class="price">£1,000 – £1,800</p>
-        <div class="features">
-          <p>Product listings</p>
-          <p>Shopping cart & checkout</p>
-          <p>Payment gateway integration</p>
-          <p>Responsive design</p>
-        </div>
-        <button class="main__btn"><a href="contact.html">Get Started!</a></button>
-      </div>
-
-      <div class="price-tier-container">
-        <h4>E-commerce + Custom Features</h4>
-        <p class="price">£2,000+</p>
-        <div class="features">
-          <p>Advanced e-commerce solutions</p>
-          <p>Custom plugins & integrations</p>
-          <p>Scalable & secure</p>
-          <p>Ongoing support available</p>
-        </div>
-        <button class="main__btn"><a href="contact.html">Contact Us!</a></button>
-      </div>
-
-      <div class="price-tier-container">
-        <h4>Website Redesign</h4>
-        <p class="price">60–80% of original cost</p>
-        <div class="features">
-          <p>Complete website overhaul</p>
-          <p>Modern design updates</p>
-          <p>Improve user experience</p>
-          <p>SEO improvements</p>
-        </div>
-        <button class="main__btn"><a href="contact.html">Request Quote</a></button>
-      </div>
-
-      <div class="price-tier-container">
-        <h4>Monthly Maintenance (optional)</h4>
-        <p class="price">£50 – £150/month</p>
-        <div class="features">
-          <p>Regular updates</p>
-          <p>Security monitoring</p>
-          <p>Backup & recovery</p>
-          <p>Technical support</p>
-        </div>
-        <button class="main__btn"><a href="contact.html">Subscribe!</a></button>
-      </div>
-
-      <!-- New Graphic Design Services -->
-      <div class="price-tier-container">
-        <h4>Logo Design</h4>
-        <p class="price">£150 – £350</p>
-        <div class="features">
-          <p>Custom logo creation</p>
-          <p>Multiple concepts</p>
-          <p>High-resolution files</p>
-        </div>
-        <button class="main__btn"><a href="contact.html">Get Started!</a></button>
-      </div>
-
-      <div class="price-tier-container">
-        <h4>Brand Identity Kit (logo, fonts, colors)</h4>
-        <p class="price">£400 – £750</p>
-        <div class="features">
-          <p>Logo design</p>
-          <p>Font selection</p>
-          <p>Color palette</p>
-          <p>Brand guidelines</p>
-        </div>
-        <button class="main__btn"><a href="contact.html">Get Started!</a></button>
-      </div>
-
-      <div class="price-tier-container">
-        <h4>Instagram Post Templates (set of 3–5)</h4>
-        <p class="price">£75 – £150</p>
-        <div class="features">
-          <p>Custom-designed templates</p>
-          <p>Editable files</p>
-          <p>Consistent branding</p>
-        </div>
-        <button class="main__btn"><a href="contact.html">order Now!</a></button>
-      </div>
-
-      <div class="price-tier-container">
-        <h4>Business Card Design</h4>
-        <p class="price">£40 – £80</p>
-        <div class="features">
-          <p>Double-sided design</p>
-          <p>Print-ready files</p>
-        </div>
-        <button class="main__btn"><a href="contact.html">Get Started!</a></button>
-      </div>
-
-      <div class="price-tier-container">
-        <h4>Flyer/Poster Design</h4>
-        <p class="price">£50 – £100</p>
-        <div class="features">
-          <p>Custom flyer/poster</p>
-          <p>Print-ready design</p>
-          <p>Multiple size options</p>
-        </div>
-        <button class="main__btn"><a href="contact.html">Get Started!</a></button>
-      </div>
-
-      <div class="price-tier-container">
-        <h4>Reels Cover Graphics</h4>
-        <p class="price">£20 – £50 each</p>
-        <div class="features">
-          <p>Custom designed covers</p>
-          <p>Branded styles</p>
-          <p>Optimized for Instagram Reels</p>
-        </div>
-        <button class="main__btn"><a href="contact.html">Order Now!</a></button>
-      </div>
-
+      <button class="main__btn add-to-cart" data-plan="Pro Plan" data-price-monthly="40" data-price-yearly="384">Select Plan</button>
     </div>
+    <div class="tier-column">
+      <h4>Premium Plan</h4>
+      <div class="price" data-monthly="80" data-yearly="768">$80</div>
+      <div class="features">
+        <p>Unlimited pages</p>
+        <p>Unlimited revisions</p>
+        <p>24/7 Support</p>
+        <p>Full SEO & Marketing</p>
+      </div>
+      <button class="main__btn add-to-cart" data-plan="Premium Plan" data-price-monthly="80" data-price-yearly="768">Select Plan</button>
+    </div>
+  </div>
 
-    <!-- Desktop Pricing Table -->
-    <table>
-      <thead>
-        <tr>
-          <th>Service</th>
-          <th>Starting Price (GBP)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Web Services -->
-        <tr>
-          <td>1-page Website (Landing Page)</td>
-          <td>£250 – £400</td>
-        </tr>
-        <tr>
-          <td>3–5 Page Brochure Website</td>
-          <td>£500 – £900</td>
-        </tr>
-        <tr>
-          <td>E-commerce Website (Basic)</td>
-          <td>£1,000 – £1,800</td>
-        </tr>
-        <tr>
-          <td>E-commerce + Custom Features</td>
-          <td>£2,000+</td>
-        </tr>
-        <tr>
-          <td>Website Redesign</td>
-          <td>60–80% of original cost</td>
-        </tr>
-        <tr>
-          <td>Monthly Maintenance (optional)</td>
-          <td>£50 – £150/month</td>
-        </tr>
-
-        <!-- Graphic Design Services -->
-        <tr>
-          <td>Logo Design</td>
-          <td>£150 – £350</td>
-        </tr>
-        <tr>
-          <td>Brand Identity Kit (logo, fonts, colors)</td>
-          <td>£400 – £750</td>
-        </tr>
-        <tr>
-          <td>Instagram Post Templates (set of 3–5)</td>
-          <td>£75 – £150</td>
-        </tr>
-        <tr>
-          <td>Business Card Design</td>
-          <td>£40 – £80</td>
-        </tr>
-        <tr>
-          <td>Flyer/Poster Design</td>
-          <td>£50 – £100</td>
-        </tr>
-        <tr>
-          <td>Reels Cover Graphics</td>
-          <td>£20 – £50 each</td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- Mobile Tier Cards -->
+  <div class="mobile-tier-container" data-aos="fade-up" data-aos-duration="1500">
+    <div class="price-tier-container">
+      <h4>Basic Plan</h4>
+      <div class="price" data-monthly="20" data-yearly="192">$20</div>
+      <div class="features">
+        <p>5 pages</p>
+        <p>2 design revisions</p>
+        <p>Email support</p>
+        <p>Basic SEO</p>
+      </div>
+      <button class="main__btn add-to-cart" data-plan="Basic Plan" data-price-monthly="20" data-price-yearly="192">Select Plan</button>
+    </div>
+    <div class="price-tier-container">
+      <h4>Pro Plan</h4>
+      <div class="price" data-monthly="40" data-yearly="384">$40</div>
+      <div class="features">
+        <p>10 pages</p>
+        <p>5 design revisions</p>
+        <p>Priority email support</p>
+        <p>Advanced SEO</p>
+      </div>
+      <button class="main__btn add-to-cart" data-plan="Pro Plan" data-price-monthly="40" data-price-yearly="384">Select Plan</button>
+    </div>
+    <div class="price-tier-container">
+      <h4>Premium Plan</h4>
+      <div class="price" data-monthly="80" data-yearly="768">$80</div>
+      <div class="features">
+        <p>Unlimited pages</p>
+        <p>Unlimited revisions</p>
+        <p>24/7 Support</p>
+        <p>Full SEO & Marketing</p>
+      </div>
+      <button class="main__btn add-to-cart" data-plan="Premium Plan" data-price-monthly="80" data-price-yearly="768">Select Plan</button>
+    </div>
   </div>
 </section>
 
-<script>
-  const toggle = document.getElementById('pricingToggle');
-
-  toggle.addEventListener('change', () => {
-    document.querySelectorAll('.price').forEach(price => {
-      const monthly = price.getAttribute('data-monthly');
-      const yearly = price.getAttribute('data-yearly');
-
-      if (monthly && yearly) {
-        price.textContent = toggle.checked ? `£${yearly}` : `£${monthly}`;
-      }
-    });
-
-    document.querySelectorAll('.desktop-tier-container .price').forEach(priceWrapper => {
-      const monthlySpan = priceWrapper.querySelector('.monthly');
-      const yearlySpan = priceWrapper.querySelector('.yearly');
-
-      if (monthlySpan && yearlySpan) {
-        if (toggle.checked) {
-          monthlySpan.classList.add('hidden');
-          yearlySpan.classList.remove('hidden');
-        } else {
-          yearlySpan.classList.add('hidden');
-          monthlySpan.classList.remove('hidden');
-        }
-      }
-    });
-  });
-
-  const modal = document.getElementById('modal');
-const modalClose = document.querySelector('.modal-close');
-const chooseButtons = document.querySelectorAll('.btn');
-
-chooseButtons.forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    e.preventDefault();
-    modal.style.display = 'flex';
-  });
-});
-
-modalClose.addEventListener('click', () => {
-  modal.style.display = 'none';
-});
-
-window.addEventListener('click', (e) => {
-  if (e.target === modal) {
-    modal.style.display = 'none';
-  }
-});
-
-</script>
-
-<!-- 💬 Modal for Choose Plan -->
-<div id="modal" class="modal-overlay">
+<!-- Cart Modal -->
+<div class="modal-overlay" id="cartModal">
   <div class="modal-content">
-    <span class="modal-close">&times;</span>
-    <h3>Plan Selected</h3>
-    <p>Thanks for choosing a plan! We’ll contact you shortly with next steps.</p>
+    <span class="modal-close" id="closeModal">&times;</span>
+    <h3>Plan Added to Cart</h3>
+    <p id="modal-text"></p>
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 <script>
-  const mobileMenu = document.getElementById('mobile-menu');
-  const navMenu = document.querySelector('.navbar__menu');
+  AOS.init();
 
-  mobileMenu.addEventListener('click', () => {
-    mobileMenu.classList.toggle('is-active');
-    navMenu.classList.toggle('active');
+  // Pricing toggle logic
+  const pricingToggle = document.getElementById('pricingToggle');
+  function updatePrices() {
+    const monthly = !pricingToggle.checked;
+    document.querySelectorAll('.price').forEach(priceEl => {
+      const monthlyPrice = priceEl.dataset.monthly;
+      const yearlyPrice = priceEl.dataset.yearly;
+      priceEl.textContent = monthly ? `$${monthlyPrice}` : `$${yearlyPrice}`;
+    });
+  }
+  pricingToggle.addEventListener('change', updatePrices);
+  updatePrices();
+
+  // Cart modal and add to cart buttons
+  const modal = document.getElementById('cartModal');
+  const modalText = document.getElementById('modal-text');
+  const closeModalBtn = document.getElementById('closeModal');
+
+  function openModal(message) {
+    modalText.textContent = message;
+    modal.style.display = 'flex';
+  }
+
+  closeModalBtn.onclick = () => {
+    modal.style.display = 'none';
+  };
+
+  window.onclick = (event) => {
+    if(event.target === modal) {
+      modal.style.display = 'none';
+    }
+  };
+
+  document.querySelectorAll('.add-to-cart').forEach(button => {
+    button.addEventListener('click', () => {
+      const plan = button.dataset.plan;
+      const monthlyPrice = button.dataset.priceMonthly;
+      const yearlyPrice = button.dataset.priceYearly;
+      const isMonthly = !pricingToggle.checked;
+      const price = isMonthly ? monthlyPrice : yearlyPrice;
+      const period = isMonthly ? 'monthly' : 'yearly';
+      openModal(`You have added the <strong>${plan}</strong> (${period}) plan for $${price} to your cart.`);
+    });
+  });
+
+  // Mobile menu toggle (simple)
+  const menuToggle = document.getElementById('mobile-menu');
+  const menu = document.querySelector('.navbar__menu');
+  menuToggle.addEventListener('click', () => {
+    menu.classList.toggle('active');
+    menuToggle.classList.toggle('active');
   });
 </script>
-
 
 </body>
 </html>
