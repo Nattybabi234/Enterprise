@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Najaza Checkout</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    h1 { color: #222; }
+    #cart-container div { margin: 5px 0; }
+    form input, form textarea { display: block; width: 100%; margin: 10px 0; padding: 8px; }
+    form button { padding: 10px 15px; background: gold; border: none; cursor: pointer; }
+  </style>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+  <h1>Checkout</h1>
+
+  <!-- Cart Display -->
+  <div id="cart-container"></div>
+
+  <!-- Checkout Form -->
+  <form id="checkout-form">
+    <input type="text" id="name" placeholder="Full Name" required />
+    <input type="email" id="email" placeholder="Email Address" required />
+    <textarea id="address" placeholder="Delivery Address" required></textarea>
+    <button type="submit">Place Order</button>
+  </form>
+
+  <script>
+    // ----- Firebase Config -----
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ----- Display Cart Items -----
+    const cartContainer = document.getElementById("cart-container");
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    if (cart.length === 0) {
+      cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+    } else {
+      let total = 0;
+      cart.forEach(item => {
+        const div = document.createElement("div");
+        div.textContent = `${item.title} - £${item.price}`;
+        cartContainer.appendChild(div);
+        total += item.price;
+      });
+      const totalDiv = document.createElement("div");
+      totalDiv.innerHTML = `<strong>Total: £${total}</strong>`;
+      cartContainer.appendChild(totalDiv);
+    }
+
+    // ----- Handle Form Submission -----
+    document.getElementById("checkout-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const address = document.getElementById("address").value.trim();
+
+      if (!name || !email || !address || cart.length === 0) {
+        alert("Please complete all fields and make sure your cart is not empty.");
+        return;
+      }
+
+      const order = {
+        name,
+        email,
+        address,
+        items: cart,
+        createdAt: new Date().toISOString()
+      };
+
+      try {
+        await db.collection("orders").add(order);
+        alert("Order placed successfully!");
+        localStorage.removeItem("cart");
+        window.location.href = "thankyou.html"; // Optional
+      } catch (error) {
+        console.error("Error placing order:", error);
+        alert("Failed to submit order. Please try again.");
+      }
+    });
+
+    // ----- Example Add to Cart (for testing directly) -----
+    // localStorage.setItem("cart", JSON.stringify([
+    //   { title: "Web Design", price: 150 },
+    //   { title: "Logo Design", price: 50 }
+    // ]));
+  </script>
+
+</body>
+</html>
