@@ -1,102 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Najaza Checkout</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    h1 { color: #222; }
-    #cart-container div { margin: 5px 0; }
-    form input, form textarea { display: block; width: 100%; margin: 10px 0; padding: 8px; }
-    form button { padding: 10px 15px; background: gold; border: none; cursor: pointer; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    h2 {
+      color: #333;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: #888;
+    }
+    #status {
+      margin-top: 15px;
+      font-weight: bold;
+    }
   </style>
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
-  <h1>Checkout</h1>
-
-  <!-- Cart Display -->
-  <div id="cart-container"></div>
-
-  <!-- Checkout Form -->
-  <form id="checkout-form">
-    <input type="text" id="name" placeholder="Full Name" required />
-    <input type="email" id="email" placeholder="Email Address" required />
-    <textarea id="address" placeholder="Delivery Address" required></textarea>
-    <button type="submit">Place Order</button>
+  <h2>Checkout Form</h2>
+  <form id="checkoutForm">
+    <div class="form-group">
+      <label for="name">Full Name</label>
+      <input id="name" required />
+    </div>
+    <div class="form-group">
+      <label for="email">Email Address</label>
+      <input id="email" type="email" required />
+    </div>
+    <div class="form-group">
+      <label for="items">Items Ordered</label>
+      <textarea id="items" placeholder="e.g., Web Design, Logo Design" required></textarea>
+    </div>
+    <button type="submit" id="submitBtn">Checkout</button>
+    <p id="status"></p>
   </form>
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
   <script>
-    // ----- Firebase Config -----
+    // ✅ Your Firebase config
     const firebaseConfig = {
-  apiKey: "AIzaSyDEEwSOIc_YgQTp2xoQ4kz1b_VqAu8tPus",
-  authDomain: "najazacart.firebaseapp.com",
-  projectId: "najazacart",
-  storageBucket: "najazacart.firebasestorage.app",
-  messagingSenderId: "63961437624",
-  appId: "1:63961437624:web:b7f6f55b65444221b2ab4d",
-  measurementId: "G-DZ9WXBVLQC"
-};
+      apiKey: "AIzaSyDEEwSOIc_YgQTp2xoQ4kz1b_VqAu8tPus",
+      authDomain: "najazacart.firebaseapp.com",
+      projectId: "najazacart",
+      storageBucket: "najazacart.firebasestorage.app",
+      messagingSenderId: "63961437624",
+      appId: "1:63961437624:web:b7f6f55b65444221b2ab4d",
+      measurementId: "G-DZ9WXBVLQC"
+    };
+
+    // 🔥 Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // ----- Display Cart Items -----
-    const cartContainer = document.getElementById("cart-container");
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    if (cart.length === 0) {
-      cartContainer.innerHTML = "<p>Your cart is empty.</p>";
-    } else {
-      let total = 0;
-      cart.forEach(item => {
-        const div = document.createElement("div");
-        div.textContent = `${item.title} - £${item.price}`;
-        cartContainer.appendChild(div);
-        total += item.price;
-      });
-      const totalDiv = document.createElement("div");
-      totalDiv.innerHTML = `<strong>Total: £${total}</strong>`;
-      cartContainer.appendChild(totalDiv);
-    }
+    const form = document.getElementById('checkoutForm');
+    const status = document.getElementById('status');
+    const submitBtn = document.getElementById('submitBtn');
 
-    // ----- Handle Form Submission -----
-    document.getElementById("checkout-form").addEventListener("submit", async (e) => {
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const address = document.getElementById("address").value.trim();
 
-      if (!name || !email || !address || cart.length === 0) {
-        alert("Please complete all fields and make sure your cart is not empty.");
-        return;
-      }
+      submitBtn.disabled = true;
+      status.textContent = "Submitting...";
 
-      const order = {
-        name,
-        email,
-        address,
-        items: cart,
-        createdAt: new Date().toISOString()
-      };
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const items = document.getElementById('items').value.trim();
 
       try {
-        await db.collection("orders").add(order);
-        alert("Order placed successfully!");
-        localStorage.removeItem("cart");
-        window.location.href = "thankyou.html"; // Optional
-      } catch (error) {
-        console.error("Error placing order:", error);
-        alert("Failed to submit order. Please try again.");
-      }
-    });
+        await db.collection("orders").add({
+          name,
+          email,
+          items,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
 
-    // ----- Example Add to Cart (for testing directly) -----
-    // localStorage.setItem("cart", JSON.stringify([
-    //   { title: "Web Design", price: 150 },
-    //   { title: "Logo Design", price: 50 }
-    // ]));
+        status.textContent = "✅ Order submitted successfully!";
+        form.reset();
+      } catch (error) {
+        console.error("❌ Error saving order:", error);
+        status.textContent = "❌ Failed to submit. Check console.";
+      }
+
+      submitBtn.disabled = false;
+    });
   </script>
 
 </body>
