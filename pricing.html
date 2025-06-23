@@ -26,9 +26,24 @@
       text-align: center;
     }
 
-    .text-gold { color: var(--secondary-color, gold); }
-    .bg-gold { background-color: var(--secondary-color, gold); }
-    .border-gold { border-color: var(--secondary-color, gold); }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .text-gold { color: var(--secondary-color); }
+    .bg-gold { background-color: var(--secondary-color); }
+    .border-gold { border-color: var(--secondary-color); }
+
+    :root {
+      --primary-color: #1e3a8a;
+      --secondary-color: gold;
+      --dark-bg: #121212;
+    }
 
     .section {
       padding: 4rem 1rem;
@@ -38,7 +53,7 @@
       width: 100%;
       border-collapse: collapse;
       margin-top: 2rem;
-      background-color: var(--dark-bg, #111);
+      background-color: var(--dark-bg);
     }
 
     th, td {
@@ -49,7 +64,7 @@
     }
 
     th {
-      background-color: var(--primary-color, #1e3a8a);
+      background-color: var(--primary-color);
       color: white;
     }
 
@@ -57,22 +72,22 @@
       color: #e5e5e5;
     }
 
-    .btn, .main__btn {
-      background-color: var(--secondary-color, gold);
+    /* Buttons */
+    .main__btn, .btn {
+      background-color: var(--secondary-color);
       color: #000;
       padding: 0.6rem 1rem;
       border: none;
       border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s, color 0.3s;
       margin-top: 10px;
       display: inline-block;
-      text-decoration: none;
     }
 
-    .btn:hover, .main__btn:hover {
-      background-color: #ffd700;
+    .main__btn:hover, .btn:hover {
+      background-color: gold;
       color: #000;
     }
 
@@ -217,7 +232,7 @@
       }
     }
 
-    /* Mobile hover effect */
+    /* Mobile hover effect on .price-tier-container */
     @media (max-width: 768px) {
       .price-tier-container {
         transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -275,172 +290,174 @@
 <!-- Navbar -->
 <nav class="navbar">
   <div class="navbar__container">
-    <a href="/" id="navbar__logo"><i class="fa-solid fa-terminal"></i> NAJAZA</a>
+    <a href="/" id="navbar__logo"><i class="fa-solid fa-terminal"></i>NAJAZA</a>
     <div class="navbar__toggle" id="mobile-menu">
       <span class="bar"></span><span class="bar"></span><span class="bar"></span>
     </div>
     <ul class="navbar__menu">
       <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
-      <li class="navbar__item"><a href="/portfolio.html" class="navbar__links">Portfolio</a></li>
-      <li class="navbar__item"><a href="/tech.html" class="navbar__links">Tech</a></li>
-      <li class="navbar__item"><a href="/pricing.html" class="navbar__links active">Pricing</a></li>
-      <li class="navbar__item"><a href="/signup.html" class="navbar__links">Sign Up</a></li>
-      <li class="navbar__item"><a href="/signin.html" class="navbar__links">Sign In</a></li>
+      <li class="navbar__item"><a href="/tech" class="navbar__links">Tech</a></li>
+      <li class="navbar__item"><a href="/pricing" class="navbar__links active">Pricing</a></li>
+      <li class="navbar__item"><a href="/sign-in" class="navbar__links">Sign In</a></li>
     </ul>
   </div>
 </nav>
 
-<!-- Pricing Section -->
-<section class="pricing-section section" id="pricing">
-  <h2 class="text-gold">Pricing</h2>
-  <p>Choose the right plan that fits your needs</p>
+<section class="section pricing-container">
+  <h2>Pricing</h2>
+  <p>Choose your perfect package</p>
 
-  <div class="price-toggle">
+  <!-- Toggle for Monthly / Yearly -->
+  <div class="price-toggle" aria-label="Pricing toggle">
     <span>Monthly</span>
     <input type="checkbox" id="pricingToggle" />
-    <label for="pricingToggle" class="toggle-label"></label>
-    <span>Yearly <small>(Save 20%)</small></span>
+    <label for="pricingToggle" class="toggle-label" aria-pressed="false"></label>
+    <span>Yearly</span>
   </div>
 
-  <!-- Desktop Tier Cards -->
-  <div class="desktop-tier-container" data-aos="fade-up" data-aos-duration="1500">
-    <div class="tier-column">
-      <h4>Basic Plan</h4>
-      <div class="price" data-monthly="20" data-yearly="192">$20</div>
+  <!-- Desktop Pricing Tiers -->
+  <div class="desktop-tier-container">
+    <div class="tier-column" id="tier-free">
+      <h4>FREE</h4>
+      <p class="price" data-monthly="Free" data-yearly="Free">Free</p>
       <div class="features">
-        <p>5 pages</p>
-        <p>2 design revisions</p>
-        <p>Email support</p>
-        <p>Basic SEO</p>
+        <p>1 Page</p>
+        <p>1 Website</p>
+        <p>Minimal Maintenance</p>
+        <p>Free Updates</p>
       </div>
-      <button class="main__btn add-to-cart" data-plan="Basic Plan" data-price-monthly="20" data-price-yearly="192">Select Plan</button>
+      <button class="main__btn btn get-started-btn" data-tier="Free">Get Started</button>
     </div>
-    <div class="tier-column">
-      <h4>Pro Plan</h4>
-      <div class="price" data-monthly="40" data-yearly="384">$40</div>
+    <div class="tier-column" id="tier-starter">
+      <h4>STARTER</h4>
+      <p class="price" data-monthly="$70" data-yearly="$700">$70</p>
       <div class="features">
-        <p>10 pages</p>
-        <p>5 design revisions</p>
-        <p>Priority email support</p>
+        <p>Up to 5 Pages</p>
+        <p>1 Website</p>
+        <p>SEO Optimization</p>
+        <p>Basic Maintenance</p>
+      </div>
+      <button class="main__btn btn get-started-btn" data-tier="Starter">Get Started</button>
+    </div>
+    <div class="tier-column" id="tier-advance">
+      <h4>ADVANCE</h4>
+      <p class="price" data-monthly="$150" data-yearly="$1500">$150</p>
+      <div class="features">
+        <p>Up to 10 Pages</p>
+        <p>3 Websites</p>
         <p>Advanced SEO</p>
+        <p>Priority Support</p>
       </div>
-      <button class="main__btn add-to-cart" data-plan="Pro Plan" data-price-monthly="40" data-price-yearly="384">Select Plan</button>
-    </div>
-    <div class="tier-column">
-      <h4>Premium Plan</h4>
-      <div class="price" data-monthly="80" data-yearly="768">$80</div>
-      <div class="features">
-        <p>Unlimited pages</p>
-        <p>Unlimited revisions</p>
-        <p>24/7 Support</p>
-        <p>Full SEO & Marketing</p>
-      </div>
-      <button class="main__btn add-to-cart" data-plan="Premium Plan" data-price-monthly="80" data-price-yearly="768">Select Plan</button>
+      <button class="main__btn btn get-started-btn" data-tier="Advance">Get Started</button>
     </div>
   </div>
 
-  <!-- Mobile Tier Cards -->
-  <div class="mobile-tier-container" data-aos="fade-up" data-aos-duration="1500">
-    <div class="price-tier-container">
-      <h4>Basic Plan</h4>
-      <div class="price" data-monthly="20" data-yearly="192">$20</div>
+  <!-- Mobile Pricing Tiers -->
+  <div class="mobile-tier-container">
+    <div class="price-tier-container" id="mobile-tier-free">
+      <h4>FREE</h4>
+      <p class="price" data-monthly="Free" data-yearly="Free">Free</p>
       <div class="features">
-        <p>5 pages</p>
-        <p>2 design revisions</p>
-        <p>Email support</p>
-        <p>Basic SEO</p>
+        <p>1 Page</p>
+        <p>1 Website</p>
+        <p>Minimal Maintenance</p>
+        <p>Free Updates</p>
       </div>
-      <button class="main__btn add-to-cart" data-plan="Basic Plan" data-price-monthly="20" data-price-yearly="192">Select Plan</button>
+      <button class="main__btn btn get-started-btn" data-tier="Free">Get Started</button>
     </div>
-    <div class="price-tier-container">
-      <h4>Pro Plan</h4>
-      <div class="price" data-monthly="40" data-yearly="384">$40</div>
+    <div class="price-tier-container" id="mobile-tier-starter">
+      <h4>STARTER</h4>
+      <p class="price" data-monthly="$70" data-yearly="$700">$70</p>
       <div class="features">
-        <p>10 pages</p>
-        <p>5 design revisions</p>
-        <p>Priority email support</p>
+        <p>Up to 5 Pages</p>
+        <p>1 Website</p>
+        <p>SEO Optimization</p>
+        <p>Basic Maintenance</p>
+      </div>
+      <button class="main__btn btn get-started-btn" data-tier="Starter">Get Started</button>
+    </div>
+    <div class="price-tier-container" id="mobile-tier-advance">
+      <h4>ADVANCE</h4>
+      <p class="price" data-monthly="$150" data-yearly="$1500">$150</p>
+      <div class="features">
+        <p>Up to 10 Pages</p>
+        <p>3 Websites</p>
         <p>Advanced SEO</p>
+        <p>Priority Support</p>
       </div>
-      <button class="main__btn add-to-cart" data-plan="Pro Plan" data-price-monthly="40" data-price-yearly="384">Select Plan</button>
-    </div>
-    <div class="price-tier-container">
-      <h4>Premium Plan</h4>
-      <div class="price" data-monthly="80" data-yearly="768">$80</div>
-      <div class="features">
-        <p>Unlimited pages</p>
-        <p>Unlimited revisions</p>
-        <p>24/7 Support</p>
-        <p>Full SEO & Marketing</p>
-      </div>
-      <button class="main__btn add-to-cart" data-plan="Premium Plan" data-price-monthly="80" data-price-yearly="768">Select Plan</button>
+      <button class="main__btn btn get-started-btn" data-tier="Advance">Get Started</button>
     </div>
   </div>
 </section>
 
-<!-- Cart Modal -->
-<div class="modal-overlay" id="cartModal">
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
   <div class="modal-content">
-    <span class="modal-close" id="closeModal">&times;</span>
-    <h3>Plan Added to Cart</h3>
-    <p id="modal-text"></p>
+    <button class="modal-close" aria-label="Close modal">&times;</button>
+    <h3 id="modalTitle">Get Started</h3>
+    <p id="modalText"></p>
+    <button class="main__btn btn" id="modalConfirmBtn">Confirm</button>
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 <script>
-  AOS.init();
+  // Pricing Toggle for Monthly / Yearly
+  const toggleCheckbox = document.getElementById('pricingToggle');
+  const prices = document.querySelectorAll('.price');
 
-  // Pricing toggle logic
-  const pricingToggle = document.getElementById('pricingToggle');
   function updatePrices() {
-    const monthly = !pricingToggle.checked;
-    document.querySelectorAll('.price').forEach(priceEl => {
-      const monthlyPrice = priceEl.dataset.monthly;
-      const yearlyPrice = priceEl.dataset.yearly;
-      priceEl.textContent = monthly ? `$${monthlyPrice}` : `$${yearlyPrice}`;
+    const yearly = toggleCheckbox.checked;
+    prices.forEach(price => {
+      price.textContent = yearly ? price.dataset.yearly : price.dataset.monthly;
     });
   }
-  pricingToggle.addEventListener('change', updatePrices);
-  updatePrices();
 
-  // Cart modal and add to cart buttons
-  const modal = document.getElementById('cartModal');
-  const modalText = document.getElementById('modal-text');
-  const closeModalBtn = document.getElementById('closeModal');
+  toggleCheckbox.addEventListener('change', updatePrices);
+  updatePrices(); // initial set
 
-  function openModal(message) {
-    modalText.textContent = message;
-    modal.style.display = 'flex';
-  }
+  // Modal functionality
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalText = document.getElementById('modalText');
+  const modalCloseBtn = modalOverlay.querySelector('.modal-close');
+  const modalConfirmBtn = document.getElementById('modalConfirmBtn');
 
-  closeModalBtn.onclick = () => {
-    modal.style.display = 'none';
-  };
-
-  window.onclick = (event) => {
-    if(event.target === modal) {
-      modal.style.display = 'none';
-    }
-  };
-
-  document.querySelectorAll('.add-to-cart').forEach(button => {
-    button.addEventListener('click', () => {
-      const plan = button.dataset.plan;
-      const monthlyPrice = button.dataset.priceMonthly;
-      const yearlyPrice = button.dataset.priceYearly;
-      const isMonthly = !pricingToggle.checked;
-      const price = isMonthly ? monthlyPrice : yearlyPrice;
-      const period = isMonthly ? 'monthly' : 'yearly';
-      openModal(`You have added the <strong>${plan}</strong> (${period}) plan for $${price} to your cart.`);
+  // Open modal and set content
+  document.querySelectorAll('.get-started-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tier = btn.dataset.tier;
+      const priceElement = btn.parentElement.querySelector('.price');
+      const price = priceElement ? priceElement.textContent : '';
+      modalText.textContent = `You selected the ${tier} plan priced at ${price}. Please confirm to proceed.`;
+      modalOverlay.style.display = 'flex';
+      modalOverlay.focus();
     });
   });
 
-  // Mobile menu toggle (simple)
-  const menuToggle = document.getElementById('mobile-menu');
-  const menu = document.querySelector('.navbar__menu');
-  menuToggle.addEventListener('click', () => {
-    menu.classList.toggle('active');
-    menuToggle.classList.toggle('active');
+  // Close modal function
+  function closeModal() {
+    modalOverlay.style.display = 'none';
+  }
+
+  modalCloseBtn.addEventListener('click', closeModal);
+
+  // Close modal on click outside content
+  modalOverlay.addEventListener('click', e => {
+    if (e.target === modalOverlay) {
+      closeModal();
+    }
+  });
+
+  // Confirm button action
+  modalConfirmBtn.addEventListener('click', () => {
+    alert('Thank you for choosing a plan! We will contact you shortly.');
+    closeModal();
+  });
+
+  // Accessibility: Close modal with Escape key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modalOverlay.style.display === 'flex') {
+      closeModal();
+    }
   });
 </script>
 
