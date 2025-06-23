@@ -1,271 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Najaza Enterprises provides technology solutions including web development, AI-powered tech, and more. Explore our services, pricing, and contact options." />
-    <meta name="keywords" content="web development, AI technology, digital solutions, Najaza Enterprises, website design, tech solutions, responsive websites" />
-    <meta name="author" content="Nathania Layeni" />
-    <meta property="og:title" content="Najaza Enterprises - Technology Solutions" />
-    <meta property="og:description" content="Explore technology solutions at Najaza Enterprises. Offering web development, AI-powered tech, responsive websites, and more." />
-    <meta property="og:image" content="mainlogo.jpg" />
-    <meta property="og:url" content="https://najaza-enterprises.netlify.app/" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@NajazaEnt" />
-    <meta name="twitter:title" content="Najaza Enterprises - Technology Solutions" />
-    <meta name="twitter:description" content="Explore technology solutions at Najaza Enterprises. Offering web development, AI-powered tech, responsive websites, and more." />
-    <meta name="twitter:image" content="mainlogo.jpg" />
-    
-    <title>Najaza Web</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://kit.fontawesome.com/5b5b5373bb.js" crossorigin="anonymous"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet" />
-    <script src="https://unpkg.com/scrollreveal"></script>
-    <link rel="icon" type="image/png" href="mainlogo.jpg" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Najaza Enterprises provides technology solutions including web development, AI-powered tech, and more. Explore our services, pricing, and contact options." />
+  <meta name="keywords" content="web development, AI technology, digital solutions, Najaza Enterprises, website design, tech solutions, responsive websites" />
+  <meta name="author" content="Nathania Layeni" />
+  <meta property="og:title" content="Najaza Enterprises - Technology Solutions" />
+  <meta property="og:description" content="Explore technology solutions at Najaza Enterprises. Offering web development, AI-powered tech, responsive websites, and more." />
+  <meta property="og:image" content="mainlogo.jpg" />
+  <meta property="og:url" content="https://najaza-enterprises.netlify.app/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@NajazaEnt" />
+  <meta name="twitter:title" content="Najaza Enterprises - Technology Solutions" />
+  <meta name="twitter:description" content="Explore technology solutions at Najaza Enterprises. Offering web development, AI-powered tech, responsive websites, and more." />
+  <meta name="twitter:image" content="mainlogo.jpg" />
+  
+  <title>Najaza Web</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://kit.fontawesome.com/5b5b5373bb.js" crossorigin="anonymous"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <link rel="icon" type="image/png" href="mainlogo.jpg" />
 
-    <!-- Firebase App (the core Firebase SDK) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <!-- Firebase Firestore -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <!-- Firebase Auth (optional for user login) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
-<!-- Firebase Firestore -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <style>
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+    }
+    body {
+      font-family: 'Kumbh Sans', sans-serif;
+      background: #333;
+      color: #333;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
 
-<!-- Firebase Auth (optional for user login) -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    h1, h2 {
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #222;
+    }
+    p {
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      color: #555;
+    }
 
-    
-    <style>
-      /* Reset & base */
-      * {
-        box-sizing: border-box;
-        margin: 0; padding: 0;
-      }
-      body {
-        font-family: 'Kumbh Sans', sans-serif;
-        background: #333;
-        color: #333;
-        line-height: 1.6;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 40px 20px;
-      }
+    /* Pricing Section */
+    .pricing {
+      max-width: 1200px;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
 
-      h1, h2 {
-        font-weight: 700;
-        margin-bottom: 1rem;
-        color: #222;
-      }
-      p {
-        margin-bottom: 1.5rem;
-        font-size: 1.1rem;
-        color: #555;
-      }
+    .pricing__container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+    }
 
-      /* Pricing Section */
-      .pricing {
-        max-width: 1200px;
-        width: 100%;
-        text-align: center;
-        margin-bottom: 3rem;
-      }
+    .pricing__card {
+      background: rgb(31, 30, 30);
+      box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+      border-radius: 12px;
+      padding: 2rem;
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+    .pricing__card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 25px rgb(0 0 0 / 0.15);
+    }
 
+    .pricing__card.popular {
+      border: 3px solid #4a90e2;
+    }
+
+    .price {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 1rem 0 2rem 0;
+      color: #002044;
+    }
+
+    ul {
+      text-align: left;
+      margin-bottom: 2rem;
+      list-style: inside disc;
+      color: #555;
+    }
+    ul li {
+      margin-bottom: 0.7rem;
+    }
+
+    /* Pricing button */
+    .pricing__btn {
+      cursor: pointer;
+      background: #012247;
+      color: rgb(83, 83, 83);
+      border: none;
+      border-radius: 6px;
+      padding: 12px 25px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: background-color 0.3s ease;
+      text-align: center;
+      text-decoration: none;
+      user-select: none;
+    }
+    .pricing__btn:hover {
+      background: #357ABD;
+      color: white;
+    }
+
+    /* Cart modal */
+    .cart-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+    .cart-modal.active {
+      display: flex;
+    }
+    .cart-content {
+      background: rgb(56, 55, 55);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 30px 40px 40px 40px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .cart-header h3 {
+      font-size: 1.8rem;
+      color: #4a90e2;
+    }
+
+    .close-cart {
+      background: transparent;
+      border: none;
+      font-size: 2rem;
+      cursor: pointer;
+      color: #666;
+      transition: color 0.3s ease;
+    }
+    .close-cart:hover {
+      color: #000;
+    }
+
+    .cart-items {
+      flex-grow: 1;
+      margin-bottom: 1.5rem;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+    .cart-item-name {
+      font-weight: 600;
+      color: #b9b9b9;
+    }
+    .cart-item-price {
+      font-weight: 700;
+      color: #4a90e2;
+    }
+    .cart-item-remove {
+      background: transparent;
+      border: none;
+      color: #e74c3c;
+      cursor: pointer;
+      font-size: 1.2rem;
+      margin-left: 15px;
+      transition: color 0.3s ease;
+    }
+    .cart-item-remove:hover {
+      color: #c0392b;
+    }
+
+    .cart-total {
+      font-size: 1.4rem;
+      font-weight: 700;
+      text-align: right;
+      color: #222;
+      margin-bottom: 1.5rem;
+    }
+
+    .cart-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .cart-btn {
+      background: #4a90e2;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    .cart-btn:hover {
+      background: #357ABD;
+    }
+
+    /* Responsive */
+    @media(max-width: 768px) {
       .pricing__container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 2rem;
+        flex-direction: column;
+        align-items: center;
       }
-
       .pricing__card {
-        background: rgb(31, 30, 30);
-        box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
-        border-radius: 12px;
-        padding: 2rem;
-        width: 300px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        position: relative;
+        width: 90%;
       }
-      .pricing__card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 10px 25px rgb(0 0 0 / 0.15);
-      }
-
-      .pricing__card.popular {
-        border: 3px solid #4a90e2;
-      }
-
-      .price {
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin: 1rem 0 2rem 0;
-        color: #002044;
-      }
-
-      ul {
-        text-align: left;
-        margin-bottom: 2rem;
-        list-style: inside disc;
-        color: #555;
-      }
-      ul li {
-        margin-bottom: 0.7rem;
-      }
-
-      /* Pricing button */
-      .pricing__btn {
-        cursor: pointer;
-        background: #012247;
-        color: rgb(83, 83, 83);
-        border: none;
-        border-radius: 6px;
-        padding: 12px 25px;
-        font-weight: 700;
-        font-size: 1.1rem;
-        transition: background-color 0.3s ease;
-        text-align: center;
-        text-decoration: none;
-        user-select: none;
-      }
-      .pricing__btn:hover {
-        background: #357ABD;
-      }
-
-      /* Cart modal */
-      .cart-modal {
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0,0,0,0.6);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-        padding: 20px;
-      }
-      .cart-modal.active {
-        display: flex;
-      }
-      .cart-content {
-        background: rgb(56, 55, 55);
-        border-radius: 12px;
-        width: 100%;
-        max-width: 600px;
-        max-height: 90vh;
-        overflow-y: auto;
-        padding: 30px 40px 40px 40px;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-        position: relative;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .cart-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.5rem;
-      }
-
-      .cart-header h3 {
-        font-size: 1.8rem;
-        color: #4a90e2;
-      }
-
-      .close-cart {
-        background: transparent;
-        border: none;
-        font-size: 2rem;
-        cursor: pointer;
-        color: #666;
-        transition: color 0.3s ease;
-      }
-      .close-cart:hover {
-        color: #000;
-      }
-
-      .cart-items {
-        flex-grow: 1;
-        margin-bottom: 1.5rem;
-      }
-      .cart-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 0;
-        border-bottom: 1px solid #eee;
-      }
-      .cart-item:last-child {
-        border-bottom: none;
-      }
-      .cart-item-name {
-        font-weight: 600;
-        color: #b9b9b9;
-      }
-      .cart-item-price {
-        font-weight: 700;
-        color: #4a90e2;
-      }
-      .cart-item-remove {
-        background: transparent;
-        border: none;
-        color: #e74c3c;
-        cursor: pointer;
-        font-size: 1.2rem;
-        margin-left: 15px;
-        transition: color 0.3s ease;
-      }
-      .cart-item-remove:hover {
-        color: #c0392b;
-      }
-
-      .cart-total {
-        font-size: 1.4rem;
-        font-weight: 700;
-        text-align: right;
-        color: #222;
-        margin-bottom: 1.5rem;
-      }
-
-      .cart-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-      }
-
-      .cart-btn {
-        background: #4a90e2;
-        color: white;
-        border: none;
-        padding: 12px 25px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 700;
-        font-size: 1.1rem;
-        transition: background-color 0.3s ease;
-        user-select: none;
-      }
-      .cart-btn:hover {
-        background: #357ABD;
-      }
-
-      /* Responsive */
-      @media(max-width: 768px) {
-        .pricing__container {
-          flex-direction: column;
-          align-items: center;
-        }
-        .pricing__card {
-          width: 90%;
-        }
-      }
-    </style>
+    }
+  </style>
 </head>
 <body>
 
@@ -312,197 +310,180 @@
 
   <!-- Cart Modal -->
   <div class="cart-modal" id="cart-modal" aria-hidden="true" role="dialog" aria-labelledby="cart-title" tabindex="-1">
-    <div class="cart-content" role="document">
-      <div class="cart-header">
+    <div class="cart-content">
+      <header class="cart-header">
         <h3 id="cart-title">Your Cart</h3>
         <button class="close-cart" id="close-cart" aria-label="Close Cart">&times;</button>
-      </div>
+      </header>
       <div class="cart-items" id="cart-items">
-        <p>Your cart is empty.</p>
+        <!-- Dynamically populated -->
       </div>
-      <div class="cart-total" id="cart-total"></div>
+      <div class="cart-total" id="cart-total">Total: £0</div>
       <div class="cart-actions">
-        <button class="cart-btn" id="clear-cart">Clear Cart</button>
-        <button class="cart-btn" id="checkout-btn"><a href="checkout.html">Checkout</a></button>
+        <button class="cart-btn" id="checkout-btn" type="button">Checkout</button>
+        <button class="cart-btn" id="clear-cart-btn" type="button" style="background:#e74c3c;">Clear Cart</button>
       </div>
     </div>
   </div>
 
-  <!-- Cart Button (Floating) -->
-  <button id="open-cart" aria-label="Open Cart" title="View Cart" style="
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background: #4a90e2;
-    border: none;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    color: white;
-    font-size: 28px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    z-index: 10000;
-  ">
-    <i class="fas fa-shopping-cart"></i>
-  </button>
-
   <script>
-    // Cart Data
-    const cart = [];
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDcVki29WpSaV-QPBbJHqVSHd0qCNBLDfI",
+      authDomain: "najaza-enterprises.firebaseapp.com",
+      projectId: "najaza-enterprises",
+      storageBucket: "najaza-enterprises.appspot.com",
+      messagingSenderId: "1066006225566",
+      appId: "1:1066006225566:web:d29873b54e7e9e9cbff32c"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    // Sign in anonymously on page load (you can modify to real auth later)
+    auth.signInAnonymously().catch(console.error);
+
+    // Cart data array
+    let cart = [];
 
     // Elements
     const cartModal = document.getElementById('cart-modal');
-    const cartItemsContainer = document.getElementById('cart-items');
+    const cartItemsEl = document.getElementById('cart-items');
     const cartTotalEl = document.getElementById('cart-total');
-    const openCartBtn = document.getElementById('open-cart');
-    const closeCartBtn = document.getElementById('close-cart');
-    const clearCartBtn = document.getElementById('clear-cart');
     const checkoutBtn = document.getElementById('checkout-btn');
+    const clearCartBtn = document.getElementById('clear-cart-btn');
+    const closeCartBtn = document.getElementById('close-cart');
 
-    // Update cart display
+    // Show Cart Modal
+    function openCart() {
+      cartModal.classList.add('active');
+      cartModal.setAttribute('aria-hidden', 'false');
+      cartModal.focus();
+      renderCart();
+    }
+
+    // Close Cart Modal
+    function closeCart() {
+      cartModal.classList.remove('active');
+      cartModal.setAttribute('aria-hidden', 'true');
+    }
+
+    closeCartBtn.addEventListener('click', closeCart);
+    cartModal.addEventListener('click', (e) => {
+      if(e.target === cartModal) closeCart();
+    });
+
+    // Add to Cart buttons
+    document.querySelectorAll('.pricing__btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const name = button.getAttribute('data-name');
+        const price = Number(button.getAttribute('data-price'));
+        addToCart({ name, price });
+        openCart();
+      });
+    });
+
+    // Add item to cart
+    function addToCart(item) {
+      cart.push(item);
+      renderCart();
+    }
+
+    // Remove item from cart by index
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      renderCart();
+    }
+
+    // Clear entire cart
+    clearCartBtn.addEventListener('click', () => {
+      if (confirm('Are you sure you want to clear the cart?')) {
+        cart = [];
+        renderCart();
+      }
+    });
+
+    // Render cart UI
     function renderCart() {
-      cartItemsContainer.innerHTML = '';
-      if(cart.length === 0){
-        cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
-        cartTotalEl.textContent = '';
+      cartItemsEl.innerHTML = '';
+
+      if(cart.length === 0) {
+        cartItemsEl.innerHTML = '<p>Your cart is empty.</p>';
+        cartTotalEl.textContent = 'Total: £0';
+        checkoutBtn.disabled = true;
         return;
       }
 
-      let total = 0;
-      cart.forEach((item, index) => {
-        total += item.price;
-
+      cart.forEach((item, i) => {
         const itemEl = document.createElement('div');
-        itemEl.classList.add('cart-item');
+        itemEl.className = 'cart-item';
+
         itemEl.innerHTML = `
           <span class="cart-item-name">${item.name}</span>
-          <span>
-            <span class="cart-item-price">£${item.price}</span>
-            <button class="cart-item-remove" aria-label="Remove ${item.name}" data-index="${index}">&times;</button>
-          </span>
+          <span class="cart-item-price">£${item.price.toFixed(2)}</span>
+          <button aria-label="Remove ${item.name}" class="cart-item-remove" data-index="${i}">&times;</button>
         `;
 
-        cartItemsContainer.appendChild(itemEl);
+        cartItemsEl.appendChild(itemEl);
       });
 
-      cartTotalEl.textContent = `Total: £${total}`;
-
-      // Attach remove item handlers
+      // Remove button handlers
       document.querySelectorAll('.cart-item-remove').forEach(btn => {
         btn.addEventListener('click', e => {
-          const index = parseInt(e.target.dataset.index);
-          if(!isNaN(index)){
-            cart.splice(index, 1);
-            renderCart();
-          }
+          const index = Number(e.target.getAttribute('data-index'));
+          removeFromCart(index);
         });
       });
+
+      const total = cart.reduce((acc, item) => acc + item.price, 0);
+      cartTotalEl.textContent = `Total: £${total.toFixed(2)}`;
+      checkoutBtn.disabled = false;
     }
 
-    // Open cart modal
-    function openCart(){
-      cartModal.classList.add('active');
-      cartModal.setAttribute('aria-hidden', 'false');
-      renderCart();
-      // Focus trap could be added here for accessibility
-    }
-
-    // Close cart modal
-    function closeCart(){
-      cartModal.classList.remove('active');
-      cartModal.setAttribute('aria-hidden', 'true');
-      openCartBtn.focus();
-    }
-
-    // Add item to cart
-    function addToCart(name, price){
-      cart.push({name, price});
-      openCart();
-    }
-
-    // Event listeners
-
-    // Add to cart buttons
-    document.querySelectorAll('.pricing__btn').forEach(button => {
-      button.addEventListener('click', () => {
-        const name = button.dataset.name;
-        const price = Number(button.dataset.price);
-        addToCart(name, price);
-      });
-    });
-
-    openCartBtn.addEventListener('click', openCart);
-    closeCartBtn.addEventListener('click', closeCart);
-
-    clearCartBtn.addEventListener('click', () => {
-      cart.length = 0; // clear array
-      renderCart();
-    });
-
+    // Checkout button click
     checkoutBtn.addEventListener('click', () => {
-  if (cart.length === 0) {
-    alert('Your cart is empty!');
-    return;
-  }
+      if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+      }
 
-  const order = {
-    items: cart.map(item => ({ name: item.name, price: item.price })),
-    total: cart.reduce((acc, item) => acc + item.price, 0),
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-  };
+      checkoutBtn.disabled = true;
+      checkoutBtn.textContent = "Processing...";
 
-  db.collection('orders')
-    .add(order)
-    .then(() => {
-      alert('Order placed successfully!');
-      cart.length = 0;
-      renderCart();
-      closeCart();
-    })
-    .catch((error) => {
-      console.error("Order error:", error);
-      alert('Something went wrong. Please try again.');
+      const order = {
+        items: cart.map(item => ({ name: item.name, price: item.price })),
+        total: cart.reduce((acc, item) => acc + item.price, 0),
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      db.collection('orders')
+        .add(order)
+        .then(() => {
+          alert('Order placed successfully!');
+          cart = [];
+          renderCart();
+          closeCart();
+          // Redirect to a thank you or checkout page
+          window.location.href = 'checkout.html';
+        })
+        .catch((error) => {
+          console.error("Order error:", error);
+          alert('Something went wrong. Please try again.');
+        })
+        .finally(() => {
+          checkoutBtn.disabled = false;
+          checkoutBtn.textContent = "Checkout";
+        });
     });
-});
 
-
-    // Close cart when clicking outside content
-    cartModal.addEventListener('click', (e) => {
-      if(e.target === cartModal){
+    // Accessibility: close modal on ESC key
+    document.addEventListener('keydown', e => {
+      if(e.key === "Escape" && cartModal.classList.contains('active')) {
         closeCart();
       }
     });
-
-    // Close cart on ESC key
-    window.addEventListener('keydown', (e) => {
-      if(e.key === 'Escape' && cartModal.classList.contains('active')){
-        closeCart();
-      }
-    });
-
-    const firebaseConfig = {
-  apiKey: "AIzaSyDEEwSOIc_YgQTp2xoQ4kz1b_VqAu8tPus",
-  authDomain: "najazacart.firebaseapp.com",
-  projectId: "najazacart",
-  storageBucket: "najazacart.appspot.com",
-  messagingSenderId: "63961437624",
-  appId: "1:63961437624:web:b7f6f55b65444221b2ab4d",
-  measurementId: "G-DZ9WXBVLQC"
-};
-
-firebase.initializeApp(firebaseConfig);
-
-const db = firebase.firestore();
-const auth = firebase.auth();
-
-auth.signInAnonymously()
-  .catch((error) => {
-    console.error("Auth error:", error);
-  });
-
-
   </script>
-
 </body>
 </html>
