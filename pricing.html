@@ -441,15 +441,31 @@
     });
 
     checkoutBtn.addEventListener('click', () => {
-      if(cart.length === 0){
-        alert('Your cart is empty!');
-        return;
-      }
-      alert('Thank you for your purchase! (This is a demo)');
+  if (cart.length === 0) {
+    alert('Your cart is empty!');
+    return;
+  }
+
+  const order = {
+    items: cart.map(item => ({ name: item.name, price: item.price })),
+    total: cart.reduce((acc, item) => acc + item.price, 0),
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  db.collection('orders')
+    .add(order)
+    .then(() => {
+      alert('Order placed successfully!');
       cart.length = 0;
       renderCart();
       closeCart();
+    })
+    .catch((error) => {
+      console.error("Order error:", error);
+      alert('Something went wrong. Please try again.');
     });
+});
+
 
     // Close cart when clicking outside content
     cartModal.addEventListener('click', (e) => {
