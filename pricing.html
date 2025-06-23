@@ -1,465 +1,465 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Najaza Enterprises - Pricing</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://kit.fontawesome.com/5b5b5373bb.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
-  <link rel="icon" type="image/png" href="mainlogo.jpg" />
-  <style>
-    /* Base Styles */
-    body {
-      background-color: #070707;
-      color: white;
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Najaza Enterprises provides technology solutions including web development, AI-powered tech, and more. Explore our services, pricing, and contact options." />
+    <meta name="keywords" content="web development, AI technology, digital solutions, Najaza Enterprises, website design, tech solutions, responsive websites" />
+    <meta name="author" content="Nathania Layeni" />
+    <meta property="og:title" content="Najaza Enterprises - Technology Solutions" />
+    <meta property="og:description" content="Explore technology solutions at Najaza Enterprises. Offering web development, AI-powered tech, responsive websites, and more." />
+    <meta property="og:image" content="mainlogo.jpg" />
+    <meta property="og:url" content="https://najaza-enterprises.netlify.app/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@NajazaEnt" />
+    <meta name="twitter:title" content="Najaza Enterprises - Technology Solutions" />
+    <meta name="twitter:description" content="Explore technology solutions at Najaza Enterprises. Offering web development, AI-powered tech, responsive websites, and more." />
+    <meta name="twitter:image" content="mainlogo.jpg" />
+    
+    <title>Najaza Web</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://kit.fontawesome.com/5b5b5373bb.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <link rel="icon" type="image/png" href="mainlogo.jpg" />
 
-    h2 {
-      text-align: center;
-    }
-
-    p {
-      text-align: center;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .text-gold { color: var(--secondary-color); }
-    .bg-gold { background-color: var(--secondary-color); }
-    .border-gold { border-color: var(--secondary-color); }
-
-    :root {
-      --primary-color: #1e3a8a;
-      --secondary-color: gold;
-      --dark-bg: #121212;
-    }
-
-    .section {
-      padding: 4rem 1rem;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 2rem;
-      background-color: var(--dark-bg);
-    }
-
-    th, td {
-      padding: 1rem;
-      border: 1px solid #444;
-      text-align: center;
-      font-size: 0.95rem;
-    }
-
-    th {
-      background-color: var(--primary-color);
-      color: white;
-    }
-
-    td {
-      color: #e5e5e5;
-    }
-
-    /* Buttons */
-    .main__btn, .btn {
-      background-color: var(--secondary-color);
-      color: #000;
-      padding: 0.6rem 1rem;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s, color 0.3s;
-      margin-top: 10px;
-      display: inline-block;
-    }
-
-    .main__btn:hover, .btn:hover {
-      background-color: gold;
-      color: #000;
-    }
-
-    /* Pricing Toggle */
-    .price-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      margin: 20px 0;
-      font-weight: 600;
-      color: #f1f1f1;
-    }
-
-    .price-toggle input[type="checkbox"] {
-      display: none;
-    }
-
-    .toggle-label {
-      position: relative;
-      width: 50px;
-      height: 26px;
-      background-color: #1e3a8a;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: background 0.3s;
-      display: inline-block;
-    }
-
-    .toggle-label::after {
-      content: "";
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      top: 3px;
-      left: 3px;
-      background-color: white;
-      border-radius: 50%;
-      transition: 0.3s;
-    }
-
-    #pricingToggle:checked + .toggle-label {
-      background-color: #ffd700;
-    }
-
-    #pricingToggle:checked + .toggle-label::after {
-      transform: translateX(24px);
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    @media (max-width: 768px) {
-      .desktop-tier-container {
-        display: none;
+    <style>
+      /* Basic Reset */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Kumbh Sans', Arial, sans-serif;
       }
 
-      .mobile-tier-container {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-      }
-    }
-
-    @media (min-width: 769px) {
-      .mobile-tier-container {
-        display: none;
+      body {
+        background-color: #f5f5f5;
+        color: #333;
+        padding: 40px 20px;
+        text-align: center;
+        position: relative;
+        min-height: 100vh;
       }
 
+      h1, h2, h4 {
+        margin-bottom: 15px;
+      }
+
+      p {
+        margin-bottom: 20px;
+        font-size: 1.1rem;
+        color: #555;
+      }
+
+      /* Pricing Section */
+      .pricing-container {
+        max-width: 960px;
+        margin: 0 auto;
+      }
+
+      /* Desktop container */
       .desktop-tier-container {
         display: flex;
         justify-content: center;
-        gap: 2rem;
-        margin-top: 3rem;
+        gap: 30px;
+        margin-top: 30px;
         flex-wrap: wrap;
       }
-    }
 
-    .pricing-container {
-      margin: 2rem auto;
-      max-width: 1200px;
-      padding: 1rem;
-      background-color: rgba(255, 255, 255, 0.03);
-      border-radius: 12px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
-    }
+      /* Mobile container */
+      .mobile-tier-container {
+        display: none;
+      }
 
-    .price-tier-container {
-      background: #0d0d0d;
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin: 1rem 0;
-      border: 3px solid;
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-      border-image: linear-gradient(45deg, #ffd700, #1e3a8a) 1;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .price-tier-container:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-    }
-
-    .price-tier-container h4 {
-      font-size: 1.4rem;
-      color: gold;
-      margin-bottom: 10px;
-    }
-
-    .price-tier-container .price {
-      font-size: 1.6rem;
-      font-weight: bold;
-      color: white;
-      margin-bottom: 1rem;
-    }
-
-    .price-tier-container .features p {
-      margin: 0.4rem 0;
-      font-size: 1rem;
-      color: #ddd;
-    }
-
-    /* Desktop tier cards with glow + hover */
-    @media (min-width: 769px) {
-      .tier-column {
-        background: #101010;
+      .tier-column, .price-tier-container {
+        background: #fff;
+        padding: 25px 20px;
         border-radius: 12px;
-        padding: 1.5rem;
-        border: 3px solid transparent;
-        background-image: linear-gradient(#101010, #101010),
-                          linear-gradient(135deg, royalblue, gold);
-        background-origin: border-box;
-        background-clip: padding-box, border-box;
-        box-shadow: 0 0 20px rgba(30, 58, 138, 0.3);
-        transition: box-shadow 0.3s ease, transform 0.3s ease;
+        box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+        width: 280px;
+        transition: transform 0.3s ease;
       }
 
-      .tier-column:hover {
-        box-shadow: 0 0 25px rgba(255, 215, 0, 0.6), 0 0 40px rgba(65, 105, 225, 0.5);
-        transform: translateY(-6px);
-      }
-    }
-
-    /* Mobile hover effect on .price-tier-container */
-    @media (max-width: 768px) {
-      .price-tier-container {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      .tier-column:hover, .price-tier-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 16px rgb(0 0 0 / 0.15);
       }
 
-      .price-tier-container:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 0 25px rgba(65, 105, 225, 0.4);
+      .tier-column.popular, .price-tier-container.popular {
+        border: 3px solid #fbbf24; /* Gold-ish highlight */
+        box-shadow: 0 8px 20px rgb(251 191 36 / 0.3);
       }
-    }
 
-    /* Modal styles */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.8);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
+      .tier-column h4, .price-tier-container h4 {
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+        color: #222;
+        margin-bottom: 10px;
+      }
 
-    .modal-content {
-      background: #111;
-      border: 2px solid gold;
-      border-radius: 12px;
-      padding: 2rem;
-      max-width: 90%;
-      text-align: center;
-      color: white;
-      position: relative;
-      box-shadow: 0 0 25px rgba(255, 215, 0, 0.5);
-    }
+      .price {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #111;
+        margin-bottom: 20px;
+      }
 
-    .modal-content h3 {
-      color: gold;
-      margin-bottom: 1rem;
-    }
+      .features p {
+        font-size: 1rem;
+        margin-bottom: 10px;
+        color: #555;
+      }
 
-    .modal-close {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      color: white;
-      font-size: 1.4rem;
-      cursor: pointer;
-    }
-  </style>
+      .main__btn.btn.get-started-btn {
+        margin-top: 25px;
+        background-color: #fbbf24;
+        color: #111;
+        font-weight: 600;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-size: 1.1rem;
+      }
+
+      .main__btn.btn.get-started-btn:hover {
+        background-color: #d29c1a;
+        color: #fff;
+      }
+
+      /* Cart Icon/Button */
+      #cart-btn {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #fbbf24;
+        border: none;
+        padding: 12px 18px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 1rem;
+        color: #111;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 20;
+        box-shadow: 0 4px 8px rgb(251 191 36 / 0.5);
+        transition: background-color 0.3s ease;
+      }
+
+      #cart-btn:hover {
+        background-color: #d29c1a;
+        color: #fff;
+      }
+
+      #cart-count {
+        background: #111;
+        color: #fff;
+        border-radius: 50%;
+        padding: 3px 8px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        min-width: 22px;
+        text-align: center;
+      }
+
+      /* Cart Modal */
+      .cart-modal {
+        display: none;
+        position: fixed;
+        z-index: 30;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0,0,0,0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .cart-modal.active {
+        display: flex;
+      }
+
+      .cart-content {
+        background: #fff;
+        border-radius: 10px;
+        width: 400px;
+        max-width: 90vw;
+        padding: 25px;
+        text-align: left;
+        position: relative;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+
+      .cart-content h3 {
+        margin-bottom: 20px;
+        font-size: 1.8rem;
+        color: #222;
+        text-align: center;
+      }
+
+      .close-cart-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: #666;
+        cursor: pointer;
+      }
+
+      .cart-items {
+        margin-bottom: 20px;
+      }
+
+      .cart-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
+        padding: 10px 0;
+      }
+
+      .cart-item-name {
+        font-weight: 600;
+        color: #333;
+      }
+
+      .cart-item-price {
+        color: #555;
+        margin-left: 10px;
+      }
+
+      .remove-item-btn {
+        background: #ff4d4d;
+        border: none;
+        color: white;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background-color 0.3s ease;
+      }
+
+      .remove-item-btn:hover {
+        background: #cc0000;
+      }
+
+      /* Responsive */
+      @media (max-width: 767px) {
+        .desktop-tier-container {
+          display: none;
+        }
+        .mobile-tier-container {
+          display: block;
+        }
+
+        .price-tier-container {
+          margin-bottom: 20px;
+        }
+      }
+    </style>
 </head>
 <body>
+  <section class="pricing" id="pricing">
+    <h1>Pricing Plans</h1>
+    <p>Affordable packages to bring your vision to life</p>
+    <div class="pricing-container">
+      <div class="desktop-tier-container">
+        <!-- Starter Plan -->
+        <div class="tier-column">
+          <h4>Starter</h4>
+          <p class="price">£90</p>
+          <div class="features">
+            <p>1 Page Website</p>
+            <p>Responsive Design</p>
+            <p>Email Contact Form</p>
+          </div>
+          <button class="main__btn btn get-started-btn" data-name="Starter" data-price="90">Add to Cart</button>
+        </div>
 
-<!-- Navbar -->
-<nav class="navbar">
-  <div class="navbar__container">
-    <a href="/" id="navbar__logo"><i class="fa-solid fa-terminal"></i>NAJAZA</a>
-    <div class="navbar__toggle" id="mobile-menu">
-      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
-    </div>
-    <ul class="navbar__menu">
-      <li class="navbar__item"><a href="/" class="navbar__links">Home</a></li>
-      <li class="navbar__item"><a href="/tech" class="navbar__links">Tech</a></li>
-      <li class="navbar__item"><a href="/pricing" class="navbar__links active">Pricing</a></li>
-      <li class="navbar__item"><a href="/sign-in" class="navbar__links">Sign In</a></li>
-    </ul>
-  </div>
-</nav>
+        <!-- Pro Plan (popular) -->
+        <div class="tier-column popular">
+          <h4>Pro</h4>
+          <p class="price">£180</p>
+          <div class="features">
+            <p>Up to 5 Pages</p>
+            <p>Animations & Scroll Effects</p>
+            <p>Email & Social Links</p>
+            <p>Basic SEO</p>
+          </div>
+          <button class="main__btn btn get-started-btn" data-name="Pro" data-price="180">Add to Cart</button>
+        </div>
 
-<section class="section pricing-container">
-  <h2>Pricing</h2>
-  <p>Choose your perfect package</p>
+        <!-- Premium Plan -->
+        <div class="tier-column">
+          <h4>Premium</h4>
+          <p class="price">£360</p>
+          <div class="features">
+            <p>Full Website + Admin Panel</p>
+            <p>Advanced Animations</p>
+            <p>Dark Mode & Contact Integration</p>
+            <p>Hosting Setup</p>
+          </div>
+          <button class="main__btn btn get-started-btn" data-name="Premium" data-price="360">Add to Cart</button>
+        </div>
+      </div>
 
-  <!-- Toggle for Monthly / Yearly -->
-  <div class="price-toggle" aria-label="Pricing toggle">
-    <span>Monthly</span>
-    <input type="checkbox" id="pricingToggle" />
-    <label for="pricingToggle" class="toggle-label" aria-pressed="false"></label>
-    <span>Yearly</span>
-  </div>
+      <div class="mobile-tier-container">
+        <!-- Starter Plan -->
+        <div class="price-tier-container">
+          <h4>Starter</h4>
+          <p class="price">£90</p>
+          <div class="features">
+            <p>1 Page Website</p>
+            <p>Responsive Design</p>
+            <p>Email Contact Form</p>
+          </div>
+          <button class="main__btn btn get-started-btn" data-name="Starter" data-price="90">Add to Cart</button>
+        </div>
 
-  <!-- Desktop Pricing Tiers -->
-  <div class="desktop-tier-container">
-    <div class="tier-column" id="tier-free">
-      <h4>FREE</h4>
-      <p class="price" data-monthly="Free" data-yearly="Free">Free</p>
-      <div class="features">
-        <p>1 Page</p>
-        <p>1 Website</p>
-        <p>Minimal Maintenance</p>
-        <p>Free Updates</p>
-      </div>
-      <button class="main__btn btn get-started-btn" data-tier="Free">Get Started</button>
-    </div>
-    <div class="tier-column" id="tier-starter">
-      <h4>STARTER</h4>
-      <p class="price" data-monthly="$70" data-yearly="$700">$70</p>
-      <div class="features">
-        <p>Up to 5 Pages</p>
-        <p>1 Website</p>
-        <p>SEO Optimization</p>
-        <p>Basic Maintenance</p>
-      </div>
-      <button class="main__btn btn get-started-btn" data-tier="Starter">Get Started</button>
-    </div>
-    <div class="tier-column" id="tier-advance">
-      <h4>ADVANCE</h4>
-      <p class="price" data-monthly="$150" data-yearly="$1500">$150</p>
-      <div class="features">
-        <p>Up to 10 Pages</p>
-        <p>3 Websites</p>
-        <p>Advanced SEO</p>
-        <p>Priority Support</p>
-      </div>
-      <button class="main__btn btn get-started-btn" data-tier="Advance">Get Started</button>
-    </div>
-  </div>
+        <!-- Pro Plan (popular) -->
+        <div class="price-tier-container popular">
+          <h4>Pro</h4>
+          <p class="price">£180</p>
+          <div class="features">
+            <p>Up to 5 Pages</p>
+            <p>Animations & Scroll Effects</p>
+            <p>Email & Social Links</p>
+            <p>Basic SEO</p>
+          </div>
+          <button class="main__btn btn get-started-btn" data-name="Pro" data-price="180">Add to Cart</button>
+        </div>
 
-  <!-- Mobile Pricing Tiers -->
-  <div class="mobile-tier-container">
-    <div class="price-tier-container" id="mobile-tier-free">
-      <h4>FREE</h4>
-      <p class="price" data-monthly="Free" data-yearly="Free">Free</p>
-      <div class="features">
-        <p>1 Page</p>
-        <p>1 Website</p>
-        <p>Minimal Maintenance</p>
-        <p>Free Updates</p>
+        <!-- Premium Plan -->
+        <div class="price-tier-container">
+          <h4>Premium</h4>
+          <p class="price">£360</p>
+          <div class="features">
+            <p>Full Website + Admin Panel</p>
+            <p>Advanced Animations</p>
+            <p>Dark Mode & Contact Integration</p>
+            <p>Hosting Setup</p>
+          </div>
+          <button class="main__btn btn get-started-btn" data-name="Premium" data-price="360">Add to Cart</button>
+        </div>
       </div>
-      <button class="main__btn btn get-started-btn" data-tier="Free">Get Started</button>
     </div>
-    <div class="price-tier-container" id="mobile-tier-starter">
-      <h4>STARTER</h4>
-      <p class="price" data-monthly="$70" data-yearly="$700">$70</p>
-      <div class="features">
-        <p>Up to 5 Pages</p>
-        <p>1 Website</p>
-        <p>SEO Optimization</p>
-        <p>Basic Maintenance</p>
-      </div>
-      <button class="main__btn btn get-started-btn" data-tier="Starter">Get Started</button>
-    </div>
-    <div class="price-tier-container" id="mobile-tier-advance">
-      <h4>ADVANCE</h4>
-      <p class="price" data-monthly="$150" data-yearly="$1500">$150</p>
-      <div class="features">
-        <p>Up to 10 Pages</p>
-        <p>3 Websites</p>
-        <p>Advanced SEO</p>
-        <p>Priority Support</p>
-      </div>
-      <button class="main__btn btn get-started-btn" data-tier="Advance">Get Started</button>
+  </section>
+
+  <!-- Cart Button -->
+  <button id="cart-btn" aria-label="View Cart">
+    <i class="fas fa-shopping-cart"></i> Cart <span id="cart-count">0</span>
+  </button>
+
+  <!-- Cart Modal -->
+  <div id="cart-modal" class="cart-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+    <div class="cart-content">
+      <button class="close-cart-btn" aria-label="Close Cart">&times;</button>
+      <h3 id="cart-title">Your Cart</h3>
+      <div class="cart-items"></div>
+      <p><strong>Total: £<span id="cart-total">0</span></strong></p>
     </div>
   </div>
-</section>
 
-<!-- Modal -->
-<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
-  <div class="modal-content">
-    <button class="modal-close" aria-label="Close modal">&times;</button>
-    <h3 id="modalTitle">Get Started</h3>
-    <p id="modalText"></p>
-    <button class="main__btn btn" id="modalConfirmBtn">Confirm</button>
-  </div>
-</div>
+  <script>
+    const cartBtn = document.getElementById('cart-btn');
+    const cartModal = document.getElementById('cart-modal');
+    const closeCartBtn = document.querySelector('.close-cart-btn');
+    const cartItemsContainer = document.querySelector('.cart-items');
+    const cartCount = document.getElementById('cart-count');
+    const cartTotal = document.getElementById('cart-total');
 
-<script>
-  // Pricing Toggle for Monthly / Yearly
-  const toggleCheckbox = document.getElementById('pricingToggle');
-  const prices = document.querySelectorAll('.price');
+    let cart = [];
 
-  function updatePrices() {
-    const yearly = toggleCheckbox.checked;
-    prices.forEach(price => {
-      price.textContent = yearly ? price.dataset.yearly : price.dataset.monthly;
-    });
-  }
+    // Update cart UI
+    function updateCart() {
+      // Update count
+      cartCount.textContent = cart.length;
 
-  toggleCheckbox.addEventListener('change', updatePrices);
-  updatePrices(); // initial set
+      // Clear current cart items
+      cartItemsContainer.innerHTML = '';
 
-  // Modal functionality
-  const modalOverlay = document.getElementById('modalOverlay');
-  const modalText = document.getElementById('modalText');
-  const modalCloseBtn = modalOverlay.querySelector('.modal-close');
-  const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+      // Add each cart item
+      cart.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.classList.add('cart-item');
+        div.innerHTML = `
+          <span class="cart-item-name">${item.name}</span>
+          <span class="cart-item-price">£${item.price}</span>
+          <button class="remove-item-btn" data-index="${index}" aria-label="Remove ${item.name} from cart">&times;</button>
+        `;
+        cartItemsContainer.appendChild(div);
+      });
 
-  // Open modal and set content
-  document.querySelectorAll('.get-started-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const tier = btn.dataset.tier;
-      const priceElement = btn.parentElement.querySelector('.price');
-      const price = priceElement ? priceElement.textContent : '';
-      modalText.textContent = `You selected the ${tier} plan priced at ${price}. Please confirm to proceed.`;
-      modalOverlay.style.display = 'flex';
-      modalOverlay.focus();
-    });
-  });
+      // Update total price
+      const totalPrice = cart.reduce((sum, item) => sum + Number(item.price), 0);
+      cartTotal.textContent = totalPrice.toFixed(2);
 
-  // Close modal function
-  function closeModal() {
-    modalOverlay.style.display = 'none';
-  }
-
-  modalCloseBtn.addEventListener('click', closeModal);
-
-  // Close modal on click outside content
-  modalOverlay.addEventListener('click', e => {
-    if (e.target === modalOverlay) {
-      closeModal();
+      // If cart empty show message
+      if(cart.length === 0){
+        cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+      }
     }
-  });
 
-  // Confirm button action
-  modalConfirmBtn.addEventListener('click', () => {
-    alert('Thank you for choosing a plan! We will contact you shortly.');
-    closeModal();
-  });
-
-  // Accessibility: Close modal with Escape key
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && modalOverlay.style.display === 'flex') {
-      closeModal();
+    // Add item to cart
+    function addToCart(name, price) {
+      cart.push({name, price});
+      updateCart();
     }
-  });
-</script>
 
+    // Remove item from cart
+    cartItemsContainer.addEventListener('click', e => {
+      if(e.target.classList.contains('remove-item-btn')){
+        const index = e.target.getAttribute('data-index');
+        cart.splice(index, 1);
+        updateCart();
+      }
+    });
+
+    // Show cart modal
+    cartBtn.addEventListener('click', () => {
+      cartModal.classList.add('active');
+      cartModal.setAttribute('aria-hidden', 'false');
+    });
+
+    // Hide cart modal
+    closeCartBtn.addEventListener('click', () => {
+      cartModal.classList.remove('active');
+      cartModal.setAttribute('aria-hidden', 'true');
+    });
+
+    // Close modal on outside click
+    cartModal.addEventListener('click', e => {
+      if(e.target === cartModal){
+        cartModal.classList.remove('active');
+        cartModal.setAttribute('aria-hidden', 'true');
+      }
+    });
+
+    // Add to cart button handlers
+    document.querySelectorAll('.get-started-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const name = button.getAttribute('data-name');
+        const price = button.getAttribute('data-price');
+        addToCart(name, price);
+      });
+    });
+
+    // Initialize cart display
+    updateCart();
+  </script>
 </body>
 </html>
