@@ -26,440 +26,435 @@
     <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet" />
     <script src="https://unpkg.com/scrollreveal"></script>
     <link rel="icon" type="image/png" href="mainlogo.jpg" />
-
+    
     <style>
-      /* Basic Reset */
+      /* Reset & base */
       * {
         box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: 'Kumbh Sans', Arial, sans-serif;
+        margin: 0; padding: 0;
       }
-
       body {
-        background-color: #f5f5f5;
+        font-family: 'Kumbh Sans', sans-serif;
+        background: #f9f9f9;
         color: #333;
-        padding: 40px 20px;
-        text-align: center;
-        position: relative;
+        line-height: 1.6;
         min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px;
       }
 
-      h1, h2, h4 {
-        margin-bottom: 15px;
+      h1, h2 {
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #222;
       }
-
       p {
-        margin-bottom: 20px;
+        margin-bottom: 1.5rem;
         font-size: 1.1rem;
         color: #555;
       }
 
       /* Pricing Section */
-      .pricing-container {
-        max-width: 960px;
-        margin: 0 auto;
+      .pricing {
+        max-width: 1200px;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 3rem;
       }
 
-      /* Desktop container */
-      .desktop-tier-container {
+      .pricing__container {
         display: flex;
-        justify-content: center;
-        gap: 30px;
-        margin-top: 30px;
         flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
       }
 
-      /* Mobile container */
-      .mobile-tier-container {
-        display: none;
-      }
-
-      .tier-column, .price-tier-container {
-        background: #fff;
-        padding: 25px 20px;
+      .pricing__card {
+        background: white;
+        box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
         border-radius: 12px;
-        box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
-        width: 280px;
-        transition: transform 0.3s ease;
+        padding: 2rem;
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+      }
+      .pricing__card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 25px rgb(0 0 0 / 0.15);
       }
 
-      .tier-column:hover, .price-tier-container:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 16px rgb(0 0 0 / 0.15);
-      }
-
-      .tier-column.popular, .price-tier-container.popular {
-        border: 3px solid #fbbf24; /* Gold-ish highlight */
-        box-shadow: 0 8px 20px rgb(251 191 36 / 0.3);
-      }
-
-      .tier-column h4, .price-tier-container h4 {
-        font-size: 1.5rem;
-        letter-spacing: 2px;
-        color: #222;
-        margin-bottom: 10px;
+      .pricing__card.popular {
+        border: 3px solid #4a90e2;
       }
 
       .price {
         font-size: 2.5rem;
-        font-weight: bold;
-        color: #111;
-        margin-bottom: 20px;
+        font-weight: 700;
+        margin: 1rem 0 2rem 0;
+        color: #4a90e2;
       }
 
-      .features p {
-        font-size: 1rem;
-        margin-bottom: 10px;
+      ul {
+        text-align: left;
+        margin-bottom: 2rem;
+        list-style: inside disc;
         color: #555;
       }
+      ul li {
+        margin-bottom: 0.7rem;
+      }
 
-      .main__btn.btn.get-started-btn {
-        margin-top: 25px;
-        background-color: #fbbf24;
-        color: #111;
-        font-weight: 600;
-        border: none;
-        padding: 12px 30px;
-        border-radius: 30px;
+      /* Pricing button */
+      .pricing__btn {
         cursor: pointer;
-        transition: background-color 0.3s ease;
+        background: #4a90e2;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 12px 25px;
+        font-weight: 700;
         font-size: 1.1rem;
-      }
-
-      .main__btn.btn.get-started-btn:hover {
-        background-color: #d29c1a;
-        color: #fff;
-      }
-
-      /* Cart Icon/Button */
-      #cart-btn {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #fbbf24;
-        border: none;
-        padding: 12px 18px;
-        border-radius: 30px;
-        cursor: pointer;
-        font-weight: 700;
-        font-size: 1rem;
-        color: #111;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        z-index: 20;
-        box-shadow: 0 4px 8px rgb(251 191 36 / 0.5);
         transition: background-color 0.3s ease;
-      }
-
-      #cart-btn:hover {
-        background-color: #d29c1a;
-        color: #fff;
-      }
-
-      #cart-count {
-        background: #111;
-        color: #fff;
-        border-radius: 50%;
-        padding: 3px 8px;
-        font-size: 0.9rem;
-        font-weight: 700;
-        min-width: 22px;
         text-align: center;
+        text-decoration: none;
+        user-select: none;
+      }
+      .pricing__btn:hover {
+        background: #357ABD;
       }
 
-      /* Cart Modal */
+      /* Cart modal */
       .cart-modal {
-        display: none;
         position: fixed;
-        z-index: 30;
-        left: 0;
-        top: 0;
-        width: 100vw;
-        height: 100vh;
-        background-color: rgba(0,0,0,0.5);
-        display: flex;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.6);
+        display: none;
         justify-content: center;
         align-items: center;
+        z-index: 9999;
         padding: 20px;
       }
-
       .cart-modal.active {
         display: flex;
       }
-
       .cart-content {
-        background: #fff;
-        border-radius: 10px;
-        width: 400px;
-        max-width: 90vw;
-        padding: 25px;
-        text-align: left;
-        position: relative;
-        max-height: 80vh;
+        background: white;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 600px;
+        max-height: 90vh;
         overflow-y: auto;
+        padding: 30px 40px 40px 40px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        position: relative;
+        display: flex;
+        flex-direction: column;
       }
 
-      .cart-content h3 {
-        margin-bottom: 20px;
+      .cart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .cart-header h3 {
         font-size: 1.8rem;
-        color: #222;
-        text-align: center;
+        color: #4a90e2;
       }
 
-      .close-cart-btn {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        background: none;
+      .close-cart {
+        background: transparent;
         border: none;
-        font-size: 1.4rem;
-        font-weight: bold;
-        color: #666;
+        font-size: 2rem;
         cursor: pointer;
+        color: #666;
+        transition: color 0.3s ease;
+      }
+      .close-cart:hover {
+        color: #000;
       }
 
       .cart-items {
-        margin-bottom: 20px;
+        flex-grow: 1;
+        margin-bottom: 1.5rem;
       }
-
       .cart-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 1px solid #ddd;
         padding: 10px 0;
+        border-bottom: 1px solid #eee;
       }
-
+      .cart-item:last-child {
+        border-bottom: none;
+      }
       .cart-item-name {
         font-weight: 600;
         color: #333;
       }
-
       .cart-item-price {
-        color: #555;
-        margin-left: 10px;
+        font-weight: 700;
+        color: #4a90e2;
       }
-
-      .remove-item-btn {
-        background: #ff4d4d;
+      .cart-item-remove {
+        background: transparent;
         border: none;
-        color: white;
-        border-radius: 5px;
-        padding: 5px 10px;
+        color: #e74c3c;
         cursor: pointer;
-        font-size: 0.9rem;
-        transition: background-color 0.3s ease;
+        font-size: 1.2rem;
+        margin-left: 15px;
+        transition: color 0.3s ease;
+      }
+      .cart-item-remove:hover {
+        color: #c0392b;
       }
 
-      .remove-item-btn:hover {
-        background: #cc0000;
+      .cart-total {
+        font-size: 1.4rem;
+        font-weight: 700;
+        text-align: right;
+        color: #222;
+        margin-bottom: 1.5rem;
+      }
+
+      .cart-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+
+      .cart-btn {
+        background: #4a90e2;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 1.1rem;
+        transition: background-color 0.3s ease;
+        user-select: none;
+      }
+      .cart-btn:hover {
+        background: #357ABD;
       }
 
       /* Responsive */
-      @media (max-width: 767px) {
-        .desktop-tier-container {
-          display: none;
+      @media(max-width: 768px) {
+        .pricing__container {
+          flex-direction: column;
+          align-items: center;
         }
-        .mobile-tier-container {
-          display: block;
-        }
-
-        .price-tier-container {
-          margin-bottom: 20px;
+        .pricing__card {
+          width: 90%;
         }
       }
     </style>
 </head>
 <body>
+
   <section class="pricing" id="pricing">
     <h1>Pricing Plans</h1>
     <p>Affordable packages to bring your vision to life</p>
-    <div class="pricing-container">
-      <div class="desktop-tier-container">
-        <!-- Starter Plan -->
-        <div class="tier-column">
-          <h4>Starter</h4>
-          <p class="price">£90</p>
-          <div class="features">
-            <p>1 Page Website</p>
-            <p>Responsive Design</p>
-            <p>Email Contact Form</p>
-          </div>
-          <button class="main__btn btn get-started-btn" data-name="Starter" data-price="90">Add to Cart</button>
-        </div>
-
-        <!-- Pro Plan (popular) -->
-        <div class="tier-column popular">
-          <h4>Pro</h4>
-          <p class="price">£180</p>
-          <div class="features">
-            <p>Up to 5 Pages</p>
-            <p>Animations & Scroll Effects</p>
-            <p>Email & Social Links</p>
-            <p>Basic SEO</p>
-          </div>
-          <button class="main__btn btn get-started-btn" data-name="Pro" data-price="180">Add to Cart</button>
-        </div>
-
-        <!-- Premium Plan -->
-        <div class="tier-column">
-          <h4>Premium</h4>
-          <p class="price">£360</p>
-          <div class="features">
-            <p>Full Website + Admin Panel</p>
-            <p>Advanced Animations</p>
-            <p>Dark Mode & Contact Integration</p>
-            <p>Hosting Setup</p>
-          </div>
-          <button class="main__btn btn get-started-btn" data-name="Premium" data-price="360">Add to Cart</button>
-        </div>
+    <div class="pricing__container">
+      <div class="pricing__card">
+        <h2>Starter</h2>
+        <p class="price">£90</p>
+        <ul>
+          <li>1 Page Website</li>
+          <li>Responsive Design</li>
+          <li>Email Contact Form</li>
+        </ul>
+        <button class="pricing__btn" data-name="Starter Plan" data-price="90">Add to Cart</button>
       </div>
-
-      <div class="mobile-tier-container">
-        <!-- Starter Plan -->
-        <div class="price-tier-container">
-          <h4>Starter</h4>
-          <p class="price">£90</p>
-          <div class="features">
-            <p>1 Page Website</p>
-            <p>Responsive Design</p>
-            <p>Email Contact Form</p>
-          </div>
-          <button class="main__btn btn get-started-btn" data-name="Starter" data-price="90">Add to Cart</button>
-        </div>
-
-        <!-- Pro Plan (popular) -->
-        <div class="price-tier-container popular">
-          <h4>Pro</h4>
-          <p class="price">£180</p>
-          <div class="features">
-            <p>Up to 5 Pages</p>
-            <p>Animations & Scroll Effects</p>
-            <p>Email & Social Links</p>
-            <p>Basic SEO</p>
-          </div>
-          <button class="main__btn btn get-started-btn" data-name="Pro" data-price="180">Add to Cart</button>
-        </div>
-
-        <!-- Premium Plan -->
-        <div class="price-tier-container">
-          <h4>Premium</h4>
-          <p class="price">£360</p>
-          <div class="features">
-            <p>Full Website + Admin Panel</p>
-            <p>Advanced Animations</p>
-            <p>Dark Mode & Contact Integration</p>
-            <p>Hosting Setup</p>
-          </div>
-          <button class="main__btn btn get-started-btn" data-name="Premium" data-price="360">Add to Cart</button>
-        </div>
+  
+      <div class="pricing__card popular">
+        <h2>Pro</h2>
+        <p class="price">£180</p>
+        <ul>
+          <li>Up to 5 Pages</li>
+          <li>Animations & Scroll Effects</li>
+          <li>Email & Social Links</li>
+          <li>Basic SEO</li>
+        </ul>
+        <button class="pricing__btn" data-name="Pro Plan" data-price="180">Add to Cart</button>
+      </div>
+  
+      <div class="pricing__card">
+        <h2>Premium</h2>
+        <p class="price">£360</p>
+        <ul>
+          <li>Full Website + Admin Panel</li>
+          <li>Advanced Animations</li>
+          <li>Dark Mode & Contact Integration</li>
+          <li>Hosting Setup</li>
+        </ul>
+        <button class="pricing__btn" data-name="Premium Plan" data-price="360">Add to Cart</button>
       </div>
     </div>
   </section>
 
-  <!-- Cart Button -->
-  <button id="cart-btn" aria-label="View Cart">
-    <i class="fas fa-shopping-cart"></i> Cart <span id="cart-count">0</span>
-  </button>
-
   <!-- Cart Modal -->
-  <div id="cart-modal" class="cart-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="cart-title">
-    <div class="cart-content">
-      <button class="close-cart-btn" aria-label="Close Cart">&times;</button>
-      <h3 id="cart-title">Your Cart</h3>
-      <div class="cart-items"></div>
-      <p><strong>Total: £<span id="cart-total">0</span></strong></p>
+  <div class="cart-modal" id="cart-modal" aria-hidden="true" role="dialog" aria-labelledby="cart-title" tabindex="-1">
+    <div class="cart-content" role="document">
+      <div class="cart-header">
+        <h3 id="cart-title">Your Cart</h3>
+        <button class="close-cart" id="close-cart" aria-label="Close Cart">&times;</button>
+      </div>
+      <div class="cart-items" id="cart-items">
+        <p>Your cart is empty.</p>
+      </div>
+      <div class="cart-total" id="cart-total"></div>
+      <div class="cart-actions">
+        <button class="cart-btn" id="clear-cart">Clear Cart</button>
+        <button class="cart-btn" id="checkout-btn">Checkout</button>
+      </div>
     </div>
   </div>
 
+  <!-- Cart Button (Floating) -->
+  <button id="open-cart" aria-label="Open Cart" title="View Cart" style="
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #4a90e2;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 10000;
+  ">
+    <i class="fas fa-shopping-cart"></i>
+  </button>
+
   <script>
-    const cartBtn = document.getElementById('cart-btn');
+    // Cart Data
+    const cart = [];
+
+    // Elements
     const cartModal = document.getElementById('cart-modal');
-    const closeCartBtn = document.querySelector('.close-cart-btn');
-    const cartItemsContainer = document.querySelector('.cart-items');
-    const cartCount = document.getElementById('cart-count');
-    const cartTotal = document.getElementById('cart-total');
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartTotalEl = document.getElementById('cart-total');
+    const openCartBtn = document.getElementById('open-cart');
+    const closeCartBtn = document.getElementById('close-cart');
+    const clearCartBtn = document.getElementById('clear-cart');
+    const checkoutBtn = document.getElementById('checkout-btn');
 
-    let cart = [];
-
-    // Update cart UI
-    function updateCart() {
-      // Update count
-      cartCount.textContent = cart.length;
-
-      // Clear current cart items
+    // Update cart display
+    function renderCart() {
       cartItemsContainer.innerHTML = '';
-
-      // Add each cart item
-      cart.forEach((item, index) => {
-        const div = document.createElement('div');
-        div.classList.add('cart-item');
-        div.innerHTML = `
-          <span class="cart-item-name">${item.name}</span>
-          <span class="cart-item-price">£${item.price}</span>
-          <button class="remove-item-btn" data-index="${index}" aria-label="Remove ${item.name} from cart">&times;</button>
-        `;
-        cartItemsContainer.appendChild(div);
-      });
-
-      // Update total price
-      const totalPrice = cart.reduce((sum, item) => sum + Number(item.price), 0);
-      cartTotal.textContent = totalPrice.toFixed(2);
-
-      // If cart empty show message
       if(cart.length === 0){
         cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+        cartTotalEl.textContent = '';
+        return;
       }
+
+      let total = 0;
+      cart.forEach((item, index) => {
+        total += item.price;
+
+        const itemEl = document.createElement('div');
+        itemEl.classList.add('cart-item');
+        itemEl.innerHTML = `
+          <span class="cart-item-name">${item.name}</span>
+          <span>
+            <span class="cart-item-price">£${item.price}</span>
+            <button class="cart-item-remove" aria-label="Remove ${item.name}" data-index="${index}">&times;</button>
+          </span>
+        `;
+
+        cartItemsContainer.appendChild(itemEl);
+      });
+
+      cartTotalEl.textContent = `Total: £${total}`;
+
+      // Attach remove item handlers
+      document.querySelectorAll('.cart-item-remove').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const index = parseInt(e.target.dataset.index);
+          if(!isNaN(index)){
+            cart.splice(index, 1);
+            renderCart();
+          }
+        });
+      });
+    }
+
+    // Open cart modal
+    function openCart(){
+      cartModal.classList.add('active');
+      cartModal.setAttribute('aria-hidden', 'false');
+      renderCart();
+      // Focus trap could be added here for accessibility
+    }
+
+    // Close cart modal
+    function closeCart(){
+      cartModal.classList.remove('active');
+      cartModal.setAttribute('aria-hidden', 'true');
+      openCartBtn.focus();
     }
 
     // Add item to cart
-    function addToCart(name, price) {
+    function addToCart(name, price){
       cart.push({name, price});
-      updateCart();
+      openCart();
     }
 
-    // Remove item from cart
-    cartItemsContainer.addEventListener('click', e => {
-      if(e.target.classList.contains('remove-item-btn')){
-        const index = e.target.getAttribute('data-index');
-        cart.splice(index, 1);
-        updateCart();
-      }
-    });
+    // Event listeners
 
-    // Show cart modal
-    cartBtn.addEventListener('click', () => {
-      cartModal.classList.add('active');
-      cartModal.setAttribute('aria-hidden', 'false');
-    });
-
-    // Hide cart modal
-    closeCartBtn.addEventListener('click', () => {
-      cartModal.classList.remove('active');
-      cartModal.setAttribute('aria-hidden', 'true');
-    });
-
-    // Close modal on outside click
-    cartModal.addEventListener('click', e => {
-      if(e.target === cartModal){
-        cartModal.classList.remove('active');
-        cartModal.setAttribute('aria-hidden', 'true');
-      }
-    });
-
-    // Add to cart button handlers
-    document.querySelectorAll('.get-started-btn').forEach(button => {
+    // Add to cart buttons
+    document.querySelectorAll('.pricing__btn').forEach(button => {
       button.addEventListener('click', () => {
-        const name = button.getAttribute('data-name');
-        const price = button.getAttribute('data-price');
+        const name = button.dataset.name;
+        const price = Number(button.dataset.price);
         addToCart(name, price);
       });
     });
 
-    // Initialize cart display
-    updateCart();
+    openCartBtn.addEventListener('click', openCart);
+    closeCartBtn.addEventListener('click', closeCart);
+
+    clearCartBtn.addEventListener('click', () => {
+      cart.length = 0; // clear array
+      renderCart();
+    });
+
+    checkoutBtn.addEventListener('click', () => {
+      if(cart.length === 0){
+        alert('Your cart is empty!');
+        return;
+      }
+      alert('Thank you for your purchase! (This is a demo)');
+      cart.length = 0;
+      renderCart();
+      closeCart();
+    });
+
+    // Close cart when clicking outside content
+    cartModal.addEventListener('click', (e) => {
+      if(e.target === cartModal){
+        closeCart();
+      }
+    });
+
+    // Close cart on ESC key
+    window.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && cartModal.classList.contains('active')){
+        closeCart();
+      }
+    });
   </script>
+
 </body>
 </html>
