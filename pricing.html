@@ -326,164 +326,184 @@
     </div>
   </div>
 
-  <script>
-    // Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyDcVki29WpSaV-QPBbJHqVSHd0qCNBLDfI",
-      authDomain: "najaza-enterprises.firebaseapp.com",
-      projectId: "najaza-enterprises",
-      storageBucket: "najaza-enterprises.appspot.com",
-      messagingSenderId: "1066006225566",
-      appId: "1:1066006225566:web:d29873b54e7e9e9cbff32c"
-    };
+  // Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyDcVki29WpSaV-QPBbJHqVSHd0qCNBLDfI",
+  authDomain: "najaza-enterprises.firebaseapp.com",
+  projectId: "najaza-enterprises",
+  storageBucket: "najaza-enterprises.appspot.com",
+  messagingSenderId: "1066006225566",
+  appId: "1:1066006225566:web:d29873b54e7e9e9cbff32c"
+};
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const auth = firebase.auth();
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const auth = firebase.auth();
 
-    // Sign in anonymously on page load (you can modify to real auth later)
-    auth.signInAnonymously().catch(console.error);
+// Sign in anonymously on page load (you can modify to real auth later)
+auth.signInAnonymously().catch(console.error);
 
-    // Cart data array
-    let cart = [];
+// Cart data array
+let cart = [];
 
-    // Elements
-    const cartModal = document.getElementById('cart-modal');
-    const cartItemsEl = document.getElementById('cart-items');
-    const cartTotalEl = document.getElementById('cart-total');
-    const checkoutBtn = document.getElementById('checkout-btn');
-    const clearCartBtn = document.getElementById('clear-cart-btn');
-    const closeCartBtn = document.getElementById('close-cart');
+// Elements
+const cartModal = document.getElementById('cart-modal');
+const cartItemsEl = document.getElementById('cart-items');
+const cartTotalEl = document.getElementById('cart-total');
+const checkoutBtn = document.getElementById('checkout-btn');
+const clearCartBtn = document.getElementById('clear-cart-btn');
+const closeCartBtn = document.getElementById('close-cart');
 
-    // Show Cart Modal
-    function openCart() {
-      cartModal.classList.add('active');
-      cartModal.setAttribute('aria-hidden', 'false');
-      cartModal.focus();
-      renderCart();
-    }
+let lastFocusedButton = null;
 
-    // Close Cart Modal
-    function closeCart() {
-      cartModal.classList.remove('active');
-      cartModal.setAttribute('aria-hidden', 'true');
-    }
+// Show Cart Modal
+function openCart() {
+  cartModal.classList.add('active');
+  cartModal.setAttribute('aria-hidden', 'false');
+  cartModal.focus();
+  renderCart();
+}
 
-    closeCartBtn.addEventListener('click', closeCart);
-    cartModal.addEventListener('click', (e) => {
-      if(e.target === cartModal) closeCart();
+// Close Cart Modal
+function closeCart() {
+  cartModal.classList.remove('active');
+  cartModal.setAttribute('aria-hidden', 'true');
+  if (lastFocusedButton) {
+    lastFocusedButton.focus();
+  }
+}
+
+closeCartBtn.addEventListener('click', closeCart);
+cartModal.addEventListener('click', (e) => {
+  if(e.target === cartModal) closeCart();
+});
+
+// Add to Cart buttons
+document.querySelectorAll('.pricing__btn').forEach(button => {
+  button.addEventListener('click', () => {
+    lastFocusedButton = button;
+    const name = button.getAttribute('data-name');
+    const price = Number(button.getAttribute('data-price'));
+    addToCart({ name, price });
+    openCart();
+  });
+});
+
+// Add item to cart
+function addToCart(item) {
+  cart.push(item);
+  saveCart();
+  renderCart();
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  saveCart();
+  renderCart();
+}
+
+clearCartBtn.addEventListener('click', () => {
+  if (confirm('Are you sure you want to clear the cart?')) {
+    cart = [];
+    saveCart();
+    renderCart();
+  }
+});
+
+// Render cart UI
+function renderCart() {
+  cartItemsEl.innerHTML = '';
+
+  if(cart.length === 0) {
+    cartItemsEl.innerHTML = '<p>Your cart is empty.</p>';
+    cartTotalEl.textContent = 'Total: £0';
+    checkoutBtn.disabled = true;
+    return;
+  }
+
+  cart.forEach((item, i) => {
+    const itemEl = document.createElement('div');
+    itemEl.className = 'cart-item';
+
+    itemEl.innerHTML = `
+      <span class="cart-item-name">${item.name}</span>
+      <span class="cart-item-price">£${item.price.toFixed(2)}</span>
+      <button aria-label="Remove ${item.name}" class="cart-item-remove" data-index="${i}">&times;</button>
+    `;
+
+    cartItemsEl.appendChild(itemEl);
+  });
+
+  // Remove button handlers
+  document.querySelectorAll('.cart-item-remove').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const index = Number(e.target.getAttribute('data-index'));
+      removeFromCart(index);
     });
+  });
 
-    // Add to Cart buttons
-    document.querySelectorAll('.pricing__btn').forEach(button => {
-      button.addEventListener('click', () => {
-        const name = button.getAttribute('data-name');
-        const price = Number(button.getAttribute('data-price'));
-        addToCart({ name, price });
-        openCart();
-      });
-    });
+  const total = cart.reduce((acc, item) => acc + item.price, 0);
+  cartTotalEl.textContent = `Total: £${total.toFixed(2)}`;
+  checkoutBtn.disabled = false;
+}
 
-    // Add item to cart
-    function addToCart(item) {
-      cart.push(item);
+// Checkout button click
+checkoutBtn.addEventListener('click', () => {
+  if (cart.length === 0) {
+    alert('Your cart is empty!');
+    return;
+  }
+  checkoutBtn.disabled = true;
+
+  const order = {
+    items: cart.map(i => ({ name: i.name, price: i.price })),
+    total: cart.reduce((s, i) => s + i.price, 0),
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  db.collection('orders').add(order)
+    .then(docRef => {
+      alert('Order placed successfully!');
+      cart = [];
+      saveCart();
       renderCart();
-    }
+      closeCart();
+    })
+    .catch(err => {
+      alert('Failed to place order — check console.');
+      console.error(err);
+    })
+    .finally(() => checkoutBtn.disabled = false);
+});
 
-    // Remove item from cart by index
-    function removeFromCart(index) {
-      cart.splice(index, 1);
-      renderCart();
-    }
+// Accessibility: close modal on ESC key
+document.addEventListener('keydown', e => {
+  if(e.key === "Escape" && cartModal.classList.contains('active')) {
+    closeCart();
+  }
+});
 
-    // Clear entire cart
-    clearCartBtn.addEventListener('click', () => {
-      if (confirm('Are you sure you want to clear the cart?')) {
-        cart = [];
+// Load cart from localStorage on page load
+window.addEventListener("DOMContentLoaded", () => {
+  const savedCart = localStorage.getItem("cart");
+  if (savedCart) {
+    try {
+      const parsed = JSON.parse(savedCart);
+      if (Array.isArray(parsed)) {
+        cart = parsed;
         renderCart();
       }
-    });
-
-    // Render cart UI
-    function renderCart() {
-      cartItemsEl.innerHTML = '';
-
-      if(cart.length === 0) {
-        cartItemsEl.innerHTML = '<p>Your cart is empty.</p>';
-        cartTotalEl.textContent = 'Total: £0';
-        checkoutBtn.disabled = true;
-        return;
-      }
-
-      cart.forEach((item, i) => {
-        const itemEl = document.createElement('div');
-        itemEl.className = 'cart-item';
-
-        itemEl.innerHTML = `
-          <span class="cart-item-name">${item.name}</span>
-          <span class="cart-item-price">£${item.price.toFixed(2)}</span>
-          <button aria-label="Remove ${item.name}" class="cart-item-remove" data-index="${i}">&times;</button>
-        `;
-
-        cartItemsEl.appendChild(itemEl);
-      });
-
-      // Remove button handlers
-      document.querySelectorAll('.cart-item-remove').forEach(btn => {
-        btn.addEventListener('click', e => {
-          const index = Number(e.target.getAttribute('data-index'));
-          removeFromCart(index);
-        });
-      });
-
-      const total = cart.reduce((acc, item) => acc + item.price, 0);
-      cartTotalEl.textContent = `Total: £${total.toFixed(2)}`;
-      checkoutBtn.disabled = false;
+    } catch (e) {
+      console.error("Error loading cart from localStorage", e);
     }
+  }
+});
 
-    // Checkout button click
-    checkoutBtn.addEventListener('click', () => {
-      if (cart.length === 0) {
-        alert('Your cart is empty!');
-        return;
-      }
+// Save cart to localStorage
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
 
-      checkoutBtn.disabled = true;
-      checkoutBtn.textContent = "Processing...";
-
-      const order = {
-        items: cart.map(item => ({ name: item.name, price: item.price })),
-        total: cart.reduce((acc, item) => acc + item.price, 0),
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      };
-
-      db.collection('orders')
-        .add(order)
-        .then(() => {
-          alert('Order placed successfully!');
-          cart = [];
-          renderCart();
-          closeCart();
-          // Redirect to a thank you or checkout page
-          window.location.href = 'checkout.html';
-        })
-        .catch((error) => {
-          console.error("Order error:", error);
-          alert('Something went wrong. Please try again.');
-        })
-        .finally(() => {
-          checkoutBtn.disabled = false;
-          checkoutBtn.textContent = "Checkout";
-        });
-    });
-
-    // Accessibility: close modal on ESC key
-    document.addEventListener('keydown', e => {
-      if(e.key === "Escape" && cartModal.classList.contains('active')) {
-        closeCart();
-      }
-    });
-  </script>
 </body>
 </html>
