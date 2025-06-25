@@ -457,32 +457,36 @@
 
     // Checkout button click
     checkoutBtn.addEventListener('click', () => {
-      if (cart.length === 0) {
-        alert('Your cart is empty!');
-        return;
-      }
-      checkoutBtn.disabled = true;
+  console.log('Checkout clicked');
+  if (cart.length === 0) {
+    alert('Your cart is empty!');
+    return;
+  }
+  checkoutBtn.disabled = true;
 
-      const order = {
-        items: cart.map(i => ({ name: i.name, price: i.price })),
-        total: cart.reduce((s, i) => s + i.price, 0),
-        timestamp: firebase.firestore.FieldValue.serverTimestamp()
-      };
+  const order = {
+    items: cart.map(i => ({ name: i.name, price: i.price })),
+    total: cart.reduce((s, i) => s + i.price, 0),
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  };
+  console.log('Order to save:', order);
 
-      db.collection('orders').add(order)
-        .then(docRef => {
-          alert('Order placed successfully!');
-          cart = [];
-          saveCart();
-          renderCart();
-          closeCart();
-        })
-        .catch(err => {
-          alert('Failed to place order — check console.');
-          console.error(err);
-        })
-        .finally(() => checkoutBtn.disabled = false);
-    });
+  db.collection('orders').add(order)
+    .then(docRef => {
+      console.log('Order saved with ID:', docRef.id);
+      alert('Order placed successfully!');
+      cart = [];
+      saveCart();
+      renderCart();
+      closeCart();
+    })
+    .catch(err => {
+      alert('Failed to place order — check console.');
+      console.error('Firestore error:', err);
+    })
+    .finally(() => checkoutBtn.disabled = false);
+});
+
 
     // Accessibility: close modal on ESC key
     document.addEventListener('keydown', e => {
